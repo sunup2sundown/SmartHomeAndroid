@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:text="Motion sensor 2:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/sensor4"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_below="@+id/sensor3"
+        android:layout_alignStart="@+id/sensor3"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="Temp sensor 1 :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/sensor1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="Temp sensor 2 :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:id="@+id/sensor2"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_below="@+id/sensor1"
+        android:layout_alignStart="@+id/sensor1"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="Motion sensor 1:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/sensor3"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_below="@+id/sensor2"
+        android:layout_alignStart="@+id/sensor2"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:text="Motion sensor 3:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sensor5"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/sensor4" />
+
+    <EditText
+        android:id="@+id/stt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor2"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sensor1"
+        android:layout_toEndOf="@+id/sensor1"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/stt5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sensor5"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sensor5"
+        android:layout_toEndOf="@+id/sensor5"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/stt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor3"
+        android:layout_alignTop="@+id/sensor2"
+        android:layout_toEndOf="@+id/sensor2"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/stt4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sensor4"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sensor4"
+        android:layout_toEndOf="@+id/sensor4"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/stt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor4"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sensor3"
+        android:layout_toEndOf="@+id/sensor3"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:text="Alarm sensor :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sensor6"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_dark"
+        android:layout_below="@+id/sensor5"
+        android:layout_alignStart="@+id/sensor5"
+        android:layout_marginTop="11dp"
+        android:layout_toStartOf="@+id/stt5" />
+
+    <EditText
+        android:id="@+id/stt6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sensor6"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sensor6"
+        android:layout_toEndOf="@+id/sensor6"
+        android:background="@android:color/darker_gray"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text|textPersonName"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+</RelativeLayout>

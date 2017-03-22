@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/sensor"
+            android:icon="@android:drawable/ic_menu_mylocation"
+            android:title="Sensor Status" />
+        <item
+            android:id="@+id/relay"
+            android:icon="@android:drawable/ic_lock_idle_alarm"
+            android:title="Relay Status and Control" />
+        <item
+            android:id="@+id/config"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Configuration" />
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Account Setting" />
+        <item
+            android:id="@+id/system"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="System" />
+        <item
+            android:id="@+id/out"
+            android:icon="@android:drawable/btn_dialog"
+            android:title="Log out" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>

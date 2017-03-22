@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.temple.m.qnxsmarthomedroid.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="66dp" />
+
+    <Button
+        android:text="Sign In"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/sign_in"
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Sign up"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/sign_up"
+        android:layout_alignBaseline="@+id/sign_in"
+        android:layout_alignBottom="@+id/sign_in"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
+
+</RelativeLayout>
