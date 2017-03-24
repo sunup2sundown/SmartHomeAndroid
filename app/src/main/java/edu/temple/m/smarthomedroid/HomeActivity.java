@@ -21,10 +21,11 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //set up 4 fragments, we're going to use them and not adding new every time user click on items
-    final Fragment1 frag = new Fragment1();
-    final Fragment2 frag2 = new Fragment2();
+    final SensorFragment frag = new SensorFragment();
+    final RelayFragment frag2 = new RelayFragment();
     final Fragment3 frag3 = new Fragment3();
     final Fragment4 frag4 = new Fragment4();
     private TextView greet;

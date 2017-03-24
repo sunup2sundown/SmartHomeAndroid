@@ -14,9 +14,9 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment1 extends Fragment {
+public class SensorFragment extends Fragment {
     private TextView ss1,ss2,ss3,ss4,ss5,ss6;
-    public Fragment1() {
+    public SensorFragment() {
         // Required empty public constructor
     }
 

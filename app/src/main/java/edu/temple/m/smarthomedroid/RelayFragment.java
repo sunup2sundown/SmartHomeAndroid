@@ -11,12 +11,13 @@ import android.widget.Switch;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment2 extends Fragment {
+public class RelayFragment extends Fragment {
     private Switch ss1,ss2,ss3,ss4,ss5,ss6,ss7;
-    public Fragment2() {
+    public RelayFragment() {
         // Required empty public constructor
     }
 

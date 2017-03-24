@@ -18,7 +18,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.temple.m.qnxsmarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+
 
 public class LoginActivity extends AppCompatActivity implements SignupDialogFragment.SignupDialogListener, LoginDialogFragment.LoginDialogListener{
 
@@ -28,8 +29,6 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private ProgressDialog pDialog;
     private LoginDialogFragment loginFrag;
     private SignupDialogFragment signupFrag;
-
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         password = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_password);
         confirmPassword = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_confirm);
         if(password.getText().toString().equals(confirmPassword.getText().toString())){
-            //new CreateAccount().execute();
+                new CreateAccount().execute();
         }
         else{
             //Password Mismatch functionality
@@ -117,6 +116,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
      */
 
     private class CheckUsername extends AsyncTask<Void, Void, Void> {
+        String user = username.getText().toString();
+
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -131,8 +132,10 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
 
+
+
             //Make a request to url and get response
-            String resp = sh.makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/TestiOS2", "GET");
+            String resp = sh.makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + user, "GET");
 
             if(resp != null){
                 Log.d(TAG, "Check Username Response: " + resp);
