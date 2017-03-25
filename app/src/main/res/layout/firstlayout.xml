@@ -64,8 +64,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textStyle="normal|bold"
         android:textColor="@android:color/background_dark"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/sensor4" />
+        android:layout_below="@+id/sensor4"
+        android:layout_alignLeft="@+id/sensor4"
+        android:layout_alignStart="@+id/sensor4"
+        android:layout_marginTop="19dp" />
 
     <EditText
         android:id="@+id/stt1"

@@ -111,6 +111,19 @@
         android:layout_toStartOf="@+id/switch3" />
 
     <TextView
+        android:id="@+id/backdoor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="Back Door:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/background_dark"
+        android:textStyle="normal|bold"
+        android:layout_below="@+id/frontdoor"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
         android:id="@+id/lamp3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -148,18 +161,5 @@
         android:textStyle="normal|bold"
         android:layout_toStartOf="@+id/switch3" />
 
-    <TextView
-        android:id="@+id/backdoor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/frontdoor"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/frontdoor"
-        android:layout_marginTop="23dp"
-        android:layout_toStartOf="@+id/radioButton2"
-        android:text="Back Door:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@android:color/background_dark"
-        android:textStyle="normal|bold" />
 
 </RelativeLayout>

@@ -22,13 +22,15 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+Fragment4.OnFragment4AttachedListener {
     //set up 4 fragments, we're going to use them and not adding new every time user click on items
     final SensorFragment frag = new SensorFragment();
     final RelayFragment frag2 = new RelayFragment();
     final Fragment3 frag3 = new Fragment3();
     final Fragment4 frag4 = new Fragment4();
     private TextView greet;
+    String userid;
     JSONObject dta = new JSONObject();
     JSONObject dta2 = new JSONObject();
     @Override
@@ -62,7 +64,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String userid = intent.getStringExtra("userid");
+        userid = intent.getStringExtra("userid");
 
         //set up greeting string based on user device's time setting
         greet = (TextView)findViewById(R.id.greeting);
@@ -192,10 +194,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             fragmentmanager.beginTransaction().show(frag3).commit();
             fragmentmanager.beginTransaction().hide(frag4).commit();
         } else if (id == R.id.setting) {
-            fragmentmanager.beginTransaction().hide(frag).commit();
-            fragmentmanager.beginTransaction().hide(frag2).commit();
-            fragmentmanager.beginTransaction().hide(frag3).commit();
-            fragmentmanager.beginTransaction().show(frag4).commit();
+            if(fragmentmanager.findFragmentByTag("relays")==null){
+                Bundle bundle4=new Bundle();
+                bundle4.putString("userid",userid);
+                frag4.setArguments(bundle4);
+                fragmentmanager.beginTransaction().add(R.id.contentframe,frag4,"setting").commit();
+            }else{
+                fragmentmanager.beginTransaction().hide(frag).commit();
+                fragmentmanager.beginTransaction().hide(frag2).commit();
+                fragmentmanager.beginTransaction().hide(frag3).commit();
+                fragmentmanager.beginTransaction().show(frag4).commit();
+            }
         } else if (id == R.id.out) {
             //go back to login activity, finish current activity
             Intent myIntentOut = new Intent(HomeActivity.this, LoginActivity.class);
@@ -207,5 +216,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public String getUsername(){
+        return userid;
+    }
+
 }
 

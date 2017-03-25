@@ -17,7 +17,7 @@
         <item
             android:id="@+id/setting"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Account Setting" />
+            android:title="Account Settings" />
         <item
             android:id="@+id/system"
             android:icon="@android:drawable/ic_menu_save"
