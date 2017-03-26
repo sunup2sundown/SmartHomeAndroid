@@ -21,10 +21,10 @@ import org.json.JSONObject;
  * Created by M on 3/16/2017.
  */
 
-public class Fragment4 extends Fragment{
+public class UserSettingsFragment extends Fragment{
     OnFragment4AttachedListener activity;
     String userid;
-    public Fragment4() {
+    public UserSettingsFragment() {
         // Required empty public constructor
     }
 

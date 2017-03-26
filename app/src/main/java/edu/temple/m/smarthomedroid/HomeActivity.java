@@ -23,12 +23,12 @@ import java.util.Calendar;
 
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-Fragment4.OnFragment4AttachedListener {
+UserSettingsFragment.OnFragment4AttachedListener {
     //set up 4 fragments, we're going to use them and not adding new every time user click on items
     final SensorFragment frag = new SensorFragment();
     final RelayFragment frag2 = new RelayFragment();
-    final Fragment3 frag3 = new Fragment3();
-    final Fragment4 frag4 = new Fragment4();
+    final ConfigFragment frag3 = new ConfigFragment();
+    final UserSettingsFragment frag4 = new UserSettingsFragment();
     private TextView greet;
     String userid;
     JSONObject dta = new JSONObject();
@@ -140,7 +140,7 @@ Fragment4.OnFragment4AttachedListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the House/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
