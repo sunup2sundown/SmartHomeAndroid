@@ -10,5 +10,19 @@
     <string name="signout">Sign Out</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="sensor_stt">Sensor Status</string>
+    <string name="relay_stt">Relays Status and Control</string>
+    <string name="configuration">Automation and Configurations</string>
+    <string name="acc_setting">Account Settings</string>
+    <string name="sys">System</string>
+    <string name="log_out">Log Out</string>
+    <string name="comm">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="voice_com">Voice</string>
+    <string name="forgot_username">Forgot username?</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="welcome">Welcome to SmartHome Gateway</string>
 
 </resources>
