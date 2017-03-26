@@ -31,10 +31,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TextView greet;
     JSONObject dta = new JSONObject();
     JSONObject dta2 = new JSONObject();
+
+   User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
+
+        user.setSession(this.getIntent().getStringExtra("SessionId"));
+
         //hard-coding dummy data
         try {
             dta.put("ss1", 60);
