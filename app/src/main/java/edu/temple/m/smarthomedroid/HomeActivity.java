@@ -22,13 +22,16 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+UserSettingsFragment.OnFragment4AttachedListener {
     //set up 4 fragments, we're going to use them and not adding new every time user click on items
+    final Dashboard frag0 = new Dashboard();
     final SensorFragment frag = new SensorFragment();
     final RelayFragment frag2 = new RelayFragment();
-    final Fragment3 frag3 = new Fragment3();
-    final Fragment4 frag4 = new Fragment4();
+    final ConfigFragment frag3 = new ConfigFragment();
+    final UserSettingsFragment frag4 = new UserSettingsFragment();
     private TextView greet;
+    String userid;
     JSONObject dta = new JSONObject();
     JSONObject dta2 = new JSONObject();
 
@@ -68,21 +71,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String userid = intent.getStringExtra("userid");
+        userid = intent.getStringExtra("userid");
 
         //set up greeting string based on user device's time setting
-        greet = (TextView)findViewById(R.id.greeting);
+        /*greet = (TextView)findViewById(R.id.greeting);
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         if(timeOfDay >= 0 && timeOfDay < 12){
             greet.setText("Good morning "+userid);
         }else if(timeOfDay >= 12 && timeOfDay < 16){
             greet.setText("Good afternoon "+userid);
-        }else if(timeOfDay >= 16 && timeOfDay < 19){
+        }else if(timeOfDay >= 16 && timeOfDay < 20){
             greet.setText("Good evening "+userid);
-        }else if(timeOfDay >= 19 && timeOfDay < 24){
+        }else if(timeOfDay >= 20 && timeOfDay < 24){
             greet.setText("Good night "+userid);
-        }
+        }*/
 
         //pass json object to fragments
         Bundle bundle1=new Bundle();
@@ -94,20 +97,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         frag2.setArguments(bundle2);
         FragmentManager fra = getFragmentManager();
 
-        //add all fragments here with tags, but only show sensors fragment first , which is fragment1
+        //add all fragments here with tags, but only show dashboard fragment first , which is fragment0
         fra.beginTransaction().add(R.id.contentframe,frag4,"setting");
         fra.beginTransaction().add(R.id.contentframe,frag3,"config");
         fra.beginTransaction().add(R.id.contentframe,frag2,"relays");
-        fra.beginTransaction().add(R.id.contentframe,frag,"sensors").commit();
+        fra.beginTransaction().add(R.id.contentframe,frag,"sensors");
+        fra.beginTransaction().add(R.id.contentframe,frag0,"home").commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        //                .setAction("Action", null).show();
+        //    }
+        //});
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -144,17 +148,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the House/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
         } else if(id == R.id.voice){
             return true;
+        }*/
+        if(id == R.id.voice){
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -177,6 +183,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragmentmanager.beginTransaction().hide(frag2).commit();
                 fragmentmanager.beginTransaction().hide(frag3).commit();
                 fragmentmanager.beginTransaction().hide(frag4).commit();
+                fragmentmanager.beginTransaction().hide(frag0).commit();
             }
         } else if (id == R.id.relay) {
             //same thing as sensor fragment above
@@ -190,6 +197,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragmentmanager.beginTransaction().show(frag2).commit();
                 fragmentmanager.beginTransaction().hide(frag3).commit();
                 fragmentmanager.beginTransaction().hide(frag4).commit();
+                fragmentmanager.beginTransaction().hide(frag0).commit();
             }
 
         } else if (id == R.id.config) {
@@ -197,11 +205,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             fragmentmanager.beginTransaction().hide(frag2).commit();
             fragmentmanager.beginTransaction().show(frag3).commit();
             fragmentmanager.beginTransaction().hide(frag4).commit();
+            fragmentmanager.beginTransaction().hide(frag0).commit();
         } else if (id == R.id.setting) {
+            if(fragmentmanager.findFragmentByTag("relays")==null){
+                Bundle bundle4=new Bundle();
+                bundle4.putString("userid",userid);
+                frag4.setArguments(bundle4);
+                fragmentmanager.beginTransaction().add(R.id.contentframe,frag4,"setting").commit();
+            }else{
+                fragmentmanager.beginTransaction().hide(frag).commit();
+                fragmentmanager.beginTransaction().hide(frag2).commit();
+                fragmentmanager.beginTransaction().hide(frag3).commit();
+                fragmentmanager.beginTransaction().show(frag4).commit();
+                fragmentmanager.beginTransaction().hide(frag0).commit();
+            }
+        } else if (id == R.id.dashboard){
             fragmentmanager.beginTransaction().hide(frag).commit();
             fragmentmanager.beginTransaction().hide(frag2).commit();
             fragmentmanager.beginTransaction().hide(frag3).commit();
-            fragmentmanager.beginTransaction().show(frag4).commit();
+            fragmentmanager.beginTransaction().hide(frag4).commit();
+            fragmentmanager.beginTransaction().show(frag0).commit();
         } else if (id == R.id.out) {
             //go back to login activity, finish current activity
             Intent myIntentOut = new Intent(HomeActivity.this, LoginActivity.class);
@@ -213,5 +236,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public String getUsername(){
+        return userid;
+    }
+
 }
 

@@ -49,7 +49,7 @@ public class LoginDialogFragment extends DialogFragment{
 
         //Inflate Dialog with custom layout
         //null as parent view because its in dialog layout
-        builder.setView(inflater.inflate(R.layout.login_dialog_layout, null))
+        builder.setView(inflater.inflate(R.layout.dialog_login, null))
                 //Add Action Buttons
                 .setPositiveButton("Log in", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){

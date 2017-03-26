@@ -275,6 +275,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                 i.putExtra("Username", username.getText().toString());
                 i.putExtra("SessionId", resp);
+                //Go to House Activity Screen with Session Token
+                //TODO: Send user info and session token to House Activity or create a user instance
                 startActivity(i);
             }
             else{
