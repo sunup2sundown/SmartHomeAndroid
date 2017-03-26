@@ -53,7 +53,7 @@ public class SignupDialogFragment extends DialogFragment{
 
         //Inflate dialog with custom layout
         //null for parent view as in dialog layout
-        builder.setView(inflater.inflate(R.layout.signup_dialog, null))
+        builder.setView(inflater.inflate(R.layout.dialog_signup, null))
                 .setPositiveButton("Sign up", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity

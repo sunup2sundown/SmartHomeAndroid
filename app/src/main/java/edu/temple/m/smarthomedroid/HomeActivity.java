@@ -74,9 +74,9 @@ Fragment4.OnFragment4AttachedListener {
             greet.setText("Good morning "+userid);
         }else if(timeOfDay >= 12 && timeOfDay < 16){
             greet.setText("Good afternoon "+userid);
-        }else if(timeOfDay >= 16 && timeOfDay < 19){
+        }else if(timeOfDay >= 16 && timeOfDay < 20){
             greet.setText("Good evening "+userid);
-        }else if(timeOfDay >= 19 && timeOfDay < 24){
+        }else if(timeOfDay >= 20 && timeOfDay < 24){
             greet.setText("Good night "+userid);
         }
 
