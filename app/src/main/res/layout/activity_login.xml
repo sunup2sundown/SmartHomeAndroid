@@ -4,40 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context="edu.temple.m.qnxsmarthomedroid.LoginActivity">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="66dp"
+        app:srcCompat="@mipmap/ic_logo" />
 
     <Button
-        android:text="Sign In"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
         android:id="@+id/sign_in"
-        android:layout_marginTop="120dp"
-        android:layout_marginRight="49dp"
-        android:layout_marginEnd="49dp"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="Sign up"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sign_up"
+        android:layout_alignBottom="@+id/sign_up"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:background="@android:color/background_light"
+        android:text="Sign In" />
+
+    <Button
         android:id="@+id/sign_up"
-        android:layout_alignBaseline="@+id/sign_in"
-        android:layout_alignBottom="@+id/sign_in"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="48dp"
-        android:layout_marginStart="48dp" />
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginRight="45dp"
+        android:layout_toLeftOf="@+id/sign_in"
+        android:layout_toStartOf="@+id/sign_in"
+        android:background="@android:color/background_light"
+        android:text="Sign up" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/welcome"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
 
 </RelativeLayout>
