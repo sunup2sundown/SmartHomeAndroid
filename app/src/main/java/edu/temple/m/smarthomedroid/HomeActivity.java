@@ -84,7 +84,7 @@ UserSettingsFragment.OnFragment4AttachedListener {
         fra.beginTransaction().add(R.id.contentframe,frag3,"config");
         fra.beginTransaction().add(R.id.contentframe,frag2,"relays");
         fra.beginTransaction().add(R.id.contentframe,frag,"sensors");
-        fra.beginTransaction().add(R.id.contentframe,frag0,"home").commit();
+        fra.beginTransaction().add(R.id.contentframe,frag0,"home").show(frag0).commit();
 
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //fab.setOnClickListener(new View.OnClickListener() {
@@ -161,11 +161,12 @@ UserSettingsFragment.OnFragment4AttachedListener {
                 fragmentmanager.beginTransaction().add(R.id.contentframe,frag,"sensors").commit();
             }else{
                 //if it's in the list, just show it and hide others
-                fragmentmanager.beginTransaction().show(frag).commit();
+
                 fragmentmanager.beginTransaction().hide(frag2).commit();
                 fragmentmanager.beginTransaction().hide(frag3).commit();
                 fragmentmanager.beginTransaction().hide(frag4).commit();
                 fragmentmanager.beginTransaction().hide(frag0).commit();
+                fragmentmanager.beginTransaction().show(frag).commit();
             }
         } else if (id == R.id.relay) {
             //same thing as sensor fragment above
@@ -176,20 +177,24 @@ UserSettingsFragment.OnFragment4AttachedListener {
                 fragmentmanager.beginTransaction().add(R.id.contentframe,frag2,"relays").commit();
             }else{
                 fragmentmanager.beginTransaction().hide(frag).commit();
-                fragmentmanager.beginTransaction().show(frag2).commit();
                 fragmentmanager.beginTransaction().hide(frag3).commit();
                 fragmentmanager.beginTransaction().hide(frag4).commit();
                 fragmentmanager.beginTransaction().hide(frag0).commit();
+                fragmentmanager.beginTransaction().show(frag2).commit();
             }
 
         } else if (id == R.id.config) {
-            fragmentmanager.beginTransaction().hide(frag).commit();
-            fragmentmanager.beginTransaction().hide(frag2).commit();
-            fragmentmanager.beginTransaction().show(frag3).commit();
-            fragmentmanager.beginTransaction().hide(frag4).commit();
-            fragmentmanager.beginTransaction().hide(frag0).commit();
+            if(fragmentmanager.findFragmentByTag("config")==null){
+                fragmentmanager.beginTransaction().add(R.id.contentframe,frag3,"config").commit();
+            }else {
+                fragmentmanager.beginTransaction().hide(frag).commit();
+                fragmentmanager.beginTransaction().hide(frag2).commit();
+                fragmentmanager.beginTransaction().hide(frag4).commit();
+                fragmentmanager.beginTransaction().hide(frag0).commit();
+                fragmentmanager.beginTransaction().show(frag3).commit();
+            }
         } else if (id == R.id.setting) {
-            if(fragmentmanager.findFragmentByTag("relays")==null){
+            if(fragmentmanager.findFragmentByTag("setting")==null){
                 Bundle bundle4=new Bundle();
                 bundle4.putString("userid",userId);
                 frag4.setArguments(bundle4);
@@ -198,15 +203,19 @@ UserSettingsFragment.OnFragment4AttachedListener {
                 fragmentmanager.beginTransaction().hide(frag).commit();
                 fragmentmanager.beginTransaction().hide(frag2).commit();
                 fragmentmanager.beginTransaction().hide(frag3).commit();
-                fragmentmanager.beginTransaction().show(frag4).commit();
                 fragmentmanager.beginTransaction().hide(frag0).commit();
+                fragmentmanager.beginTransaction().show(frag4).commit();
             }
         } else if (id == R.id.dashboard){
-            fragmentmanager.beginTransaction().hide(frag).commit();
-            fragmentmanager.beginTransaction().hide(frag2).commit();
-            fragmentmanager.beginTransaction().hide(frag3).commit();
-            fragmentmanager.beginTransaction().hide(frag4).commit();
-            fragmentmanager.beginTransaction().show(frag0).commit();
+            if(fragmentmanager.findFragmentByTag("home")==null){
+                fragmentmanager.beginTransaction().add(R.id.contentframe,frag0,"home").commit();
+            }else {
+                fragmentmanager.beginTransaction().hide(frag).commit();
+                fragmentmanager.beginTransaction().hide(frag2).commit();
+                fragmentmanager.beginTransaction().hide(frag3).commit();
+                fragmentmanager.beginTransaction().hide(frag4).commit();
+                fragmentmanager.beginTransaction().show(frag0).commit();
+            }
         } else if (id == R.id.out) {
             //go back to login activity, finish current activity
             Intent myIntentOut = new Intent(HomeActivity.this, LoginActivity.class);
