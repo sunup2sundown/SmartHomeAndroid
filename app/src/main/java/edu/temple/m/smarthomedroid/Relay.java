@@ -5,11 +5,20 @@ package edu.temple.m.smarthomedroid;
  */
 
 public class Relay {
+    public static final boolean ON = true;
+    public static final boolean OFF = false;
     String id;
-    int value;
+    boolean status;
 
-    public Relay(String id, int value){
+    public Relay(String id, boolean status){
         this.id = id;
-        this.value = value;
+        this.status = status;
+    }
+
+    public void switchOn(){
+        status = ON;
+    }
+    public void switchOff(){
+        status = OFF;
     }
 }
