@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QNXSmartHomeDroid</string>
+    <string name="app_name">Smart Home Gateway</string>
 
     <string name="title_activity_smart_home">SmartHome</string>
 
@@ -13,7 +13,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="sensor_stt">Sensor Status</string>
     <string name="relay_stt">Relays Status and Control</string>
-    <string name="configuration">Automation and Configurations</string>
+    <string name="configuration">Automation/Notification </string>
     <string name="acc_setting">Account Settings</string>
     <string name="sys">System</string>
     <string name="log_out">Log Out</string>
