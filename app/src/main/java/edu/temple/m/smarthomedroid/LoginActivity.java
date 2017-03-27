@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private LoginDialogFragment loginFrag;
     private SignupDialogFragment signupFrag;
     private boolean goodUser;
+    private String userStr, passStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,20 +84,67 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         username = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_username);
         password = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_password);
         confirmPassword = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_confirm);
-        if(password.getText().toString().equals(confirmPassword.getText().toString())){
-            if(username_error(username.getText().toString())){
-                Toast.makeText(this, "Please enter a proper username", Toast.LENGTH_LONG);
+
+        new CheckUsername().execute();
+
+        //Log.d(TAG, password.getText().toString());
+        //Log.d(TAG, confirmPassword.getText().toString());
+        userStr = username.getText().toString();
+        passStr = password.getText().toString();
+        String confirm = confirmPassword.getText().toString();
+
+        if(Objects.equals(passStr, confirm)){
+            if(username_error(userStr)){
+                //Toast.makeText(this, "Please enter a proper username", Toast.LENGTH_LONG);
+                //Show Dialog that info was wrong
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("Please enter a proper username")
+                        .setTitle("Account Creation Failed...")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog aDialog = builder.show();
             }
             else if(!goodUser){
-                Toast.makeText(this, "That Username already exists.", Toast.LENGTH_LONG);
+                //Toast.makeText(this, "That Username already exists.", Toast.LENGTH_LONG);
+                //Show Dialog that info was wrong
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("The Username you want is already taken. Try again")
+                        .setTitle("Account Creation Failed...")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog aDialog = builder.show();
             }
             else{
+                //Log.d(TAG, "Got to Account Creation");
+                //Log.d(TAG, hash_pass(password.getText().toString()));
                 new CreateAccount().execute();
+
+                //wait(500);
+                new LoginAccount().execute();
             }
         }
         else{
             //Password Mismatch functionality
-            Toast.makeText(this, "Password's do not match", Toast.LENGTH_LONG);
+            //Toast.makeText(this, "Password's do not match", Toast.LENGTH_LONG);
+            //Show Dialog that info was wrong
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setMessage("The Passwords do not match")
+                    .setTitle("Account Creation Failed...")
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id){
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog aDialog = builder.show();
         }
     }
 
@@ -117,6 +166,9 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         username = (EditText)dialog.getDialog().findViewById(R.id.login_dialog_username);
         password = (EditText)dialog.getDialog().findViewById(R.id.login_dialog_password);
 
+        userStr = username.getText().toString();
+        passStr = password.getText().toString();
+
         new LoginAccount().execute();
     }
 
@@ -131,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
      */
 
     private class CheckUsername extends AsyncTask<Void, Void, Void> {
-        String user = username.getText().toString();
+        String user = userStr;
 
         @Override
         protected void onPreExecute(){
@@ -154,13 +206,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
 
             if(resp != null){
                 Log.d(TAG, "Check Username Response: " + resp);
-            }
 
-            if(Integer.parseInt(resp) == 1){
-                goodUser = true;
-            }
-            else{
-                goodUser = false;
+                if(resp.equals("1\n")){
+                    goodUser = true;
+                }
+                else{
+                    goodUser = false;
+                }
             }
 
             return null;
@@ -189,8 +241,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("username", username.getText());
-                jsonObject.put("password", password.getText());
+                jsonObject.put("username", userStr);
+                jsonObject.put("password", hash_pass(passStr));
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -237,8 +289,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("username", username.getText());
-                jsonObject.put("password", password.getText());
+                jsonObject.put("username", userStr);
+                jsonObject.put("password", hash_pass(passStr));
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -256,6 +308,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             if(resp != null){
                 if(login_success(resp))
                     start = true;
+
+                Log.d(TAG, resp);
             }
 
             return null;
@@ -276,7 +330,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                 i.putExtra("Username", username.getText().toString());
                 i.putExtra("SessionId", resp);
                 //Go to House Activity Screen with Session Token
-                //TODO: Send user info and session token to House Activity or create a user instance
+                //Send user info and session token to House Activity or create a user instance
                 startActivity(i);
             }
             else{

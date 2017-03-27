@@ -3,7 +3,6 @@ package edu.temple.m.smarthomedroid;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -20,10 +19,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
 UserSettingsFragment.OnFragment4AttachedListener {
+
     //set up 4 fragments, we're going to use them and not adding new every time user click on items
     final Dashboard frag0 = new Dashboard();
     final SensorFragment frag = new SensorFragment();
@@ -31,7 +32,7 @@ UserSettingsFragment.OnFragment4AttachedListener {
     final ConfigFragment frag3 = new ConfigFragment();
     final UserSettingsFragment frag4 = new UserSettingsFragment();
     private TextView greet;
-    String userid;
+    String userId;
     JSONObject dta = new JSONObject();
     JSONObject dta2 = new JSONObject();
 
@@ -42,36 +43,17 @@ UserSettingsFragment.OnFragment4AttachedListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
 
-        user.setSession(this.getIntent().getStringExtra("SessionId"));
+        Intent prevIntent = getIntent();
+        String sessionId = prevIntent.getStringExtra("SessionId");
+        userId = prevIntent.getStringExtra("userid");
 
-        //hard-coding dummy data
-        try {
-            dta.put("ss1", 60);
-            dta.put("ss2", 72);
-            dta.put("ss3",1000000);
-            dta.put("ss4",1000000);
-            dta.put("ss5",2000000);
-            dta.put("ss6",1000000);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            dta2.put("ss1",0);
-            dta2.put("ss2",1);
-            dta2.put("ss3",0);
-            dta2.put("ss4",0);
-            dta2.put("ss5",1);
-            dta2.put("ss6",1);
-            dta2.put("ss7",1);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(Objects.equals(sessionId, null)) {
+            user.setSession(sessionId);
         }
 
         //get toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent = getIntent();
-        userid = intent.getStringExtra("userid");
 
         //set up greeting string based on user device's time setting
         /*greet = (TextView)findViewById(R.id.greeting);
@@ -124,7 +106,7 @@ UserSettingsFragment.OnFragment4AttachedListener {
         View header=navigationView.getHeaderView(0);
 /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         TextView name = (TextView)header.findViewById(R.id.Name);
-        name.setText(userid+"'s SmartHome GateWay");
+        name.setText(userId+"'s SmartHome GateWay");
     }
 
     @Override
@@ -209,7 +191,7 @@ UserSettingsFragment.OnFragment4AttachedListener {
         } else if (id == R.id.setting) {
             if(fragmentmanager.findFragmentByTag("relays")==null){
                 Bundle bundle4=new Bundle();
-                bundle4.putString("userid",userid);
+                bundle4.putString("userid",userId);
                 frag4.setArguments(bundle4);
                 fragmentmanager.beginTransaction().add(R.id.contentframe,frag4,"setting").commit();
             }else{
@@ -237,7 +219,7 @@ UserSettingsFragment.OnFragment4AttachedListener {
         return true;
     }
     public String getUsername(){
-        return userid;
+        return userId;
     }
 
 }
