@@ -11,4 +11,15 @@ public class User {
 
 
     //getters & setters
+    public String getName(){
+        return name;
+    }
+
+    public void setName(){
+
+    }
+
+    public void setSession(String id){
+        this.sessionId = id;
+    }
 }

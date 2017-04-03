@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -63,13 +64,13 @@ public class RelayFragment extends Fragment {
             String id = keys.next();
             Relay r = null;
             try {
-                r = new Relay(id, (int) obj2.get(id));
+                r = new Relay(id, (int)obj2.get(id) == 1 ? true : false);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             relays.add(r);
         }
-        mAdapter = new ArrayAdapter<Relay>(getActivity(), R.layout.item_sensor, relays){
+        mAdapter = new ArrayAdapter<Relay>(getActivity(), R.layout.item_relay, relays){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -78,10 +79,25 @@ public class RelayFragment extends Fragment {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_relay, parent, false);
                 }
                 TextView name = (TextView) convertView.findViewById(R.id.name);
-                View status = convertView.findViewById(R.id.status);
+                Switch status = (Switch) convertView.findViewById(R.id.status);
                 final Relay rl = relays.get(position);
 
                 name.setText(rl.id);
+                status.setChecked(rl.status);
+                status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked){
+                            // switch relay on...
+                            rl.switchOn();
+                            Log.d(rl.id, "" + rl.status);
+                        } else {
+                            // switch relay off...
+                            rl.switchOff();
+                            Log.d(rl.id, "" + rl.status);
+                        }
+                    }
+                });
                 convertView.setBackgroundColor(Color.WHITE);
                 return convertView;
             }

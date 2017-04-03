@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,11 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
@@ -29,6 +35,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private ProgressDialog pDialog;
     private LoginDialogFragment loginFrag;
     private SignupDialogFragment signupFrag;
+    private boolean goodUser;
+    private String userStr, passStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +48,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         btnSignin = (Button)findViewById(R.id.sign_in);
         btnSignup = (Button)findViewById(R.id.sign_up);
 
+        goodUser = false;
+
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginFrag = new LoginDialogFragment();
                 loginFrag.show(fm, "LoginDialogFragment");
-                //new GetUsername().execute();
             }
         });
 
@@ -75,12 +84,67 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         username = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_username);
         password = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_password);
         confirmPassword = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_confirm);
-        if(password.getText().toString().equals(confirmPassword.getText().toString())){
+
+        new CheckUsername().execute();
+
+        //Log.d(TAG, password.getText().toString());
+        //Log.d(TAG, confirmPassword.getText().toString());
+        userStr = username.getText().toString();
+        passStr = password.getText().toString();
+        String confirm = confirmPassword.getText().toString();
+
+        if(Objects.equals(passStr, confirm)){
+            if(username_error(userStr)){
+                //Toast.makeText(this, "Please enter a proper username", Toast.LENGTH_LONG);
+                //Show Dialog that info was wrong
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("Please enter a proper username")
+                        .setTitle("Account Creation Failed...")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog aDialog = builder.show();
+            }
+            else if(!goodUser){
+                //Toast.makeText(this, "That Username already exists.", Toast.LENGTH_LONG);
+                //Show Dialog that info was wrong
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("The Username you want is already taken. Try again")
+                        .setTitle("Account Creation Failed...")
+                        .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog aDialog = builder.show();
+            }
+            else{
+                //Log.d(TAG, "Got to Account Creation");
+                //Log.d(TAG, hash_pass(password.getText().toString()));
                 new CreateAccount().execute();
+
+                //wait(500);
+                new LoginAccount().execute();
+            }
         }
         else{
             //Password Mismatch functionality
-            Toast.makeText(this, "Password's do not match", Toast.LENGTH_LONG);
+            //Toast.makeText(this, "Password's do not match", Toast.LENGTH_LONG);
+            //Show Dialog that info was wrong
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setMessage("The Passwords do not match")
+                    .setTitle("Account Creation Failed...")
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id){
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog aDialog = builder.show();
         }
     }
 
@@ -102,6 +166,9 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         username = (EditText)dialog.getDialog().findViewById(R.id.login_dialog_username);
         password = (EditText)dialog.getDialog().findViewById(R.id.login_dialog_password);
 
+        userStr = username.getText().toString();
+        passStr = password.getText().toString();
+
         new LoginAccount().execute();
     }
 
@@ -116,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
      */
 
     private class CheckUsername extends AsyncTask<Void, Void, Void> {
-        String user = username.getText().toString();
+        String user = userStr;
 
         @Override
         protected void onPreExecute(){
@@ -139,6 +206,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
 
             if(resp != null){
                 Log.d(TAG, "Check Username Response: " + resp);
+
+                if(resp.equals("1\n")){
+                    goodUser = true;
+                }
+                else{
+                    goodUser = false;
+                }
             }
 
             return null;
@@ -167,8 +241,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("username", username.getText());
-                jsonObject.put("password", password.getText());
+                jsonObject.put("username", userStr);
+                jsonObject.put("password", hash_pass(passStr));
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -203,6 +277,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private class LoginAccount extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         boolean start = false;
+        String resp;
 
         @Override
         protected void onPreExecute() {
@@ -214,8 +289,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("username", username.getText());
-                jsonObject.put("password", password.getText());
+                jsonObject.put("username", userStr);
+                jsonObject.put("password", hash_pass(passStr));
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -228,11 +303,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             Log.d(TAG, jsonObject.toString());
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
+            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
 
             if(resp != null){
                 if(login_success(resp))
                     start = true;
+
+                Log.d(TAG, resp);
             }
 
             return null;
@@ -247,10 +324,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             }
 
             if(start){
-                //Go to House Activity Screen with Session Token
-                //TODO: Send user info and session token to House Activity or create a user instance
+                //Go to Home Activity Screen with Session Token
+                //Send user info and session token to Home Activity or create a user instance
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                i.putExtra("userid", username.getText().toString());
+                i.putExtra("Username", username.getText().toString());
+                i.putExtra("SessionId", resp);
+                //Go to House Activity Screen with Session Token
+                //Send user info and session token to House Activity or create a user instance
                 startActivity(i);
             }
             else{
@@ -285,5 +365,40 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             Log.d(TAG, "True");
             return true;
         }
+    }
+
+    //Check if Username contains any spaces
+    private boolean username_error(String user){
+        if(user.length() >= 40 ){
+            return true;
+        }
+        else if(user.contains(" ")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    private static String hash_pass(String pw) {
+        try {
+            StringBuffer hexStr = new StringBuffer();
+            byte[] hash;
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xFF & hash[i]);
+                if (hex.length() == 1) {
+                    hexStr.append('0');
+                }
+                hexStr.append(hex);
+            }
+
+            return hexStr.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
