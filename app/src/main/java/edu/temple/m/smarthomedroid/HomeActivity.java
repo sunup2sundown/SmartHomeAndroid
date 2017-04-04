@@ -105,7 +105,9 @@ UserSettingsFragment.OnFragment4AttachedListener {
         View header=navigationView.getHeaderView(0);
 /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
         TextView name = (TextView)header.findViewById(R.id.Name);
+
         name.setText(userId+"'s SmartHome GateWay");
+
     }
 
     @Override
