@@ -1,4 +1,4 @@
-package edu.temple.m.smarthomedroid;
+package edu.temple.m.smarthomedroid.Objects;
 
 /**
  * Created by Jhang Myong Ja on 3/25/2017.
@@ -6,6 +6,8 @@ package edu.temple.m.smarthomedroid;
 
 public class House {
     String name;
+
+    public House(){}
 
     public House(String name){
         this.name = name;

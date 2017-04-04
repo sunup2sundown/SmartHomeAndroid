@@ -1,4 +1,4 @@
-package edu.temple.m.smarthomedroid;
+package edu.temple.m.smarthomedroid.Dialogs;
 
 
 import android.app.AlertDialog;
@@ -7,6 +7,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+
+import edu.temple.m.smarthomedroid.R;
 
 public class SwitchHouseDialogFragment extends DialogFragment {
     public static SwitchHouseDialogFragment newInstance() {

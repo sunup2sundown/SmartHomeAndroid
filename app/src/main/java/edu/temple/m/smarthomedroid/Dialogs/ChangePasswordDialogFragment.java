@@ -1,4 +1,4 @@
-package edu.temple.m.smarthomedroid;
+package edu.temple.m.smarthomedroid.Dialogs;
 
 
 import android.app.AlertDialog;
@@ -8,12 +8,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
+import edu.temple.m.smarthomedroid.R;
 
-public class NewHouseDialogFragment extends DialogFragment {
-    public static NewHouseDialogFragment newInstance() {
-        NewHouseDialogFragment frag = new NewHouseDialogFragment();
+public class ChangePasswordDialogFragment extends DialogFragment {
+    public static ChangePasswordDialogFragment newInstance() {
+        ChangePasswordDialogFragment frag = new ChangePasswordDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "Create New House");
+        args.putString("title", "Change Your Password");
         frag.setArguments(args);
         return frag;
     }
@@ -27,10 +28,10 @@ public class NewHouseDialogFragment extends DialogFragment {
         String title = getArguments().getString("title");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_newhouse, null))
+        builder.setView(inflater.inflate(R.layout.dialog_changepw, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Change", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // switch to the new house...
@@ -38,7 +39,7 @@ public class NewHouseDialogFragment extends DialogFragment {
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        NewHouseDialogFragment.this.getDialog().cancel();
+                        ChangePasswordDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -21,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import edu.temple.m.smarthomedroid.Objects.Sensor;
 
 /**
  * A simple {@link Fragment} subclass.

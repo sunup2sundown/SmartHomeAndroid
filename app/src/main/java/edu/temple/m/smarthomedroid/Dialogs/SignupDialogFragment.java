@@ -1,4 +1,4 @@
-package edu.temple.m.smarthomedroid;
+package edu.temple.m.smarthomedroid.Dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+
+import edu.temple.m.smarthomedroid.R;
 
 /**
  * Created by Matthew White on 3/10/2017.

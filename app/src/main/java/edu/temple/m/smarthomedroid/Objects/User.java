@@ -1,4 +1,4 @@
-package edu.temple.m.smarthomedroid;
+package edu.temple.m.smarthomedroid.Objects;
 
 /**
  * Created by M on 3/12/2017.
@@ -6,7 +6,6 @@ package edu.temple.m.smarthomedroid;
 
 public class User {
     private String name;
-    private String password;
     private String sessionId;
 
 

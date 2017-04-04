@@ -8,13 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +22,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
+import edu.temple.m.smarthomedroid.Dialogs.LoginDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.SignupDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 
@@ -127,7 +127,6 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                 //Log.d(TAG, hash_pass(password.getText().toString()));
                 new CreateAccount().execute();
 
-                //wait(500);
                 new LoginAccount().execute();
             }
         }

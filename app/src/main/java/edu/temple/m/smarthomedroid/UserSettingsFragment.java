@@ -1,12 +1,8 @@
 package edu.temple.m.smarthomedroid;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 
 /**
  * Created by M on 3/16/2017.
