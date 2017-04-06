@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edu.temple.m.smarthomedroid.Objects.Sensor;
+
 /**
  * A simple {@link Fragment} subclass.
  */

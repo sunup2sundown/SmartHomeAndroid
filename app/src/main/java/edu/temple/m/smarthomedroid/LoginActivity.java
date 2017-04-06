@@ -1,13 +1,13 @@
 package edu.temple.m.smarthomedroid;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,12 +38,14 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private boolean goodUser;
     private String userStr, passStr;
 
+    FragmentManager dialogManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final FragmentManager fm = getFragmentManager();
+        dialogManager = getSupportFragmentManager();
 
         btnSignin = (Button)findViewById(R.id.sign_in);
         btnSignup = (Button)findViewById(R.id.sign_up);
@@ -54,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             @Override
             public void onClick(View v) {
                 loginFrag = new LoginDialogFragment();
-                loginFrag.show(fm, "LoginDialogFragment");
+                loginFrag.show(dialogManager, "LoginDialogFragment");
             }
         });
 
@@ -62,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             @Override
             public void onClick(View v) {
                 signupFrag = new SignupDialogFragment();
-                signupFrag.show(fm, "SignupDialogFragment");
+                signupFrag.show(dialogManager, "SignupDialogFragment");
 
             }
         });
@@ -168,7 +170,9 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         userStr = username.getText().toString();
         passStr = password.getText().toString();
 
-        new LoginAccount().execute();
+        //new LoginAccount().execute();
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(i);
     }
 
     @Override
