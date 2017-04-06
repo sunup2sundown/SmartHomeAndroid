@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:text="@string/forgot_username"
         android:textAlignment="textEnd"
+        android:gravity="end"
         android:textColor="@color/colorPrimary"
         android:textStyle="italic" />
 
@@ -51,6 +52,7 @@
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
         android:textAlignment="textEnd"
+        android:gravity="end"
         android:textColor="@color/colorPrimary"
         android:textStyle="italic" />
 

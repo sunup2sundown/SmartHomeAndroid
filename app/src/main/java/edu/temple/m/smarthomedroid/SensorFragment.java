@@ -21,8 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import edu.temple.m.smarthomedroid.Objects.Sensor;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -74,7 +72,7 @@ public class SensorFragment extends Fragment {
                 View status = convertView.findViewById(R.id.status);
                 final Sensor s = sensors.get(position);
 
-                name.setText(s.id);
+                name.setText("");
                 convertView.setBackgroundColor(Color.WHITE);
                 return convertView;
             }

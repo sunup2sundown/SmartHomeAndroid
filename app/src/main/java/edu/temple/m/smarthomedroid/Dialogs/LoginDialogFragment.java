@@ -3,9 +3,9 @@ package edu.temple.m.smarthomedroid.Dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
@@ -15,7 +15,7 @@ import edu.temple.m.smarthomedroid.R;
  * Created by Matthew White on 3/17/2017.
  */
 
-public class LoginDialogFragment extends DialogFragment{
+public class LoginDialogFragment extends DialogFragment {
 
     private final String TAG = "Login Dialog";
     private EditText username, password;

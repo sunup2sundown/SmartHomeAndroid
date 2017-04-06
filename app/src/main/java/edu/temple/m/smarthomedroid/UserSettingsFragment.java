@@ -1,7 +1,7 @@
 package edu.temple.m.smarthomedroid;
 
-import android.app.Fragment;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,8 +19,10 @@ import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
  */
 
 public class UserSettingsFragment extends Fragment{
+
+    FragmentManager fm;
     OnFragment4AttachedListener activity;
-    String userid;
+    //String userid;
     public UserSettingsFragment() {
         // Required empty public constructor
     }
@@ -28,29 +30,32 @@ public class UserSettingsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fourthlayout,container,false);
-        TextView username = (TextView) v.findViewById(R.id.text_username);
-        userid = getArguments().getString("userid");
-        username.setText(userid);
-        ((Button)v.findViewById(R.id.button_changepw)).setOnClickListener(new View.OnClickListener() {
+        final View v = inflater.inflate(R.layout.fragment_settings,container,false);
+        TextView username = (TextView) v.findViewById(R.id.tv_username);
+        //userid = getArguments().getString("userid");
+        //username.setText(userid);
+
+        fm = getFragmentManager();
+
+        ((Button)v.findViewById(R.id.btn_changepw)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangePasswordDialogFragment f = ChangePasswordDialogFragment.newInstance();
-                f.show(getFragmentManager(), null);
+                ChangePasswordDialogFragment f = new ChangePasswordDialogFragment();
+                f.show(fm, null);
             }
         });
-        ((Button)v.findViewById(R.id.button_newhouse)).setOnClickListener(new View.OnClickListener() {
+        ((Button)v.findViewById(R.id.btn_newhouse)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewHouseDialogFragment f = NewHouseDialogFragment.newInstance();
-                f.show(getFragmentManager(), null);
+                NewHouseDialogFragment f = new NewHouseDialogFragment();
+                f.show(fm, null);
             }
         });
-        ((Button)v.findViewById(R.id.button_switchhouse)).setOnClickListener(new View.OnClickListener() {
+        ((Button)v.findViewById(R.id.btn_switchhouse)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SwitchHouseDialogFragment f = SwitchHouseDialogFragment.newInstance();
-                f.show(getFragmentManager(), null);
+                f.show(fm, null);
             }
         });
         return v;
@@ -58,8 +63,8 @@ public class UserSettingsFragment extends Fragment{
 
     public void onAttach(Context actv){
         super.onAttach(actv);
-        activity = (OnFragment4AttachedListener)actv;
-        userid = activity.getUsername();
+        //activity = (OnFragment4AttachedListener)actv;
+        //userid = activity.getUsername();
     }
 
     public interface OnFragment4AttachedListener {
@@ -67,3 +72,4 @@ public class UserSettingsFragment extends Fragment{
     }
 
 }
+

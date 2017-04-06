@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context="edu.temple.m.qnxsmarthomedroid.LoginActivity">
+    tools:context="edu.temple.m.smarthomedroid.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"

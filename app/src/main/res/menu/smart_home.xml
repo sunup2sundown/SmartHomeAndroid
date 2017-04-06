@@ -6,7 +6,7 @@
         android:enabled="true"
         android:icon="@mipmap/ic_voice"
         android:orderInCategory="100"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="@string/voice_com"
         android:visible="true" />
 </menu>
