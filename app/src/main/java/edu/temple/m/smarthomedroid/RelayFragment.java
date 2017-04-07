@@ -47,7 +47,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         //Create and set custom adapter for relay list
         RelayAdapter adapter = new RelayAdapter(getContext(), relayList);
 
-        adapter.add(new Relay("0", "Test Relay", 0));
+        adapter.add(new Relay("1", "Test Relay 1", 0));
 
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(adapter);
@@ -59,7 +59,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     }
 
     private void populateList(){
-        Relay newRelay = new Relay("0", "Test Relay", 0);
+        Relay newRelay = new Relay("0", "Test Relay 0", 0);
 
         relayList.add(0, newRelay);
     }

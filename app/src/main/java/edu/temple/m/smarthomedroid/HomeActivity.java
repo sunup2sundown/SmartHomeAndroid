@@ -142,7 +142,7 @@ public class HomeActivity extends AppCompatActivity{
                 fragment = new RelayFragment();
                 break;
             case R.id.nav_sensor:
-                fragment = new RelayFragment();
+                fragment = new SensorFragment();
                 break;
             case R.id.nav_relay:
                 fragment = new RelayFragment();
@@ -154,7 +154,7 @@ public class HomeActivity extends AppCompatActivity{
                 fragment = new UserSettingsFragment();
                 break;
             case R.id.nav_system:
-                fragment = new RelayFragment();
+                fragment = new SystemFragment();
                 break;
             case R.id.nav_logout:
                 activityClosing = true;
@@ -176,7 +176,7 @@ public class HomeActivity extends AppCompatActivity{
             //Insert the fragment by replacing any existing fragments
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.replace(R.id.contentframe, fragment);
             fragmentTransaction.commit();
         }
 

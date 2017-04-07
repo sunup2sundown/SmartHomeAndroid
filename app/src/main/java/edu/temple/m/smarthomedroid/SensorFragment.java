@@ -41,7 +41,7 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         //Create new view from relay fragment layout
-        View view = inflater.inflate(R.layout.fragment_relay, container, false);
+        View view = inflater.inflate(R.layout.fragment_sensor, container, false);
 
         return view;
     }
@@ -57,7 +57,7 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         //Create and set custom adapter for relay list
         SensorAdapter adapter = new SensorAdapter(getContext(), sensorList);
 
-        adapter.add(new Sensor("0", "Test Relay", 0));
+        adapter.add(new Sensor("1", "Test Sensor", 0));
 
         ListView lv = (ListView)getView().findViewById(R.id.fragment_sensor_listview);
         lv.setAdapter(adapter);
