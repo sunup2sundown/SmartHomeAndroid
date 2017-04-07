@@ -37,7 +37,7 @@ public class SensorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.firstlayout,container,false);
+        final View v = inflater.inflate(R.layout.layout_sensor,container,false);
         Bundle bundle=getArguments();
         String jsonString=bundle.getString("data");
         JSONObject obj=null;
