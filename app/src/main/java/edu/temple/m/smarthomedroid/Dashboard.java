@@ -14,7 +14,7 @@ public class Dashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.layout_sensor,container,false);
+        final View v = inflater.inflate(R.layout.fragment_sensor,container,false);
         return v;
     }
 }

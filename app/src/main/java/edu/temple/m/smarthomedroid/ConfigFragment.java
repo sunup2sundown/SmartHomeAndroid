@@ -14,7 +14,7 @@ public class ConfigFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.layout_config,container,false);
+        final View v = inflater.inflate(R.layout.fragment_config,container,false);
         return v;
     }
 }

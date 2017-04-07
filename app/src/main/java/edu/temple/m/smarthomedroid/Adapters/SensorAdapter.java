@@ -40,7 +40,7 @@ public class SensorAdapter extends ArrayAdapter<Sensor> {
         TextView tvName = (TextView)convertView.findViewById(R.id.item_sensor_name);
 
         tvName.setText(sensor.getName());
-        
+
         return convertView;
     }
 
