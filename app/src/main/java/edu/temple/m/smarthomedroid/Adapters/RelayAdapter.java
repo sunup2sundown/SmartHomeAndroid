@@ -29,8 +29,6 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
         super(context, android.R.layout.simple_list_item_1, relays);
     }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         Relay relay = (Relay)getItem(position);

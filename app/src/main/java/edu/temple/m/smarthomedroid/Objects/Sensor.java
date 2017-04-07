@@ -7,12 +7,28 @@ package edu.temple.m.smarthomedroid.Objects;
 public class Sensor {
     String id;
     String name;
+    String houseName;
     int value;
 
     public Sensor(){}
 
-    public Sensor(String id, int value){
+    public Sensor(String id, String name, int value){
         this.id = id;
+        this.name = name;
         this.value = value;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setHouseName(String houseName){
+        this.houseName = houseName;
+    }
+
+    public String getName(){return name;}
+
+    public int getValue(){
+        return value;
     }
 }
