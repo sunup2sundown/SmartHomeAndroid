@@ -1,6 +1,9 @@
 package edu.temple.m.smarthomedroid.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.R;
 
@@ -17,7 +21,7 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class HouseAdapter extends ArrayAdapter<House> {
-    private Context context;
+    private Activity context;
     private boolean useList = true;
 
     /**
@@ -27,6 +31,7 @@ public class HouseAdapter extends ArrayAdapter<House> {
      */
     public HouseAdapter(Context context, ArrayList<House> houses){
         super(context, android.R.layout.simple_list_item_1, houses);
+        this.context = (Activity) context;
     }
 
     @Override
@@ -40,6 +45,15 @@ public class HouseAdapter extends ArrayAdapter<House> {
         TextView tvName = (TextView)convertView.findViewById(R.id.item_house_name);
 
         tvName.setText(house.getName());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HouseOptionsDialogFragment f = new HouseOptionsDialogFragment();
+                final FragmentManager fm = HouseAdapter.this.context.getFragmentManager();
+                f.show(fm, null);
+            }
+        });
 
         return convertView;
     }
