@@ -38,7 +38,7 @@ public class UserSettingsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_user,container,false);
-        TextView username = (TextView) v.findViewById(R.id.tv_username);
+        //TextView username = (TextView) v.findViewById(R.id.tv_username);
         //userid = getArguments().getString("userid");
         //username.setText(userid);
 

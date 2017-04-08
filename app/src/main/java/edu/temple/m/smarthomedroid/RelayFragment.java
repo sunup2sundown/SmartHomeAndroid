@@ -25,8 +25,6 @@ import edu.temple.m.smarthomedroid.Objects.Relay;
 public class RelayFragment extends ListFragment implements AdapterView.OnItemClickListener{
 
     ArrayList<Relay> relayList;
-    Adapter mAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -42,7 +40,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         //Construct data source
         relayList = new ArrayList<Relay>();
         //Populate relaysList from API call
-        //populateList();
+        populateList();
 
         //Create and set custom adapter for relay list
         RelayAdapter adapter = new RelayAdapter(getContext(), relayList);

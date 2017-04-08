@@ -11,20 +11,20 @@
     android:weightSum="1">
 
     <ListView
+        android:id="@+id/listview_sensors"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="98dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="150dp"
         android:layout_alignParentStart="true"
-        android:id="@+id/listview_sensors" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="98dp" />
 
     <ListView
         android:id="@+id/listview_relays"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="36dp"
         android:layout_below="@+id/listview_sensors"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="58dp" />
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:id="@+id/spinner_houses"

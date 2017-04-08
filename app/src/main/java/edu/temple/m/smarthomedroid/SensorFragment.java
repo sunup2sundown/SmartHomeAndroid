@@ -35,8 +35,6 @@ import edu.temple.m.smarthomedroid.Objects.Sensor;
 public class SensorFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     ArrayList<Sensor> sensorList;
-    Adapter mAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
@@ -52,7 +50,7 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         //Construct data source
         sensorList = new ArrayList<Sensor>();
         //Populate sensorList from API call
-        //populateList();
+        populateList();
 
         //Create and set custom adapter for relay list
         SensorAdapter adapter = new SensorAdapter(getContext(), sensorList);

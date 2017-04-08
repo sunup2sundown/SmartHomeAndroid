@@ -4,7 +4,7 @@ package edu.temple.m.smarthomedroid.Objects;
  * Created by Jhang Myong Ja on 3/25/2017.
  */
 
-public class Sensor {
+public class Sensor implements Peripheral {
     String id;
     String name;
     String houseName;
@@ -28,6 +28,9 @@ public class Sensor {
 
     public String getName(){return name;}
 
+    public String getHouseName(){
+        return houseName;
+    }
     public int getValue(){
         return value;
     }

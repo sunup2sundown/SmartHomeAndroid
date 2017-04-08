@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity{
         //show properly
         switch(menuItem.getItemId()){
             case R.id.nav_dashboard:
-                fragment = new RelayFragment();
+                fragment = new Dashboard();
                 break;
             case R.id.nav_sensor:
                 fragment = new SensorFragment();
@@ -148,7 +148,7 @@ public class HomeActivity extends AppCompatActivity{
                 fragment = new RelayFragment();
                 break;
             case R.id.nav_config:
-                fragment = new RelayFragment();
+                fragment = new ConfigFragment();
                 break;
             case R.id.nav_setting:
                 fragment = new UserSettingsFragment();

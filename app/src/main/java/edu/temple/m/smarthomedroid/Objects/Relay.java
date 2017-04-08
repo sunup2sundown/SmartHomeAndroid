@@ -6,7 +6,7 @@ package edu.temple.m.smarthomedroid.Objects;
  * Edited: 3/27/2017 10:45am by Matt White
  */
 
-public class Relay {
+public class Relay implements Peripheral {
     String id;
     String name;
     String houseName;
