@@ -73,6 +73,7 @@ public class UserSettingsFragment extends Fragment{
                 f.show(fm, null);
             }
         });
+
         return v;
     }
 

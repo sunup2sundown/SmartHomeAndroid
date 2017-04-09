@@ -2,67 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/text_houseid"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
+    android:layout_marginTop="?attr/actionBarSize"
     android:background="@android:color/background_light"
-    android:id="@+id/text_houseid">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
-        android:text="Username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
         android:id="@+id/tv_username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="105dp"
+        android:text="Username"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
     <TextView
-        android:text="House ID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="73dp"
         android:id="@+id/textView7"
-        android:layout_below="@+id/tv_username"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Change Password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="73dp"
+        android:text="House ID" />
+
+    <Button
         android:id="@+id/btn_changepw"
-        android:layout_marginTop="33dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textView7"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:text="Change Password" />
 
     <Button
-        android:text="New House"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
         android:id="@+id/btn_newhouse"
-        android:layout_below="@+id/btn_changepw"
-        android:layout_marginTop="33dp"
-        android:layout_toStartOf="@+id/tv_current_house" />
-
-    <Button
-        android:text="Switch House"
         android:layout_width="130dp"
         android:layout_height="60dp"
-        android:id="@+id/btn_switchhouse"
         android:layout_below="@+id/btn_changepw"
         android:layout_marginTop="33dp"
-        android:layout_toEndOf="@+id/tv_current_house" />
+        android:layout_toStartOf="@+id/tv_current_house"
+        android:text="New House" />
+
+    <Button
+        android:id="@+id/btn_switchhouse"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/btn_changepw"
+        android:layout_marginTop="33dp"
+        android:layout_toEndOf="@+id/tv_current_house"
+        android:text="Switch House" />
 
     <TextView
-        android:text="Current House:"
+        android:id="@+id/tv_current_house"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_current_house"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:layout_above="@+id/btn_changepw"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp" />
+        android:layout_marginBottom="35dp"
+        android:text="Current House:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 
 </RelativeLayout>
