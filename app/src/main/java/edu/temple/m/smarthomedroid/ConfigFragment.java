@@ -17,4 +17,6 @@ public class ConfigFragment extends Fragment{
         final View v = inflater.inflate(R.layout.thirdlayout,container,false);
         return v;
     }
+
+    //TODO: Expandable List view of Houses->Boards->Peripheral types->Peripheral Names
 }
