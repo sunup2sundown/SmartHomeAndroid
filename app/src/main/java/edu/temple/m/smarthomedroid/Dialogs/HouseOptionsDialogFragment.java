@@ -18,8 +18,8 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class HouseOptionsDialogFragment extends DialogFragment {
-    public static NewHouseDialogFragment newInstance(String houseName) {
-        NewHouseDialogFragment frag = new NewHouseDialogFragment();
+    public static HouseOptionsDialogFragment newInstance(String houseName) {
+        HouseOptionsDialogFragment frag = new HouseOptionsDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", houseName);
         frag.setArguments(args);

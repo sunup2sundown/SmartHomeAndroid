@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Objects.House;
@@ -24,7 +25,7 @@ import edu.temple.m.smarthomedroid.Objects.Sensor;
  * Created by M on 3/16/2017.
  */
 
-public class UserSettingsFragment extends Fragment{
+public class UserSettingsFragment extends Fragment {
 
     ArrayList<House> houseList;
     FragmentManager fm;
@@ -78,7 +79,7 @@ public class UserSettingsFragment extends Fragment{
 
 
         //Create and set custom adapter for relay list
-        HouseAdapter adapter = new HouseAdapter(getContext(), houseList);
+        HouseAdapter adapter = new HouseAdapter(getActivity(), houseList);
 
         adapter.add(new House("1", "Test House 1"));
 
@@ -101,5 +102,6 @@ public class UserSettingsFragment extends Fragment{
 
         houseList.add(0, newHouse);
     }
+
 }
 

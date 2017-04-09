@@ -16,7 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class HomeActivity extends AppCompatActivity{
+import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
+import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
+
+public class HomeActivity extends AppCompatActivity  implements HouseAdapter.OnHouseAdapterItemClickListener{
 
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -186,6 +189,11 @@ public class HomeActivity extends AppCompatActivity{
         setTitle(menuItem.getTitle());
         //Close Navigation Drawer
         mDrawer.closeDrawers();
+    }
+
+    public void OnHouseAdapterItemClick(String houseName){
+        HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName);
+        f.show(fragmentManager, null);
     }
 }
 

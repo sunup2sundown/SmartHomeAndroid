@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.SignupDialogFragment;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.R;
 
@@ -21,7 +22,7 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class HouseAdapter extends ArrayAdapter<House> {
-    private Activity context;
+    private OnHouseAdapterItemClickListener activity;
     private boolean useList = true;
 
     /**
@@ -31,12 +32,18 @@ public class HouseAdapter extends ArrayAdapter<House> {
      */
     public HouseAdapter(Context context, ArrayList<House> houses){
         super(context, android.R.layout.simple_list_item_1, houses);
-        this.context = (Activity) context;
+        try{
+            //Instantiate listener so events can be sent to host
+            this.activity = (OnHouseAdapterItemClickListener) context;
+        } catch(ClassCastException e){
+            //Activity doesn't implement
+            throw new ClassCastException("activity must implement OnHouseAdapterItemClickListener");
+        }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        House house = (House)getItem(position);
+        final House house = (House)getItem(position);
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_house, parent, false);
@@ -49,9 +56,7 @@ public class HouseAdapter extends ArrayAdapter<House> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HouseOptionsDialogFragment f = new HouseOptionsDialogFragment();
-                final FragmentManager fm = HouseAdapter.this.context.getFragmentManager();
-                f.show(fm, null);
+                activity.OnHouseAdapterItemClick(house.getName());
             }
         });
 
@@ -63,4 +68,7 @@ public class HouseAdapter extends ArrayAdapter<House> {
         return getView(position, convertView, parent);
     }
 
+    public interface OnHouseAdapterItemClickListener{
+        void OnHouseAdapterItemClick(String houseName);
+    }
 }
