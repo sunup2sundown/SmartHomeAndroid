@@ -6,27 +6,25 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.widget.EditText;
 
 import edu.temple.m.smarthomedroid.R;
 
 /**
- * Created by Matthew White on 3/10/2017.
+ * Created by M on 4/9/2017.
  */
 
-public class SignupDialogFragment extends DialogFragment {
-
-    private final String TAG = "Signup Dialog";
-    private EditText username, password, confirmPassword;
-    SignupDialogListener mListener;
+public class ChangeUserPasswordDialogFragment extends DialogFragment{
+    private final String TAG = "ChangeUserPasswordDialog";
+    ChangeUserPasswordDialogListener mListener;
 
     /* The activity that creates instance of dialog fragment must implement
     *  this interface in order to recieve event callbacks
      */
-    public interface SignupDialogListener{
-        public void onSignupDialogPositiveClick(DialogFragment dialog);
-        public void onSignupDialogNegativeClick(DialogFragment dialog);
+    public interface ChangeUserPasswordDialogListener{
+        public void onChangeUserPasswordDialogPositiveClick(DialogFragment dialog);
+        public void onChangeUserPasswordDialogNegativeClick(DialogFragment dialog);
     }
 
     //Override the Fragment.onAttach method to instantiate listener
@@ -37,7 +35,7 @@ public class SignupDialogFragment extends DialogFragment {
         //Verify that the host activity implements the callback interface
         try{
             //Instantiate listener so events can be sent to host
-            mListener = (SignupDialogListener) activity;
+            mListener = (ChangeUserPasswordDialogListener) activity;
         } catch(ClassCastException e){
             //Activity doesn't implement
             throw new ClassCastException(activity.toString() + " must implement SignupDialogListener");
@@ -54,22 +52,20 @@ public class SignupDialogFragment extends DialogFragment {
 
         //Inflate dialog with custom layout
         //null for parent view as in dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_signup, null))
-                .setPositiveButton("Sign up", new DialogInterface.OnClickListener(){
+        builder.setView(inflater.inflate(R.layout.dialog_change_user_password, null))
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //Send the positive button event back to host activity
-                        mListener.onSignupDialogPositiveClick(SignupDialogFragment.this);
+                        mListener.onChangeUserPasswordDialogPositiveClick(ChangeUserPasswordDialogFragment.this);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         //send the negative button event back to host activity
-                        mListener.onSignupDialogNegativeClick(SignupDialogFragment.this);
+                        mListener.onChangeUserPasswordDialogNegativeClick(ChangeUserPasswordDialogFragment.this);
                     }
                 });
         //Create Dialog object and return it
         return builder.create();
     }
-
-
 }

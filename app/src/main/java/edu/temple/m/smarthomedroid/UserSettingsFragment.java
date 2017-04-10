@@ -1,7 +1,10 @@
 package edu.temple.m.smarthomedroid;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -11,13 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
@@ -26,14 +34,17 @@ import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
  * Created by M on 3/16/2017.
  */
 
-public class UserSettingsFragment extends Fragment{
+public class UserSettingsFragment extends Fragment implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener, ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener{
 
     FragmentManager fm;
-    OnFragment4AttachedListener activity;
 
     private final String TAG = "SettingsFragment";
 
-    private String usern, sessionToken;
+    private String usern, userPassword, newUserPassword;
+    private String houseName, newHouseName, housePassword, newHousePassword;
+    private String  sessionToken;
+
+    FragmentManager dialogManager;
 
     //String userid;
     public UserSettingsFragment() {
@@ -50,13 +61,13 @@ public class UserSettingsFragment extends Fragment{
         usern = "Tom Brady";
         sessionToken = "51FAA52D-CD90-461A-8735-D866DB3BDFF3";
 
-        fm = getFragmentManager();
+        dialogManager = getActivity().getSupportFragmentManager();
 
         ((Button)v.findViewById(R.id.btn_changepw)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangePasswordDialogFragment f = new ChangePasswordDialogFragment();
-                f.show(fm, null);
+                ChangeUserPasswordDialogFragment f = new ChangeUserPasswordDialogFragment();
+                showChangeUserPasswordDialog(dialogManager);
             }
         });
         ((Button)v.findViewById(R.id.btn_newhouse)).setOnClickListener(new View.OnClickListener() {
@@ -77,14 +88,41 @@ public class UserSettingsFragment extends Fragment{
         return v;
     }
 
-    public void onAttach(Context actv){
-        super.onAttach(actv);
-        //activity = (OnFragment4AttachedListener)actv;
-        //userid = activity.getUsername();
+    /* Dialog Fragment Listeners Implementations
+    *
+     */
+    //Change Username Dialog Listener Implementation
+    public void showChangeUsernameDialog(FragmentManager fm){
+        //create instance of dialog fragment and show it
+        DialogFragment changeUsernameDialog = new ChangeUsernameDialogFragment();
+        changeUsernameDialog.show(fm, "ChangeUsernameDialogFragment");
     }
 
-    public interface OnFragment4AttachedListener {
-        String getUsername();
+    @Override
+    public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
+
+    }
+
+    @Override
+    public void onChangeUsernameDialogNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }
+
+    //Change Username Dialog Listener Implementation
+    public void showChangeUserPasswordDialog(FragmentManager fm){
+        //create instance of dialog fragment and show it
+        DialogFragment changeUserPasswordDialog = new ChangeUserPasswordDialogFragment();
+        changeUserPasswordDialog.show(fm, "ChangeUserPasswordDialogFragment");
+    }
+
+    @Override
+    public void onChangeUserPasswordDialogPositiveClick(DialogFragment dialog){
+
+    }
+
+    @Override
+    public void onChangeUserPasswordDialogNegativeClick(DialogFragment dialog){
+        //dialog.getDialog().cancel();
     }
 
     /**
@@ -100,7 +138,7 @@ public class UserSettingsFragment extends Fragment{
             super.onPreExecute();
 
             try{
-                jsonObject.put("username", user);
+                jsonObject.put("password", user);
                 jsonObject.put("sessionToken", sessionToken);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
@@ -130,7 +168,7 @@ public class UserSettingsFragment extends Fragment{
 
     private class ChangeUserPassword extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        //String pw = password;
+        String pw = userPassword;
         String session = sessionToken;
 
         @Override
@@ -138,7 +176,7 @@ public class UserSettingsFragment extends Fragment{
             super.onPreExecute();
 
             try{
-            //    jsonObject.put("username", pw);
+                jsonObject.put("password", pw);
                 jsonObject.put("sessionToken", sessionToken);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
@@ -150,10 +188,10 @@ public class UserSettingsFragment extends Fragment{
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", jsonObject);
 
             if(resp != null){
-                Log.d(TAG, "Change Username: " + resp);
+                Log.d(TAG, "Change Password: " + resp);
             }
 
             return null;
@@ -168,7 +206,9 @@ public class UserSettingsFragment extends Fragment{
 
     private class ChangeHouseName extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String user = usern;
+        String name = houseName;
+        String password = housePassword;
+        String newName = newHouseName;
         String session = sessionToken;
 
         @Override
@@ -176,7 +216,9 @@ public class UserSettingsFragment extends Fragment{
             super.onPreExecute();
 
             try{
-                jsonObject.put("username", user);
+                jsonObject.put("oldHouseName", name);
+                jsonObject.put("housePassword", password);
+                jsonObject.put("newHouseName", newName);
                 jsonObject.put("sessionToken", sessionToken);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
@@ -188,10 +230,10 @@ public class UserSettingsFragment extends Fragment{
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousename", jsonObject);
 
             if(resp != null){
-                Log.d(TAG, "Change Username: " + resp);
+                Log.d(TAG, "Change House Name: " + resp);
             }
 
             return null;
@@ -206,7 +248,9 @@ public class UserSettingsFragment extends Fragment{
 
     private class ChangeHousePassword extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String user = usern;
+        String name = houseName;
+        String password = housePassword;
+        String newPassword = newHousePassword;
         String session = sessionToken;
 
         @Override
@@ -214,7 +258,9 @@ public class UserSettingsFragment extends Fragment{
             super.onPreExecute();
 
             try{
-                jsonObject.put("username", user);
+                jsonObject.put("houseName", name);
+                jsonObject.put("oldHousePassword", password);
+                jsonObject.put("newHousePassword", newPassword);
                 jsonObject.put("sessionToken", sessionToken);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
@@ -226,10 +272,10 @@ public class UserSettingsFragment extends Fragment{
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousepassword", jsonObject);
 
             if(resp != null){
-                Log.d(TAG, "Change Username: " + resp);
+                Log.d(TAG, "Change House Password: " + resp);
             }
 
             return null;
@@ -244,7 +290,8 @@ public class UserSettingsFragment extends Fragment{
 
     private class JoinHouse extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String user = usern;
+        String name = houseName;
+        String password = housePassword;
         String session = sessionToken;
 
         @Override
@@ -252,7 +299,8 @@ public class UserSettingsFragment extends Fragment{
             super.onPreExecute();
 
             try{
-                jsonObject.put("username", user);
+                jsonObject.put("houseName", name);
+                jsonObject.put("housePassword", password);
                 jsonObject.put("sessionToken", sessionToken);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
@@ -264,10 +312,10 @@ public class UserSettingsFragment extends Fragment{
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/joinhouse", jsonObject);
 
             if(resp != null){
-                Log.d(TAG, "Change Username: " + resp);
+                Log.d(TAG, "Join House: " + resp);
             }
 
             return null;

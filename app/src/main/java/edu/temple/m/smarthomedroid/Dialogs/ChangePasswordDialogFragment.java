@@ -1,6 +1,7 @@
 package edu.temple.m.smarthomedroid.Dialogs;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import edu.temple.m.smarthomedroid.R;
 
 public class ChangePasswordDialogFragment extends DialogFragment {
+
     public static ChangePasswordDialogFragment newInstance() {
         ChangePasswordDialogFragment frag = new ChangePasswordDialogFragment();
         Bundle args = new Bundle();
@@ -39,7 +41,8 @@ public class ChangePasswordDialogFragment extends DialogFragment {
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ChangePasswordDialogFragment.this.getDialog().cancel();
+                        //ChangePasswordDialogFragment.this.getDialog().cancel();
+
                     }
                 });
         return builder.create();
