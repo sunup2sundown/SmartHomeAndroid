@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -67,6 +68,12 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
 
         rAdapter.add(new Relay("0", "Test Relay", 0));
+        rAdapter.add(new Relay("1", "Test Relay1", 1));
+        rAdapter.add(new Relay("2", "Test Relay2", 0));
+        rAdapter.add(new Relay("2", "Test Relay3", 0));
+        rAdapter.add(new Relay("2", "Test Relay4", 1));
+        rAdapter.add(new Relay("2", "Test Relay5", 1));
+        rAdapter.add(new Relay("2", "Test Relay6", 0));
 
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
