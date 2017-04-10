@@ -24,5 +24,7 @@
     <string name="forgot_username">Forgot username?</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="welcome">Welcome to SmartHome Gateway</string>
+    <string name="textON">ON</string>
+    <string name="textOFF">OFF</string>
 
 </resources>

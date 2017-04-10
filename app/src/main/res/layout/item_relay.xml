@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,7 +7,18 @@
         android:id="@+id/item_relay_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="left"
         android:text="Default Text"
-        android:layout_gravity="center_horizontal"/>
-</LinearLayout>
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_relay_name"
+        android:layout_alignParentEnd="true"
+        android:gravity="right"
+        android:textOff="@string/textOFF"
+        android:textOn="@string/textON" />
+
+</RelativeLayout>
