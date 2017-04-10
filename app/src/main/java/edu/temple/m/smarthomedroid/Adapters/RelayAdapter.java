@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.R;
+
 
 /**
  * Created by M on 4/3/2017.
@@ -33,16 +36,34 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Relay relay = (Relay)getItem(position);
+        final Relay relay = (Relay)getItem(position);
 
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_relay, parent, false);
         }
-
+        Switch stt = (Switch)convertView.findViewById(R.id.switch1);
+        if(relay.getStatus()){
+            stt.setChecked(true);
+        }else{
+            stt.setChecked(false);
+        }
+        if(stt.isPressed()) {
+            stt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        relay.switchOn();
+                    } else {
+                        relay.switchOff();
+                    }
+                }
+            });
+        }
         TextView tvName = (TextView)convertView.findViewById(R.id.item_relay_name);
 
         tvName.setText(relay.getName());
 
         return convertView;
     }
+
 }
