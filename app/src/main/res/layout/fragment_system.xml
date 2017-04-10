@@ -40,12 +40,4 @@
         android:layout_alignBottom="@+id/button_add_board"
         android:layout_alignStart="@+id/button_remove_peripheral" />
 
-    <GridView
-        android:id="@+id/gridview_peripherals"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/button_remove_board"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="153dp" />
-
 </RelativeLayout>
