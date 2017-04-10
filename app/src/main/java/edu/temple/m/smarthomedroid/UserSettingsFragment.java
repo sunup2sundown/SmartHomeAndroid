@@ -8,18 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Objects.House;
-import edu.temple.m.smarthomedroid.Objects.Sensor;
 
 /**
  * Created by M on 3/16/2017.
@@ -81,9 +79,7 @@ public class UserSettingsFragment extends Fragment {
         //Create and set custom adapter for relay list
         HouseAdapter adapter = new HouseAdapter(getActivity(), houseList);
 
-        adapter.add(new House("1", "Test House 1"));
-
-        ListView lv = (ListView)getView().findViewById(R.id.listview_houses);
+        ExpandableListView lv = (ExpandableListView)getView().findViewById(R.id.listview_houses);
         lv.setAdapter(adapter);
     }
 
@@ -98,9 +94,8 @@ public class UserSettingsFragment extends Fragment {
     }
 
     private void populateList(){
-        House newHouse = new House("0", "Test House 0");
-
-        houseList.add(0, newHouse);
+        houseList.add(0, new House("0", "Test House 0"));
+        houseList.add(0, new House("1", "Test House 1"));
     }
 
 }

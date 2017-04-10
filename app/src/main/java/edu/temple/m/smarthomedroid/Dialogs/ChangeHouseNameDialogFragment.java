@@ -14,10 +14,10 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class ChangeHouseNameDialogFragment extends DialogFragment {
-    public static NewHouseDialogFragment newInstance() {
-        NewHouseDialogFragment frag = new NewHouseDialogFragment();
+    public static ChangeHouseNameDialogFragment newInstance(String houseName) {
+        ChangeHouseNameDialogFragment frag = new ChangeHouseNameDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "Rename House");
+        args.putString("title", "Rename " + houseName);
         frag.setArguments(args);
         return frag;
     }

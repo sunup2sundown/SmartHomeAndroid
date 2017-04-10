@@ -14,10 +14,10 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class ChangeHousePasswordDialogFragment extends DialogFragment {
-    public static ChangeHousePasswordDialogFragment newInstance() {
+    public static ChangeHousePasswordDialogFragment newInstance(String houseName) {
         ChangeHousePasswordDialogFragment frag = new ChangeHousePasswordDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "New Password for House");
+        args.putString("title", "Change Password of " + houseName);
         frag.setArguments(args);
         return frag;
     }

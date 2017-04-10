@@ -36,23 +36,9 @@ public class Dashboard extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        //Construct data source
-        houseList = new ArrayList<House>();
-        //Populate sensorList from API call
-        House newHouse = new House("0", "Test House 0");
+        // populate list of houses...
 
-        houseList.add(0, newHouse);
-
-
-        //Create and set custom adapter for relay list
-        HouseAdapter hAdapter = new HouseAdapter(getContext(), houseList);
-
-        hAdapter.add(new House("1", "Test House 1"));
-
-        Spinner sp = (Spinner)getView().findViewById(R.id.spinner_houses);
-        sp.setAdapter(hAdapter);
-
-        //Construct data source
+        // Construct data source
         sensorList = new ArrayList<Sensor>();
         //Populate sensorList from API call
 

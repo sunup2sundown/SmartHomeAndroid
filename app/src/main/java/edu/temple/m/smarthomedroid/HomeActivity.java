@@ -13,13 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
-import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 
-public class HomeActivity extends AppCompatActivity  implements HouseAdapter.OnHouseAdapterItemClickListener{
+public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHouseAdapterItemClickListener{
 
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -191,9 +190,15 @@ public class HomeActivity extends AppCompatActivity  implements HouseAdapter.OnH
         mDrawer.closeDrawers();
     }
 
-    public void OnHouseAdapterItemClick(String houseName){
-        HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName);
+    public void onHouseAdapterItemRenameClick(String houseName){
+        ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
         f.show(fragmentManager, null);
+    }
+
+    public void onHouseAdapterItemChangePasswordClick(String houseName){
+        ChangeHousePasswordDialogFragment f = ChangeHousePasswordDialogFragment.newInstance(houseName);
+        f.show(fragmentManager, null);
+
     }
 }
 
