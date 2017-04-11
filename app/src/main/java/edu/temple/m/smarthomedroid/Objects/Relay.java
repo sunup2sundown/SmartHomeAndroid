@@ -26,15 +26,6 @@ public class Relay {
     public void switchOff(){
         currentValue = 0;
     }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setHouseName(String houseName){
-        this.houseName = houseName;
-    }
-
     public boolean getStatus(){
         if(currentValue == 1){
             return true;
@@ -42,6 +33,15 @@ public class Relay {
         else{
             return false;
         }
+    }
+
+    // Peripheral interface functions
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setHouseName(String houseName){
+        this.houseName = houseName;
     }
 
     public String getName(){

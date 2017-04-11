@@ -14,7 +14,7 @@ public class SwitchHouseDialogFragment extends DialogFragment {
     public static SwitchHouseDialogFragment newInstance() {
         SwitchHouseDialogFragment frag = new SwitchHouseDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "Switch House");
+        args.putString("title", "Join House");
         frag.setArguments(args);
         return frag;
     }
@@ -31,7 +31,7 @@ public class SwitchHouseDialogFragment extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_switchhouse, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Switch", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Join", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // switch house...

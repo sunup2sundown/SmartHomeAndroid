@@ -67,4 +67,14 @@ public class ChangeHousePasswordDialogFragment extends DialogFragment {
         //Create Dialog object and return it
         return builder.create();
     }
+
+
+    public static ChangeHousePasswordDialogFragment newInstance(String houseName) {
+        ChangeHousePasswordDialogFragment frag = new ChangeHousePasswordDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title", "Change Password of " + houseName);
+        frag.setArguments(args);
+        return frag;
+    }
+
 }

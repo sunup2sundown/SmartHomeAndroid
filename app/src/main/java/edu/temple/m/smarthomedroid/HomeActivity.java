@@ -1,5 +1,7 @@
 package edu.temple.m.smarthomedroid;
 
+import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +13,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class HomeActivity extends AppCompatActivity{
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Objects.House;
+
+public class HomeActivity extends AppCompatActivity
+        implements HouseAdapter.OnHouseAdapterItemClickListener,
+        ChangeUsernameDialogFragment.ChangeUsernameDialogListener,
+        ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener,
+        ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener,
+        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
+    private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -31,6 +53,14 @@ public class HomeActivity extends AppCompatActivity{
     //Session Data
     String userId, sessionId;
 
+
+    private String usern, userPassword, newUserPassword;
+    private String houseName, newHouseName, housePassword, newHousePassword;
+    private String  sessionToken;
+    private ArrayList<House> houseList;
+    FragmentManager dialogManager;
+
+
     /**
      * Class Methods
      * @param savedInstanceState
@@ -39,6 +69,9 @@ public class HomeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
+
+        usern = "Tom Brady";
+        sessionToken = "51FAA52D-CD90-461A-8735-D866DB3BDFF3";
 
         //Receive session ID and Username from Login Activity
         Intent prevIntent = getIntent();
@@ -186,6 +219,266 @@ public class HomeActivity extends AppCompatActivity{
         setTitle(menuItem.getTitle());
         //Close Navigation Drawer
         mDrawer.closeDrawers();
+    }
+
+    // Interface functions
+
+    public void onHouseAdapterItemRenameClick(String houseName) {
+        ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
+        f.show(fragmentManager, null);
+    }
+    public void onHouseAdapterItemChangePasswordClick(String houseName){
+        ChangeHousePasswordDialogFragment f = ChangeHousePasswordDialogFragment.newInstance(houseName);
+        f.show(fragmentManager, null);
+    }
+
+    /* Dialog Fragment Listeners Implementations
+     *
+     */
+
+    @Override
+    public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
+
+    }
+
+    @Override
+    public void onChangeUsernameDialogNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }
+
+    @Override
+    public void onChangeUserPasswordDialogPositiveClick(DialogFragment dialog){
+
+    }
+
+    @Override
+    public void onChangeHouseNameDialogPositiveClick(DialogFragment dialog){
+        houseName = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_old_name)).getText().toString();
+        housePassword = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_password)).getText().toString();
+        newHouseName = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_new_name)).getText().toString();
+        (new ChangeHouseName()).execute();
+    }
+
+    @Override
+    public void onChangeHousePasswordDialogPositiveClick(DialogFragment dialog){
+
+    }
+
+    // "on negative click" functions
+    @Override
+    public void onChangeUserPasswordDialogNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }
+    @Override
+    public void onChangeHouseNameDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
+    }
+    @Override
+    public void onChangeHousePasswordDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
+    }
+
+    /**
+     * HTTP Calls --Async Task
+     */
+    private class ChangeUserName extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String user = usern;
+        String session = sessionToken;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("password", user);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Change Username: " + resp);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    private class ChangeUserPassword extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String pw = userPassword;
+        String session = sessionToken;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("password", pw);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Change Password: " + resp);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    private class ChangeHouseName extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String name = houseName;
+        String password = housePassword;
+        String newName = newHouseName;
+        String session = sessionToken;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("oldHouseName", name);
+                jsonObject.put("housePassword", password);
+                jsonObject.put("newHouseName", newName);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousename", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Change House Name: " + resp);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    private class ChangeHousePassword extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String name = houseName;
+        String password = housePassword;
+        String newPassword = newHousePassword;
+        String session = sessionToken;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("houseName", name);
+                jsonObject.put("oldHousePassword", password);
+                jsonObject.put("newHousePassword", newPassword);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousepassword", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Change House Password: " + resp);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    private class JoinHouse extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String name = houseName;
+        String password = housePassword;
+        String session = sessionToken;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("houseName", name);
+                jsonObject.put("housePassword", password);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/joinhouse", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Join House: " + resp);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
     }
 }
 

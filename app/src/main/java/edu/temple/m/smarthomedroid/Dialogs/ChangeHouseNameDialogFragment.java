@@ -67,4 +67,13 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
         //Create Dialog object and return it
         return builder.create();
     }
+
+    public static ChangeHouseNameDialogFragment newInstance(String houseName) {
+        ChangeHouseNameDialogFragment frag = new ChangeHouseNameDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title", "Rename " + houseName);
+        frag.setArguments(args);
+        return frag;
+    }
+
 }
