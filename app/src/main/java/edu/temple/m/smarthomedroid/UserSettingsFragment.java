@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
@@ -50,6 +51,7 @@ public class UserSettingsFragment extends Fragment {
     private String houseName, newHouseName, housePassword, newHousePassword;
     private String  sessionToken;
     private ArrayList<House> houseList;
+    private String response;
 
     //String userid;
     public UserSettingsFragment() {
@@ -92,19 +94,14 @@ public class UserSettingsFragment extends Fragment {
         return v;
     }
 
-    private void populateList(){
-        houseList.add(0, new House("0", "John's House"));
-        houseList.add(0, new House("1", "Mary's House"));
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
 
         //Construct data source
         houseList = new ArrayList<House>();
-        //Populate list from API call
-        populateList();
-
+        // new RetrieveHouses().execute();
+        // Populate list from API call
+        populateList(response);
 
         //Create and set custom adapter for relay list
         HouseAdapter adapter = new HouseAdapter(getActivity(), houseList);
@@ -113,5 +110,55 @@ public class UserSettingsFragment extends Fragment {
         lv.setAdapter(adapter);
     }
 
+    private class RetrieveHouses extends AsyncTask<Void, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            try{
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/listhouses", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Retrieve Houses: " + resp);
+            }
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    private void populateList(String response){
+        /*
+        JSONObject houseJson = null;
+        try {
+            houseJson = new JSONObject(response);
+        } catch (JSONException e){
+            Log.e(TAG, "JSONException: " + e.getMessage());
+        }
+        Iterator<String> keys = houseJson.keys();
+        while (keys.hasNext()){
+            String key = keys.next();
+            // get house data from json into houseList
+        }
+        */
+    }
 }
 

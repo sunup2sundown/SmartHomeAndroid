@@ -383,7 +383,7 @@ public class HomeActivity extends AppCompatActivity
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousename", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousename", jsonObject);
 
             if(resp != null){
                 Log.d(TAG, "Change House Name: " + resp);
@@ -425,7 +425,7 @@ public class HomeActivity extends AppCompatActivity
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousepassword", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", jsonObject);
 
             if(resp != null){
                 Log.d(TAG, "Change House Password: " + resp);
@@ -465,7 +465,7 @@ public class HomeActivity extends AppCompatActivity
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/joinhouse", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", jsonObject);
 
             if(resp != null){
                 Log.d(TAG, "Join House: " + resp);
