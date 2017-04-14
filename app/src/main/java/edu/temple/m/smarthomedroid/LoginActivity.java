@@ -26,6 +26,8 @@ import edu.temple.m.smarthomedroid.Dialogs.LoginDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SignupDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
+import static java.lang.Thread.sleep;
+
 
 public class LoginActivity extends AppCompatActivity implements SignupDialogFragment.SignupDialogListener, LoginDialogFragment.LoginDialogListener{
 
@@ -37,9 +39,16 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private SignupDialogFragment signupFrag;
     private boolean goodUser;
     private String userStr, passStr;
+    private String good ="1",bad="0";
 
     FragmentManager dialogManager;
 
+    private void setgood(){
+        this.goodUser=true;
+    }
+    private void setbad(){
+        this.goodUser=false;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         btnSignin = (Button)findViewById(R.id.sign_in);
         btnSignup = (Button)findViewById(R.id.sign_up);
 
-        goodUser = false;
+        //goodUser = false;
 
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,14 +96,18 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         password = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_password);
         confirmPassword = (EditText) dialog.getDialog().findViewById(R.id.signup_dialog_confirm);
 
-        new CheckUsername().execute();
-
         //Log.d(TAG, password.getText().toString());
         //Log.d(TAG, confirmPassword.getText().toString());
         userStr = username.getText().toString();
         passStr = password.getText().toString();
         String confirm = confirmPassword.getText().toString();
 
+        new CheckUsername().execute();
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if(Objects.equals(passStr, confirm)){
             if(username_error(userStr)){
                 //Toast.makeText(this, "Please enter a proper username", Toast.LENGTH_LONG);
@@ -109,8 +122,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                         });
 
                 AlertDialog aDialog = builder.show();
-            }
-            else if(!goodUser){
+            }else if(!goodUser){
                 //Toast.makeText(this, "That Username already exists.", Toast.LENGTH_LONG);
                 //Show Dialog that info was wrong
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -123,8 +135,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                         });
 
                 AlertDialog aDialog = builder.show();
-            }
-            else{
+            }else{
                 //Log.d(TAG, "Got to Account Creation");
                 //Log.d(TAG, hash_pass(password.getText().toString()));
                 new CreateAccount().execute();
@@ -202,19 +213,17 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
 
-
-
             //Make a request to url and get response
             String resp = sh.makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + user, "GET");
 
             if(resp != null){
                 Log.d(TAG, "Check Username Response: " + resp);
 
-                if(resp.equals("1\n")){
-                    goodUser = true;
+                if(resp.equals(good)) {
+                    setgood();
                 }
                 else{
-                    goodUser = false;
+                    setbad();
                 }
             }
 
