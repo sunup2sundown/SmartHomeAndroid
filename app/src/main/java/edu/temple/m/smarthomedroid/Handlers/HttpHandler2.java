@@ -2,6 +2,7 @@ package edu.temple.m.smarthomedroid.Handlers;
 
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -21,16 +22,15 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by M on 3/12/2017.
  */
 
-public class HttpHandler {
+public class HttpHandler2 {
 
-    private static final String TAG = HttpHandler.class.getSimpleName();
+    private static final String TAG = HttpHandler2.class.getSimpleName();
 
-    public HttpHandler(){
+    public HttpHandler2(){
 
     }
-
-    public String makeGetCall(String reqUrl, String method){
-        String response = null;
+    private JSONObject respGet,respPost;
+    public JSONObject makeGetCall(String reqUrl, String method){
 
         try{
             URL url = new URL(reqUrl);
@@ -40,7 +40,7 @@ public class HttpHandler {
 
             //Read Response
             InputStream in = new BufferedInputStream(conn.getInputStream());
-            response = stream_to_string(in);
+            respGet = stream_to_string(in);
         }catch(MalformedURLException e){
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
         } catch(ProtocolException e){
@@ -51,13 +51,13 @@ public class HttpHandler {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
 
-        return response;
+        return respGet;
     }
 
-    public String makePostCall(String reqUrl, JSONObject json){
+    public JSONObject makePostCall(String reqUrl, JSONObject json){
         HttpsURLConnection conn;
         String data = json.toString();
-        String result = null;
+
 
         try{
             conn = (HttpsURLConnection) ((new URL(reqUrl).openConnection()));
@@ -76,7 +76,7 @@ public class HttpHandler {
 
             //Read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
-            result = stream_to_string(in);
+            respPost = stream_to_string(in);
 
         }catch(MalformedURLException e){
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
@@ -88,14 +88,17 @@ public class HttpHandler {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
 
-        return result;
+        return respPost;
 
     }
 
-    private String stream_to_string(InputStream is){
+    private JSONObject stream_to_string(InputStream is){
+        int count=0,count2= 0;
+
+        JSONObject res = null;
         BufferedReader reader = new BufferedReader((new InputStreamReader(is)));
         StringBuilder sb = new StringBuilder();
-
+        String sb2;
         String line;
         try{
             while((line = reader.readLine()) != null){
@@ -110,6 +113,24 @@ public class HttpHandler {
                 e.printStackTrace();
             }
         }
-        return sb.toString();
+        sb2=sb.toString();
+
+        if (sb2 != null) {
+            while (sb2.charAt(count)!='{'){
+                count++;
+            }
+            count2=sb2.length()-1;
+            while (sb2.charAt(count2)!='}'){
+                count2--;
+            }
+        }
+        sb2= sb2.substring(count,(count2+1));
+        //sb2= sb2.replaceAll("\\[", "").replaceAll("\\]","");
+        try {
+            res = new JSONObject(sb2);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }

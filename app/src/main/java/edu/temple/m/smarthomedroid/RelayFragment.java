@@ -20,11 +20,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.RelayAdapter;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.HttpHandler2;
 import edu.temple.m.smarthomedroid.Objects.Relay;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by M on 4/4/2017.
@@ -34,7 +38,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
     ArrayList<Relay> relayList;
     Adapter mAdapter;
-
+    private JSONObject resp1;
     final String TAG = "RelayFragment";
     private String sessionToken = "";
     private String houseName = "";
@@ -63,18 +67,30 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         //populateList();
 
         new RetrieveRelays().execute();
-
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //Create and set custom adapter for relay list
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
-
-        rAdapter.add(new Relay("0", "Test Relay", 0));
-        rAdapter.add(new Relay("1", "Test Relay1", 1));
-        rAdapter.add(new Relay("2", "Test Relay2", 0));
-        rAdapter.add(new Relay("2", "Test Relay3", 0));
-        rAdapter.add(new Relay("2", "Test Relay4", 1));
-        rAdapter.add(new Relay("2", "Test Relay5", 1));
-        rAdapter.add(new Relay("2", "Test Relay6", 0));
-
+        int k=0;
+        Iterator<String> iterator = resp1.keys();
+        while(iterator.hasNext()) {
+            String name = null;
+            try {
+                name = resp1.getString(iterator.next());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            int val=0;
+            try {
+                val = resp1.getInt(iterator.next());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            rAdapter.add(new Relay("0", name , val));
+        }
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
     }
@@ -117,15 +133,15 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
+            HttpHandler2 sh = new HttpHandler2();
 
             //Make a request to url and get response
-            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", json);
-
-            if(resp != null){
-                Log.d(TAG, "Retrieve Relay Response: " + resp);
-            }
-
+            resp1 = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", json);
+            //resp = resp.replaceAll("\\[", "").replaceAll("\\]","");
+            //if(resp != null){
+            //    Log.d(TAG, "Retrieve Relay Response: " + resp);
+            //}
+            Log.d(TAG, "Retrieve Relay Response: " + resp1);
             return null;
         }
 
