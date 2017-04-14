@@ -9,6 +9,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Objects.Relay;
@@ -47,18 +49,25 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
         }else{
             stt.setChecked(false);
         }
-        if(stt.isPressed()) {
-            stt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        stt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        relay.switchOn();
+                        try {
+                            relay.switchOn();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     } else {
-                        relay.switchOff();
+                        try {
+                            relay.switchOff();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
-        }
         TextView tvName = (TextView)convertView.findViewById(R.id.item_relay_name);
 
         tvName.setText(relay.getName());
