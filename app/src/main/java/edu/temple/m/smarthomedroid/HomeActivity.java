@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.JSONHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 public class HomeActivity extends AppCompatActivity
@@ -76,7 +78,12 @@ public class HomeActivity extends AppCompatActivity
         //Receive session ID and Username from Login Activity
         Intent prevIntent = getIntent();
         sessionId = prevIntent.getStringExtra("SessionId");
-        userId = prevIntent.getStringExtra("userid");
+        userId = prevIntent.getStringExtra("Username");
+
+        Log.d(TAG, "Username: " + userId);
+        Log.d(TAG, "SessionToken: " + sessionId);
+
+
 
         //get toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -165,8 +172,12 @@ public class HomeActivity extends AppCompatActivity
         //based on nav item clicked
         //We do not need to save entire fragment b/c we want to
         //reload data on create anyway
+        Bundle bundle = new Bundle();
         Fragment fragment = null;
         boolean activityClosing= false;
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);
 
         //Generate Fragment ONLY WHEN FRAGMENT IS COMPLETED to make sure it will
         //show properly
@@ -206,6 +217,8 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if(!activityClosing && fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
             //Insert the fragment by replacing any existing fragments
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();

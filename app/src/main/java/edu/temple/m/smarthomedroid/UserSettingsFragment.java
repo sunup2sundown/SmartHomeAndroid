@@ -45,6 +45,8 @@ public class UserSettingsFragment extends Fragment {
     FragmentManager fm;
 
     private final String TAG = "SettingsFragment";
+    private String sessionID, userID;
+    private Bundle bundle;
 
     private String usern, userPassword, newUserPassword;
     private String houseName, newHouseName, housePassword, newHousePassword;
@@ -60,6 +62,14 @@ public class UserSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_settings,container,false);
+
+        bundle = new Bundle();
+        //Receive argument bundle from Home Activity
+        userID = getArguments().getString("Username");
+        sessionID = getArguments().getString("SessionToken");
+
+        bundle.putString("SessionToken", sessionID);
+
         TextView username = (TextView) v.findViewById(R.id.text_username);
         usern = "Tom Brady";
         sessionToken = "51FAA52D-CD90-461A-8735-D866DB3BDFF3";
@@ -71,6 +81,7 @@ public class UserSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ChangeUserPasswordDialogFragment f = new ChangeUserPasswordDialogFragment();
+                f.setArguments(bundle);
                 f.show(fm, null);
             }
         });
@@ -78,6 +89,7 @@ public class UserSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NewHouseDialogFragment f = NewHouseDialogFragment.newInstance();
+                f.setArguments(bundle);
                 f.show(fm, null);
             }
         });
@@ -85,6 +97,7 @@ public class UserSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SwitchHouseDialogFragment f = SwitchHouseDialogFragment.newInstance();
+                f.setArguments(bundle);
                 f.show(fm, null);
             }
         });

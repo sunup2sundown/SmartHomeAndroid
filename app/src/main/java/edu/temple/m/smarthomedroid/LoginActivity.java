@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         userStr = username.getText().toString();
         passStr = password.getText().toString();
 
-        //new LoginAccount().execute();
+        new LoginAccount().execute();
         Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
     }
@@ -326,12 +326,21 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                 pDialog.dismiss();
             }
 
+            String tempString = "";
+
+            try {
+                JSONObject temp = new JSONObject(resp);
+                Log.d(TAG, "Session Token:" + tempString);
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
+
             if(start){
                 //Go to Home Activity Screen with Session Token
                 //Send user info and session token to Home Activity or create a user instance
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                 i.putExtra("Username", username.getText().toString());
-                i.putExtra("SessionId", resp);
+                i.putExtra("SessionId", tempString);
                 //Go to House Activity Screen with Session Token
                 //Send user info and session token to House Activity or create a user instance
                 startActivity(i);

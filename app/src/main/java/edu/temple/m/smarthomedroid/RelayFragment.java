@@ -1,6 +1,5 @@
 package edu.temple.m.smarthomedroid;
 
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,7 +55,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         jArray = new JSONArray();
         houseName = "Hardwick";
-        sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
+        sessionToken = "3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
         relayList = new ArrayList<Relay>();
         //Populate relaysList from API call
@@ -67,13 +66,8 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         //Create and set custom adapter for relay list
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
 
-        rAdapter.add(new Relay("0", "Test Relay", 0));
-        rAdapter.add(new Relay("1", "Test Relay1", 1));
-        rAdapter.add(new Relay("2", "Test Relay2", 0));
-        rAdapter.add(new Relay("2", "Test Relay3", 0));
-        rAdapter.add(new Relay("2", "Test Relay4", 1));
-        rAdapter.add(new Relay("2", "Test Relay5", 1));
-        rAdapter.add(new Relay("2", "Test Relay6", 0));
+        rAdapter.add(new Relay("0", "Bedroom Light", 0));
+        rAdapter.add(new Relay("1", "Garage Door", 1));
 
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
@@ -136,7 +130,24 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     }
 
     private void populateList(String response){
-        
+        String name;
+        String value;
+
+        try {
+            JSONObject respObject = new JSONObject(response);
+            JSONArray respArray = respObject.getJSONArray("");
+
+            for(int i = 0; i < respArray.length(); i++){
+                JSONObject curr = respArray.getJSONObject(i);
+                name = curr.getString("PeripheralName");
+                value = curr.getString("PeripheralValue");
+                Log.d(TAG, "Name: "+ name);
+                Log.d(TAG, "Value:" + value);
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
     }
 }
 
