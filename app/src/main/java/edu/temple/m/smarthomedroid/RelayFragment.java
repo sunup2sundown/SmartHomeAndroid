@@ -1,6 +1,5 @@
 package edu.temple.m.smarthomedroid;
 
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,7 +59,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         jArray = new JSONArray();
         houseName = "Hardwick";
-        sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
+        sessionToken = "3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
         relayList = new ArrayList<Relay>();
         //Populate relaysList from API call
@@ -74,6 +73,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         }
         //Create and set custom adapter for relay list
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
+
         int k=0;
         Iterator<String> iterator = resp1.keys();
         while(iterator.hasNext()) {
@@ -91,6 +91,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
             }
             rAdapter.add(new Relay(sessionToken,houseName, name , val));
         }
+
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
     }
@@ -152,7 +153,24 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     }
 
     private void populateList(String response){
-        
+        String name;
+        String value;
+
+        try {
+            JSONObject respObject = new JSONObject(response);
+            JSONArray respArray = respObject.getJSONArray("");
+
+            for(int i = 0; i < respArray.length(); i++){
+                JSONObject curr = respArray.getJSONObject(i);
+                name = curr.getString("PeripheralName");
+                value = curr.getString("PeripheralValue");
+                Log.d(TAG, "Name: "+ name);
+                Log.d(TAG, "Value:" + value);
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
     }
 }
 

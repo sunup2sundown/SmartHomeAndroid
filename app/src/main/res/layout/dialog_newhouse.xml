@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:weightSum="1">
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/dialog_newhouse_name"
         android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:hint="House ID" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/dialog_newhouse_password"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:hint="Password"/>
 
     <EditText
-        android:id="@+id/confirm_password"
+        android:id="@+id/dialog_newhouse_confirm"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

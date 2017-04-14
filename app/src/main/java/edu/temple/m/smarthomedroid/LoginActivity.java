@@ -25,6 +25,7 @@ import java.util.Objects;
 import edu.temple.m.smarthomedroid.Dialogs.LoginDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SignupDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.HttpHandler2;
 
 import static java.lang.Thread.sleep;
 
@@ -182,8 +183,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         passStr = password.getText().toString();
 
         new LoginAccount().execute();
-        //Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-        //startActivity(i);
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -268,6 +269,9 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
 
             //Make a request to url and get response
             String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
+            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
+            //String resp = json.getString();
+
 
             if(resp != null){
                 Log.d(TAG, "Account Creation: " + resp);
@@ -315,7 +319,14 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             Log.d(TAG, jsonObject.toString());
 
             //Make a request to url and get response
-            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
+            //resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
+            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
+
+            try {
+                resp = json.getString("SessionToken");
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
 
             if(resp != null){
                 if(login_success(resp))
