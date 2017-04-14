@@ -68,7 +68,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         new RetrieveRelays().execute();
         try {
-            sleep(1000);
+            sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -89,7 +89,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            rAdapter.add(new Relay("0", name , val));
+            rAdapter.add(new Relay(sessionToken,houseName, name , val));
         }
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
@@ -101,7 +101,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     }
 
     private void populateList(){
-        Relay newRelay = new Relay("0", "Test Relay", 0);
+        Relay newRelay = new Relay(sessionToken,houseName, "Test Relay", 0);
 
         relayList.add(0, newRelay);
     }
