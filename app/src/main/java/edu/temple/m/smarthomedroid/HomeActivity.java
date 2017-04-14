@@ -192,7 +192,7 @@ public class HomeActivity extends AppCompatActivity
                 fragment = new RelayFragment();
                 break;
             case R.id.nav_config:
-                fragment = new RelayFragment();
+                fragment = new ConfigFragment();
                 break;
             case R.id.nav_setting:
                 fragment = new UserSettingsFragment();
