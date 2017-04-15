@@ -1,11 +1,14 @@
 package edu.temple.m.smarthomedroid;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorTreeAdapter;
+import android.widget.ExpandableListView;
 
 /**
  * Created by M on 3/16/2017.
@@ -23,7 +26,7 @@ public class ConfigFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.thirdlayout,container,false);
+        final View v = inflater.inflate(R.layout.config_layout,container,false);
 
         bundle = new Bundle();
         //Receive argument bundle from Home Activity
@@ -38,4 +41,8 @@ public class ConfigFragment extends Fragment{
     }
 
     //TODO: Expandable List view of Houses->Boards->Peripheral types->Peripheral Names
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        ExpandableListView elv = (ExpandableListView)getView().findViewById(R.id.elv_peripherals);
+    }
 }

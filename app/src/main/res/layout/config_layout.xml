@@ -29,8 +29,8 @@
         android:layout_alignBottom="@+id/button_add_peripheral"
         android:layout_toEndOf="@+id/button_add_peripheral" />
 
-    <GridView
-        android:id="@+id/gridview_peripherals"
+    <ExpandableListView
+        android:id="@+id/elv_peripherals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
