@@ -99,7 +99,7 @@ public class BoardAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
         // remove board from list on long click

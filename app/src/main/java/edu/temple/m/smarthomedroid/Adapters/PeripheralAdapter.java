@@ -13,6 +13,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.R;
@@ -22,9 +24,15 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class PeripheralAdapter extends ArrayAdapter<Peripheral> {
-    public OnPeripheralAdapterItemClickListener activity;
-    public PeripheralAdapter(Context context, ArrayList<Peripheral> peripherals){
+    private OnPeripheralAdapterItemClickListener activity;
+    private House house;
+    private String sessionToken;
+    private final String TAG = "PeripheralAdapter";
+    public PeripheralAdapter(Context context, House h, ArrayList<Peripheral> peripherals, String sessionToken){
         super(context, android.R.layout.simple_list_item_1, peripherals);
+        this.house = h;
+        this.sessionToken = sessionToken;
+        this.activity = (OnPeripheralAdapterItemClickListener) context;
     }
 
     @Override
@@ -45,15 +53,18 @@ public class PeripheralAdapter extends ArrayAdapter<Peripheral> {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                activity.removePeripheral(p);
+                removePeripheral(house, p, sessionToken);
                 PeripheralAdapter.this.remove(p);
                 return true;
             }
         });
         return convertView;
     }
-    public interface OnPeripheralAdapterItemClickListener{
-        void onPeripheralAdapterItemClick(String name);
-        void removePeripheral(Peripheral p);
+    private void removePeripheral(House house, Peripheral peripheral, String sessionToken){
+        new TaskHandler().removePeripheral(TAG, house.getName(), peripheral.getName(), sessionToken);
+    }
+
+    public interface OnPeripheralAdapterItemClickListener {
+        void onPeripheralAdapterItemClick(String peripheralName);
     }
 }

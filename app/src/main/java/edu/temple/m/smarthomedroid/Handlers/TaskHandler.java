@@ -36,6 +36,12 @@ public class TaskHandler {
         new AddPeripheral().execute(houseName, boardName, peripheralName, peripheralModel, pinConnection);
     }
 
+    public void removePeripheral(String context, String houseName, String peripheralName, String session){
+        tag = context;
+        sessionToken = session;
+        new RemovePeripheral().execute(houseName, peripheralName);
+    }
+
     public void renamePeripheral(String context, String houseName, String oldPeripheralName,
                                  String newPeripheralName, String session) {
         tag = context;
@@ -48,6 +54,12 @@ public class TaskHandler {
         tag = context;
         sessionToken = session;
         new AddBoard().execute(houseName, boardName, boardSerialNo);
+    }
+
+    public void removeBoard(String context, String houseName, String boardName, String session) {
+        tag = context;
+        sessionToken = session;
+        new RemoveBoard().execute(houseName, boardName);
     }
 
     public void renameBoard(String context, String houseName, String oldBoardName, String newBoardName,
@@ -69,12 +81,6 @@ public class TaskHandler {
         sessionToken = session;
         new ListAllHouses().execute();
         return response;
-    }
-
-    public void removeBoard(String context, String houseName, String boardName, String session) {
-        tag = context;
-        sessionToken = session;
-        new RemoveBoard().execute(houseName, boardName);
     }
 
     /**
@@ -155,7 +161,47 @@ public class TaskHandler {
             TaskHandler.this.response = response;
 
             if(response != null){
-                Log.d(tag, "Rename Peripheral Response: " + response);
+                Log.d(tag, "List All Houses Response: " + response);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            houseName = "";
+            housePassword = "";
+        }
+    }
+
+    // for API call 18. Remove Peripheral
+    private class RemovePeripheral extends AsyncTask<String, Void, Void> {
+        JSONObject json = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            HttpHandler sh = new HttpHandler();
+            if(houseName != null && sessionToken != null) {
+                try {
+                    json.put("sessionToken", sessionToken);
+                    json.put("houseName", args[0]);
+                    json.put("peripheralName", args[1]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //Make a request to url and get response
+            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", json);
+            if(response != null){
+                Log.d(tag, "Remove Peripheral Response: " + response);
             }
 
             return null;
@@ -285,7 +331,7 @@ public class TaskHandler {
             TaskHandler.this.response = response;
 
             if(response != null){
-                Log.d(tag, "Rename Peripheral Response: " + response);
+                Log.d(tag, "Get Boards by House Response: " + response);
             }
 
             return null;
@@ -370,7 +416,7 @@ public class TaskHandler {
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/removeboard", json);
 
             if(response != null){
-                Log.d(tag, "Create Board Response: " + response);
+                Log.d(tag, "Remove Board Response: " + response);
             }
 
             return null;

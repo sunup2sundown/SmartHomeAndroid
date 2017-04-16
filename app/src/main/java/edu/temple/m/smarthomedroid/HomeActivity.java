@@ -41,15 +41,14 @@ import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
 
 public class HomeActivity extends AppCompatActivity
-        implements HouseAdapter.OnHouseAdapterItemClickListener,
-        ChangeUsernameDialogFragment.ChangeUsernameDialogListener,
-        ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener,
-        ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener,
-        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener,
-        // BoardAdapter.OnBoardAdapterItemClickListener,
-        PeripheralAdapter.OnPeripheralAdapterItemClickListener,
-        // RenamePeripheralDialogFragment.RenamePeripheralDialogListener,
-        ConfigFragment.ConfigFragmentListener{
+        implements HouseAdapter.OnHouseAdapterItemClickListener
+        , ChangeUsernameDialogFragment.ChangeUsernameDialogListener
+        , ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener
+        , ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener
+        , ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener
+        // , BoardAdapter.OnBoardAdapterItemClickListener,
+        , PeripheralAdapter.OnPeripheralAdapterItemClickListener
+        {
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -265,29 +264,13 @@ public class HomeActivity extends AppCompatActivity
         // ????
     }
     */
-    @Override
-    public ArrayList<Board> retrieveBoards(House house){
-        ArrayList<Board> result = new ArrayList<>();
-        (new GetBoardsByHouse()).execute(house.getName());
-        try {
-            JSONObject respObject = new JSONObject(response);
-            JSONArray respArray = respObject.getJSONArray("");
 
-            for(int i = 0; i < respArray.length(); i++){
-                JSONObject curr = respArray.getJSONObject(i);
-                String name = curr.getString("boardName");
-                Log.d(TAG, "boardName: "+ name);
-                result.add(new Board(name, house.getName()));
-            }
-        } catch(JSONException e){
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     /* Dialog Fragment Listeners Implementations
      *
      */
+
+
 
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
@@ -330,11 +313,6 @@ public class HomeActivity extends AppCompatActivity
     public void onChangeHousePasswordDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
     }
-    /*
-    @Override
-    public void onRenamePeripheralDialogNegativeClick(DialogFragment dialog){
-        dialog.getDialog().cancel();
-    }*/
 
     /**
      * HTTP Calls --Async Task
