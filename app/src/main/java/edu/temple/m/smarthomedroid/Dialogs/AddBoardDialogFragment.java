@@ -41,7 +41,7 @@ public class AddBoardDialogFragment extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_add_board, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String houseName =
