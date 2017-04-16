@@ -12,12 +12,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CursorTreeAdapter;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
@@ -30,10 +32,10 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class BoardAdapter extends BaseExpandableListAdapter {
-    private OnBoardAdapterItemClickListener activity;
     private ArrayList<House> houseList;
-
-
+    private final String TAG = "BoardAdapter";
+    private Context activity;
+    private String sessionToken;
     public boolean hasStableIds(){
         return false;
     }
@@ -62,15 +64,10 @@ public class BoardAdapter extends BaseExpandableListAdapter {
      * @param context
      * @param houses
      */
-    public BoardAdapter(Context context, ArrayList<House> houses){
+    public BoardAdapter(Context context, ArrayList<House> houses, String sessionToken){
+        this.activity = context;
         this.houseList = houses;
-        try{
-            //Instantiate listener so events can be sent to host
-            this.activity = (OnBoardAdapterItemClickListener) context;
-        } catch(ClassCastException e){
-            //Activity doesn't implement
-            throw new ClassCastException("activity must implement OnBoardAdapterItemClickListener");
-        }
+        this.sessionToken = sessionToken;
     }
 
     @Override
@@ -92,28 +89,28 @@ public class BoardAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent){
         final House house = (House)getGroup(groupPosition);
         // retrieve boards by calling getBoards in listener
-        ArrayList<Board> boardList = null;
-        populateBoards(boardList, house);
+        ArrayList<Board> boardList = getBoards(house.getName());
         if(convertView == null){
             convertView = LayoutInflater.from((Activity)activity).inflate(R.layout.item_board, parent, false);
         }
         TextView tv = (TextView) convertView.findViewById(R.id.item_board_id);
         final Board board = (Board) boardList.get(childPosition);
         tv.setText(board.getName());
-        tv.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Peripheral> peripherals = activity.retrievePeripherals(house, board);
-                PeripheralAdapter peripheralAdapter = new PeripheralAdapter((Activity)activity, peripherals);
+                
+            }
+        });
+        // remove board from list on long click
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                removeBoard(house, board);
+                return true;
             }
         });
         return convertView;
-    }
-
-    public interface OnBoardAdapterItemClickListener{
-        ArrayList<Board> retrieveBoards(House house);
-        void onBoardItemClick(String houseName);
-        ArrayList<Peripheral> retrievePeripherals(House house, Board board);
     }
 
     public boolean isChildSelectable(int groupPosition, int childPosition) {
@@ -123,12 +120,29 @@ public class BoardAdapter extends BaseExpandableListAdapter {
     public int getGroupCount(){
         return houseList.size();
     }
+    private ArrayList<Board> getBoards(String houseName){
 
-    private void populateBoards(ArrayList<Board> boardList, House house){
-        boardList = activity.retrieveBoards(house);
-        boardList.add(new Board("Board 1", house.getName()));
-        boardList.add(new Board("Board 2", house.getName()));
+        ArrayList<Board> list = new ArrayList<>();
+        String name;
+
+        try {
+            String response = new TaskHandler().retrieveBoards(TAG, houseName, sessionToken);
+            JSONObject respObject = new JSONObject(response);
+            JSONArray respArray = respObject.getJSONArray("");
+
+            for(int i = 0; i < respArray.length(); i++){
+                JSONObject curr = respArray.getJSONObject(i);
+                name = curr.getString("BoardName");
+                Log.d(TAG, "Name: "+ name);
+                list.add(i, new Board(name, houseName));
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        return list;
     }
 
-
+    private void removeBoard(House h, Board b){
+        new TaskHandler().removeBoard(TAG, h.getName(), b.getName(), sessionToken);
+    }
 }

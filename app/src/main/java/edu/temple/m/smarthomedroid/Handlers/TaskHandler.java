@@ -15,6 +15,7 @@ public class TaskHandler {
     String username = "", userPassword = "";
     String houseName = "", housePassword = "";
     String tag = "";
+    String response;
 
     public void createHouse(String context, String name, String password, String session){
         tag = context;
@@ -56,6 +57,26 @@ public class TaskHandler {
         new RenameBoard().execute(houseName, oldBoardName, newBoardName);
     }
 
+    public String retrieveBoards(String context, String houseName, String session){
+        tag = context;
+        sessionToken=session;
+        new GetBoardsByHouse().execute(houseName);
+        return response;
+    }
+
+    public String retrieveHouses(String context, String session){
+        tag = context;
+        sessionToken = session;
+        new ListAllHouses().execute();
+        return response;
+    }
+
+    public void removeBoard(String context, String houseName, String boardName, String session) {
+        tag = context;
+        sessionToken = session;
+        new RemoveBoard().execute(houseName, boardName);
+    }
+
     /**
      * Asynchronous Tasks -- HTTP GET Calls
      */
@@ -95,6 +116,46 @@ public class TaskHandler {
 
             if(response != null){
                 Log.d(tag, "Create House Response: " + response);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            houseName = "";
+            housePassword = "";
+        }
+    }
+
+    // for API call 14. List All Houses
+    private class ListAllHouses extends AsyncTask<Void, Void, Void>{
+        JSONObject json = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            HttpHandler sh = new HttpHandler();
+            if(houseName != null && sessionToken != null) {
+                try {
+                    json.put("sessionToken", sessionToken);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Make a request to url and get response
+            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/listallhouses", json);
+            TaskHandler.this.response = response;
+
+            if(response != null){
+                Log.d(tag, "Rename Peripheral Response: " + response);
             }
 
             return null;
@@ -197,6 +258,47 @@ public class TaskHandler {
         }
     }
 
+    // for API call 23. Get Boards by House
+    private class GetBoardsByHouse extends AsyncTask<String, Void, Void> {
+        JSONObject json = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            HttpHandler sh = new HttpHandler();
+            if(houseName != null && sessionToken != null) {
+                try {
+                    json.put("SessionToken", sessionToken);
+                    json.put("HouseName", args[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Make a request to url and get response
+            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/getboardsbyhouse", json);
+            TaskHandler.this.response = response;
+
+            if(response != null){
+                Log.d(tag, "Rename Peripheral Response: " + response);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            houseName = "";
+            housePassword = "";
+        }
+    }
+
     // for API call 27. Create Board
     private class AddBoard extends AsyncTask<String, Void, Void> {
         JSONObject json = new JSONObject();
@@ -224,6 +326,48 @@ public class TaskHandler {
 
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", json);
+
+            if(response != null){
+                Log.d(tag, "Create Board Response: " + response);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            houseName = "";
+            housePassword = "";
+        }
+    }
+
+    // for API call 28. Remove Board
+    private class RemoveBoard extends AsyncTask<String, Void, Void> {
+        JSONObject json = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            HttpHandler sh = new HttpHandler();
+            if(houseName != null && sessionToken != null) {
+                try {
+                    json.put("SessionToken", sessionToken);
+                    json.put("HouseName", args[0]);
+                    json.put("BoardName", args[1]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Make a request to url and get response
+            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/removeboard", json);
 
             if(response != null){
                 Log.d(tag, "Create Board Response: " + response);
