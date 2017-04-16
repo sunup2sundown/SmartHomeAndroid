@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:weightSum="1">
     <EditText
-        android:id="@+id/dialog_newhouse_name"
+        android:id="@+id/dialog_house_name"
         android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,11 +12,11 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="House ID" />
+        android:hint="House Name" />
 
     <EditText
-        android:id="@+id/dialog_newhouse_password"
-        android:inputType="textPassword"
+        android:id="@+id/dialog_new_board_name"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -24,18 +24,5 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="sans-serif"
-        android:hint="Password"/>
-
-    <EditText
-        android:id="@+id/dialog_newhouse_confirm"
-        android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif"
-        android:hint="Confirm password"
-        />
+        android:hint="New Board Name"/>
 </LinearLayout>

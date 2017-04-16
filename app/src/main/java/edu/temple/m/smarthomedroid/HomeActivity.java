@@ -26,21 +26,30 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
+import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.JSONHandler;
+import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.House;
+import edu.temple.m.smarthomedroid.Objects.Peripheral;
 
 public class HomeActivity extends AppCompatActivity
         implements HouseAdapter.OnHouseAdapterItemClickListener,
         ChangeUsernameDialogFragment.ChangeUsernameDialogListener,
         ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener,
         ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener,
-        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
+        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener,
+        // BoardAdapter.OnBoardAdapterItemClickListener,
+        PeripheralAdapter.OnPeripheralAdapterItemClickListener,
+        // RenamePeripheralDialogFragment.RenamePeripheralDialogListener,
+        ConfigFragment.ConfigFragmentListener{
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -54,7 +63,7 @@ public class HomeActivity extends AppCompatActivity
 
     //Session Data
     String userId, sessionId;
-
+    String response;
 
     private String usern, userPassword, newUserPassword;
     private String houseName, newHouseName, housePassword, newHousePassword;
@@ -245,6 +254,37 @@ public class HomeActivity extends AppCompatActivity
         f.show(fragmentManager, null);
     }
 
+    @Override
+    public void onPeripheralAdapterItemClick(String peripheralName){
+        RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
+        f.show(fragmentManager, null);
+    }
+    /*
+    @Override
+    public void onBoardItemClick(String houseName){
+        // ????
+    }
+    */
+    @Override
+    public ArrayList<Board> retrieveBoards(House house){
+        ArrayList<Board> result = new ArrayList<>();
+        (new GetBoardsByHouse()).execute(house.getName());
+        try {
+            JSONObject respObject = new JSONObject(response);
+            JSONArray respArray = respObject.getJSONArray("");
+
+            for(int i = 0; i < respArray.length(); i++){
+                JSONObject curr = respArray.getJSONObject(i);
+                String name = curr.getString("boardName");
+                Log.d(TAG, "boardName: "+ name);
+                result.add(new Board(name, house.getName()));
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     /* Dialog Fragment Listeners Implementations
      *
      */
@@ -290,6 +330,11 @@ public class HomeActivity extends AppCompatActivity
     public void onChangeHousePasswordDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
     }
+    /*
+    @Override
+    public void onRenamePeripheralDialogNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }*/
 
     /**
      * HTTP Calls --Async Task
@@ -494,6 +539,129 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    private class Retrieve
+    private class GetBoardsByHouse extends AsyncTask<String, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... houseName) {
+            JSONObject jsonObject = new JSONObject();
+            String name = houseName[0];
+            try{
+                jsonObject.put("houseName", name);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/getboardsbyhouse", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Get Boards by House: " + resp);
+            }
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+    public void removePeripheral(Peripheral p){
+
+    }
+
+    // AsyncTask for API Call 18: Remove Peripheral
+    private class RemovePeripheral extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            JSONObject jsonObject = new JSONObject();
+            String houseName = args[0];
+            String peripheralName = args[1];
+            try{
+                jsonObject.put("peripheralName", peripheralName);
+                jsonObject.put("houseName", houseName);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Get Boards by House: " + resp);
+            }
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+
+    }
+
+    // API Call 19: Check Peripheral Name Availability
+    private class CheckPeripheralName extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            JSONObject jsonObject = new JSONObject();
+            String houseName = args[0];
+            String peripheralName = args[1];
+            try{
+                jsonObject.put("peripheralName", peripheralName);
+                jsonObject.put("houseName", houseName);
+                jsonObject.put("sessionToken", sessionToken);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/checkperipheralnameavailability", jsonObject);
+
+            if(resp != null){
+                Log.d(TAG, "Get Boards by House: " + resp);
+            }
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+
+    }
+    /*
+    public ArrayList<Peripheral> retrievePeripherals(House house, Board board){
+
+    }
+    */
+
 }
 

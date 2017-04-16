@@ -5,9 +5,15 @@ package edu.temple.m.smarthomedroid.Objects;
  */
 
 public class Board {
-    private String id;
+    private String name;
+    private String houseName;
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
+    }
+
+    public Board(String name, String houseName){
+        this.name = name;
+        this.houseName = houseName;
     }
 }
