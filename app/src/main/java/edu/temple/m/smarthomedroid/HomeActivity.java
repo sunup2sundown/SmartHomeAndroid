@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
+import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
@@ -47,7 +48,7 @@ public class HomeActivity extends AppCompatActivity
         ChangeUsernameDialogFragment.ChangeUsernameDialogListener,
         ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener,
         ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener,
-        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
+        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener, DataPassListener {
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -58,7 +59,7 @@ public class HomeActivity extends AppCompatActivity
     //Fragment Management Declarations
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-
+    private String housename_dashboard;
     //Session Data
     String userId, sessionId;
 
@@ -104,6 +105,19 @@ public class HomeActivity extends AppCompatActivity
         navDrawer = (NavigationView)findViewById(R.id.nav_view);
         //Setup Drawer View
         setupDrawerContent(navDrawer);
+        Bundle bundle = new Bundle();
+        Fragment fragment = null;
+        boolean activityClosing= false;
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);
+        fragment = new Dashboard();
+        fragment.setArguments(bundle);
+        //Insert the fragment by replacing any existing fragments
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.flContent, fragment);
+        fragmentTransaction.commit();
+
     }
 
     @Override
@@ -184,7 +198,8 @@ public class HomeActivity extends AppCompatActivity
         boolean activityClosing= false;
 
         bundle.putString("Username", userId);
-        bundle.putString("SessionToken", sessionId);
+        bundle.putString("SessionToken", sessionToken);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
 
         //Generate Fragment ONLY WHEN FRAGMENT IS COMPLETED to make sure it will
         //show properly
@@ -296,6 +311,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onChangeHousePasswordDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
+    }
+
+    @Override
+    public void passData(String data) {
+        this.housename_dashboard = data;
     }
 
     /**

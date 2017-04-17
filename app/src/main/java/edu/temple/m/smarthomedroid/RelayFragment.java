@@ -36,13 +36,10 @@ import static java.lang.Thread.sleep;
 public class RelayFragment extends ListFragment implements AdapterView.OnItemClickListener{
 
     private ArrayList<Relay> relayList;
-    Adapter mAdapter;
-    private JSONObject resp1;
     final String TAG = "RelayFragment";
     private String sessionToken = "";
     private String houseName = "";
     private JSONArray jArray;
-
     private ProgressDialog pDialog;
 
     @Override
@@ -57,8 +54,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
 
-        jArray = new JSONArray();
-        houseName = "Hardwick";
+        houseName = getArguments().getString("HouseName");
         sessionToken = getArguments().getString("SessionToken");//"018C98BB-C886-44B1-8667-DA304872B452";//"3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
         relayList = new ArrayList<Relay>();
@@ -75,18 +71,15 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
 
         int k=0;
-        if(resp1!=null) {
-            Iterator<String> iterator = resp1.keys();
-            while (iterator.hasNext()) {
-                String name = null;
+        if(jArray!=null) {
+            int o =0;
+            for(;o<jArray.length();o++){
+                String name="";
+                int val=0;
                 try {
-                    name = resp1.getString(iterator.next());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                int val = 0;
-                try {
-                    val = resp1.getInt(iterator.next());
+                    JSONObject check= jArray.getJSONObject(o);
+                    name = check.getString("PeripheralName");
+                    val = check.getInt("PeripheralValue");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -137,15 +130,21 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler2 sh = new HttpHandler2();
-
+            HttpHandler sh = new HttpHandler();
+            String resp;
             //Make a request to url and get response
-            resp1 = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", json);
-            //resp = resp.replaceAll("\\[", "").replaceAll("\\]","");
-            //if(resp != null){
-            //    Log.d(TAG, "Retrieve Relay Response: " + resp);
-            //}
-            Log.d(TAG, "Retrieve Relay Response: " + resp1);
+            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", json);
+            if (resp!=null){
+                Log.d(TAG, "Retrieve Relay Response: " + resp);
+                try {
+                    jArray=new JSONArray(resp);
+                    jArray=jArray.getJSONArray(0);
+                    Log.d(TAG, "Retrieve Relay Array: " + jArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
             return null;
         }
 
