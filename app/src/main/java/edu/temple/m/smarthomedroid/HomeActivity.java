@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
@@ -32,8 +36,11 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.HttpHandler2;
 import edu.temple.m.smarthomedroid.Handlers.JSONHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
+
+import static java.lang.Thread.sleep;
 
 public class HomeActivity extends AppCompatActivity
         implements HouseAdapter.OnHouseAdapterItemClickListener,
@@ -47,7 +54,7 @@ public class HomeActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navDrawer;
     private ActionBarDrawerToggle drawerToggle;
-
+    private JSONObject houses;
     //Fragment Management Declarations
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -60,6 +67,7 @@ public class HomeActivity extends AppCompatActivity
     private String houseName, newHouseName, housePassword, newHousePassword;
     private String  sessionToken;
     private ArrayList<House> houseList;
+    private Spinner listhouse;
     FragmentManager dialogManager;
 
 
@@ -73,7 +81,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_smart_home);
 
         usern = "Tom Brady";
-        sessionToken = "51FAA52D-CD90-461A-8735-D866DB3BDFF3";
+        sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
 
         //Receive session ID and Username from Login Activity
         Intent prevIntent = getIntent();
@@ -96,7 +104,6 @@ public class HomeActivity extends AppCompatActivity
         navDrawer = (NavigationView)findViewById(R.id.nav_view);
         //Setup Drawer View
         setupDrawerContent(navDrawer);
-
     }
 
     @Override
@@ -183,7 +190,7 @@ public class HomeActivity extends AppCompatActivity
         //show properly
         switch(menuItem.getItemId()){
             case R.id.nav_dashboard:
-                fragment = new RelayFragment();
+                fragment = new Dashboard();
                 break;
             case R.id.nav_sensor:
                 fragment = new RelayFragment();
