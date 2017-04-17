@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,7 +40,16 @@ public class Dashboard extends Fragment {
     private String TAG = "Dashboard";
     private String usern = "Tom Brady";
     private String sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
+    DataPassListener mCallback;
 
+    public interface DataPassListener{
+        public void passData(String data);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallback = (DataPassListener) activity;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +68,7 @@ public class Dashboard extends Fragment {
                         Object item = parent.getItemAtPosition(pos);
                         housename = item.toString();
                         Log.d(TAG,housename);
+                        mCallback.passData(housename);
                         new getRe().execute();
                         try {
                             sleep(1500);
@@ -72,8 +83,6 @@ public class Dashboard extends Fragment {
                                     JSONObject check = rel.getJSONObject(o);
                                     String name1 = check.getString("PeripheralName");
                                     int val=check.getInt("PeripheralValue");
-                                    Log.d(TAG,"get in: "+ o);
-                                    Log.d(TAG,"get in2: "+ name1 +val);
                                     rAdapter.add(new Relay2(sessionToken, housename, name1, val));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
