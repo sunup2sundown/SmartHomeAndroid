@@ -7,13 +7,11 @@ package edu.temple.m.smarthomedroid.Objects;
  */
 
 public class House {
-    String id;
     String name;
 
     public House(){}
 
-    public House(String id, String name){
-        this.id = id;
+    public House(String name){
         this.name = name;
     }
 

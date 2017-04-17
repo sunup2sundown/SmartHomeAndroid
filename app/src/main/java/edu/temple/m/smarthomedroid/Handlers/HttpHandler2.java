@@ -114,7 +114,7 @@ public class HttpHandler2 {
             }
         }
         sb2=sb.toString();
-
+        Log.d(TAG, sb2);
         if (sb2 != null) {
             while (sb2.charAt(count)!='{'){
                 count++;

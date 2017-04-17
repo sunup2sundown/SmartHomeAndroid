@@ -35,7 +35,7 @@ import static java.lang.Thread.sleep;
 
 public class RelayFragment extends ListFragment implements AdapterView.OnItemClickListener{
 
-    ArrayList<Relay> relayList;
+    private ArrayList<Relay> relayList;
     Adapter mAdapter;
     private JSONObject resp1;
     final String TAG = "RelayFragment";
@@ -68,7 +68,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         jArray = new JSONArray();
         houseName = "Hardwick";
-        sessionToken = "3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
+        sessionToken = getArguments().getString("SessionToken");//"018C98BB-C886-44B1-8667-DA304872B452";//"3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
         relayList = new ArrayList<Relay>();
         //Populate relaysList from API call
@@ -84,23 +84,26 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
 
         int k=0;
-        Iterator<String> iterator = resp1.keys();
-        while(iterator.hasNext()) {
-            String name = null;
-            try {
-                name = resp1.getString(iterator.next());
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(resp1!=null) {
+            Iterator<String> iterator = resp1.keys();
+            while (iterator.hasNext()) {
+                String name = null;
+                try {
+                    name = resp1.getString(iterator.next());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                int val = 0;
+                try {
+                    val = resp1.getInt(iterator.next());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                rAdapter.add(new Relay(sessionToken, houseName, name, val));
             }
-            int val=0;
-            try {
-                val = resp1.getInt(iterator.next());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            rAdapter.add(new Relay(sessionToken,houseName, name , val));
-        }
+        }else{
 
+        }
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
     }
@@ -179,7 +182,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         } catch(JSONException e){
             e.printStackTrace();
         }
-
     }
 }
 

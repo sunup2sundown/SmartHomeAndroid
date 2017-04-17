@@ -16,43 +16,64 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+
+import android.widget.Spinner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
+import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Objects.House;
 
-public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHouseAdapterItemClickListener,
-        ChangeUsernameDialogFragment.ChangeUsernameDialogListener, ChangePasswordDialogFragment.ChangePasswordDialogListener,
-        ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener, ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
+import edu.temple.m.smarthomedroid.Objects.House;
+import edu.temple.m.smarthomedroid.Objects.Peripheral;
+
+import static java.lang.Thread.sleep;
+
+
+public class HomeActivity extends AppCompatActivity
+        implements HouseAdapter.OnHouseAdapterItemClickListener
+        , ChangeUsernameDialogFragment.ChangeUsernameDialogListener
+        , ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener
+        , ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener
+        , ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener
+        // , BoardAdapter.OnBoardAdapterItemClickListener,
+        , PeripheralAdapter.OnPeripheralAdapterItemClickListener
+        , SwitchHouseDialogFragment.SwitchHouseDialogListener
+        {
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView navDrawer;
     private ActionBarDrawerToggle drawerToggle;
-
+    private JSONObject houses;
     //Fragment Management Declarations
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
     //Session Data
     String userId, sessionId;
+    String response;
+    String userPassword;
 
-
-    private String usern, userPassword, newUserPassword;
     private String houseName, newHouseName, housePassword, newHousePassword;
-    private String  sessionToken;
     private ArrayList<House> houseList;
+    private Spinner listhouse;
     FragmentManager dialogManager;
 
 
@@ -65,8 +86,6 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
 
-        usern = "Tom Brady";
-        sessionToken = "51FAA52D-CD90-461A-8735-D866DB3BDFF3";
 
         //Receive session ID and Username from Login Activity
         Intent prevIntent = getIntent();
@@ -89,7 +108,6 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         navDrawer = (NavigationView)findViewById(R.id.nav_view);
         //Setup Drawer View
         setupDrawerContent(navDrawer);
-
     }
 
     @Override
@@ -176,7 +194,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         //show properly
         switch(menuItem.getItemId()){
             case R.id.nav_dashboard:
-                fragment = new RelayFragment();
+                fragment = new Dashboard();
                 break;
             case R.id.nav_sensor:
                 fragment = new RelayFragment();
@@ -229,19 +247,27 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
 
     // Interface functions
 
-    public void onHouseAdapterItemRenameClick(String houseName) {
-        ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
-        f.show(fragmentManager, null);
-    }
+
+
     public void onHouseAdapterItemChangePasswordClick(String houseName){
         ChangeHousePasswordDialogFragment f = ChangeHousePasswordDialogFragment.newInstance(houseName);
         f.show(fragmentManager, null);
     }
-
+    public void onHouseAdapterItemRenameClick(String houseName) {
+        ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
+        f.show(fragmentManager, null);
+    }
+    @Override
+    public void onPeripheralAdapterItemClick(String peripheralName){
+        RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
+        f.show(fragmentManager, null);
+    }
 
     /* Dialog Fragment Listeners Implementations
      *
      */
+
+
 
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
@@ -263,6 +289,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         houseName = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_old_name)).getText().toString();
         housePassword = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_password)).getText().toString();
         newHouseName = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_new_name)).getText().toString();
+
         (new ChangeHouseName()).execute();
     }
 
@@ -271,6 +298,9 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
 
     }
 
+    public void onSwitchHouseDialogPositiveClick(String houseName, String housePw, String sessionToken){
+        new JoinHouse().execute(houseName, housePw, sessionToken);
+    }
     // "on negative click" functions
     @Override
     public void onChangePasswordDialogNegativeClick(DialogFragment dialog){
@@ -290,16 +320,14 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
      */
     private class ChangeUserName extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String user = usern;
-        String session = sessionToken;
-
+        String user = userId;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
             try{
                 jsonObject.put("password", user);
-                jsonObject.put("sessionToken", sessionToken);
+                jsonObject.put("sessionToken", sessionId);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
@@ -312,9 +340,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
             //Make a request to url and get response
             String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", jsonObject);
 
-            if(resp != null){
-                Log.d(TAG, "Change Username: " + resp);
-            }
+            Log.d(TAG, "Change Username: " + resp);
 
             return null;
         }
@@ -329,15 +355,13 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
     private class ChangeUserPassword extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         String pw = userPassword;
-        String session = sessionToken;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
             try{
                 jsonObject.put("password", pw);
-                jsonObject.put("sessionToken", sessionToken);
+                jsonObject.put("sessionToken", sessionId);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
@@ -350,9 +374,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
             //Make a request to url and get response
             String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", jsonObject);
 
-            if(resp != null){
-                Log.d(TAG, "Change Password: " + resp);
-            }
+            Log.d(TAG, "Change Password: " + resp);
 
             return null;
         }
@@ -369,7 +391,6 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         String name = houseName;
         String password = housePassword;
         String newName = newHouseName;
-        String session = sessionToken;
 
         @Override
         protected void onPreExecute() {
@@ -379,7 +400,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
                 jsonObject.put("oldHouseName", name);
                 jsonObject.put("housePassword", password);
                 jsonObject.put("newHouseName", newName);
-                jsonObject.put("sessionToken", sessionToken);
+                jsonObject.put("sessionToken", sessionId);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
@@ -390,11 +411,9 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousename", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousename", jsonObject);
 
-            if(resp != null){
-                Log.d(TAG, "Change House Name: " + resp);
-            }
+            Log.d(TAG, "Change House Name: " + resp);
 
             return null;
         }
@@ -411,7 +430,6 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         String name = houseName;
         String password = housePassword;
         String newPassword = newHousePassword;
-        String session = sessionToken;
 
         @Override
         protected void onPreExecute() {
@@ -421,7 +439,7 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
                 jsonObject.put("houseName", name);
                 jsonObject.put("oldHousePassword", password);
                 jsonObject.put("newHousePassword", newPassword);
-                jsonObject.put("sessionToken", sessionToken);
+                jsonObject.put("sessionToken", sessionId);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
@@ -432,11 +450,9 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/changehousepassword", jsonObject);
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", jsonObject);
 
-            if(resp != null){
-                Log.d(TAG, "Change House Password: " + resp);
-            }
+            Log.d(TAG, "Change House Password: " + resp);
 
             return null;
         }
@@ -448,35 +464,28 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
         }
     }
 
-    private class JoinHouse extends AsyncTask<Void, Void, Void> {
+    private class JoinHouse extends AsyncTask<String, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String name = houseName;
-        String password = housePassword;
-        String session = sessionToken;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            try{
-                jsonObject.put("houseName", name);
-                jsonObject.put("housePassword", password);
-                jsonObject.put("sessionToken", sessionToken);
-            } catch(JSONException e){
-                Log.e(TAG, "JSONException: " + e.getMessage());
-            }
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
             HttpHandler sh = new HttpHandler();
 
-            //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/house/joinhouse", jsonObject);
-
-            if(resp != null){
-                Log.d(TAG, "Join House: " + resp);
+            try{
+                jsonObject.put("houseName", params[0]);
+                jsonObject.put("housePassword", params[1]);
+                jsonObject.put("sessionToken", params[2]);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
             }
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", jsonObject);
+
+            Log.d(TAG, "Join House: " + resp);
 
             return null;
         }
@@ -486,6 +495,137 @@ public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHo
             super.onPostExecute(result);
 
         }
+    }
+
+    private class GetBoardsByHouse extends AsyncTask<String, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... houseName) {
+            JSONObject jsonObject = new JSONObject();
+            String name = houseName[0];
+            try{
+                jsonObject.put("houseName", name);
+                jsonObject.put("sessionToken", sessionId);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/getboardsbyhouse", jsonObject);
+
+            Log.d(TAG, "Get Boards by House: " + resp);
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+    }
+
+    // AsyncTask for API Call 18: Remove Peripheral
+    private class RemovePeripheral extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            JSONObject jsonObject = new JSONObject();
+            String houseName = args[0];
+            String peripheralName = args[1];
+            try{
+                jsonObject.put("peripheralName", peripheralName);
+                jsonObject.put("houseName", houseName);
+                jsonObject.put("sessionToken", sessionId);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", jsonObject);
+
+            Log.d(TAG, "Get Boards by House: " + resp);
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+
+    }
+
+    // API Call 19: Check Peripheral Name Availability
+    private class CheckPeripheralName extends AsyncTask<String, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... args) {
+            JSONObject jsonObject = new JSONObject();
+            String houseName = args[0];
+            String peripheralName = args[1];
+            try{
+                jsonObject.put("peripheralName", peripheralName);
+                jsonObject.put("houseName", houseName);
+                jsonObject.put("sessionToken", sessionId);
+            } catch(JSONException e){
+                Log.e(TAG, "JSONException: " + e.getMessage());
+            }
+
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/checkperipheralnameavailability", jsonObject);
+
+            Log.d(TAG, "Get Boards by House: " + resp);
+            response = resp;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+        }
+
+    }
+
+    // hash function for password
+    private static String hash_pass(String pw) {
+        try {
+            StringBuffer hexStr = new StringBuffer();
+            byte[] hash;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xFF & hash[i]);
+                if (hex.length() == 1) {
+                    hexStr.append('0');
+                }
+                hexStr.append(hex);
+            }
+            return hexStr.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

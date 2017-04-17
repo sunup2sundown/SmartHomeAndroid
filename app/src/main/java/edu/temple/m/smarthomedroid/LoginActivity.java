@@ -183,8 +183,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         passStr = password.getText().toString();
 
         new LoginAccount().execute();
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+        //startActivity(i);
     }
 
     @Override
@@ -293,7 +293,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
     private class LoginAccount extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         boolean start = false;
-        String resp;
+        String resp=null;
 
         @Override
         protected void onPreExecute() {
@@ -321,11 +321,13 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             //Make a request to url and get response
             //resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
             JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", jsonObject);
-
-            try {
-                resp = json.getString("SessionToken");
-            } catch(JSONException e){
-                e.printStackTrace();
+            if(json!=null) {
+                Log.d(TAG, json.toString());
+                try {
+                    resp = json.getString("SessionToken");
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
             }
 
             if(resp != null){
