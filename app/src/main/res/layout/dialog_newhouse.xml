@@ -5,7 +5,7 @@
     android:weightSum="1">
     <EditText
         android:id="@+id/dialog_newhouse_name"
-        android:inputType="textEmailAddress"
+        android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

@@ -1,6 +1,5 @@
 package edu.temple.m.smarthomedroid.Dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,18 +12,16 @@ import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.R;
 
 /**
- * Created by M on 4/9/2017.
+ * Created by Jhang Myong Ja on 4/15/2017.
  */
 
-public class JoinHouseDialogFragment extends DialogFragment {
-    private final String TAG = "JoinHouseDialog";
-
+public class AddBoardDialogFragment extends DialogFragment {
     private String sessionID;
 
-    public static JoinHouseDialogFragment newInstance() {
-        JoinHouseDialogFragment frag = new JoinHouseDialogFragment();
+    public static AddBoardDialogFragment newInstance() {
+        AddBoardDialogFragment frag = new AddBoardDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "Create New House");
+        args.putString("title", "Add New Board");
         frag.setArguments(args);
         return frag;
     }
@@ -41,29 +38,33 @@ public class JoinHouseDialogFragment extends DialogFragment {
         String title = getArguments().getString("title");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_join_house, null))
+        builder.setView(inflater.inflate(R.layout.dialog_add_board, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText houseName = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_newhouse_name);
-                        EditText housePassword = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_newhouse_password);
-                        joinHouse(houseName.getText().toString(), housePassword.getText().toString());
+                        String houseName =
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_house_name)).toString();
+                        String boardName =
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).toString();
+                        String boardSerialNo =
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).toString();
+                        newBoard(houseName, boardName, boardSerialNo);
                         // switch to the new house...
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        JoinHouseDialogFragment.this.getDialog().cancel();
+                        AddBoardDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();
     }
 
-    private void joinHouse(String name, String password){
+    private void newBoard(String houseName, String boardName, String boardSerialNo){
         if(true){
-            //new TaskHandler().joinHouse("SettingsFragment:", name, password, sessionID);
+            new TaskHandler().addBoard("ConfigFragment:", houseName, boardName, boardSerialNo, sessionID);
         }
     }
 }

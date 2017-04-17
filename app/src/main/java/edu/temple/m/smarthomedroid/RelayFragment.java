@@ -40,6 +40,10 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     private String sessionToken = "";
     private String houseName = "";
     private JSONArray jArray;
+
+    private Bundle bundle;
+    private String userID;
+    private String sessionID;
     private ProgressDialog pDialog;
 
     @Override
@@ -47,6 +51,12 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
                              Bundle savedInstanceState){
         //Create new view from relay fragment layout
         View view = inflater.inflate(R.layout.fragment_relay, container, false);
+        bundle = new Bundle();
+        //Receive argument bundle from Home Activity
+        userID = getArguments().getString("Username");
+        sessionID = getArguments().getString("SessionToken");
+
+        bundle.putString("SessionToken", sessionID);
 
         return view;
     }
@@ -172,7 +182,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         } catch(JSONException e){
             e.printStackTrace();
         }
-
     }
 }
 
