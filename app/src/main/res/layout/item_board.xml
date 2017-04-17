@@ -8,8 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Board"
-        android:textAppearance="@android:style/TextAppearance.Material.Small" />
+        android:text="Board" />
 
     <TextView
         android:id="@+id/item_board_id"

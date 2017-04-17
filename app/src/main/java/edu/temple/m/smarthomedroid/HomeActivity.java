@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.json.JSONException;
@@ -39,6 +40,7 @@ import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
+import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
 
@@ -48,7 +50,7 @@ import static java.lang.Thread.sleep;
 public class HomeActivity extends AppCompatActivity
         implements HouseAdapter.OnHouseAdapterItemClickListener
         , ChangeUsernameDialogFragment.ChangeUsernameDialogListener
-        , ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener
+        , ChangePasswordDialogFragment.ChangePasswordDialogListener
         , ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener
         , ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener
         // , BoardAdapter.OnBoardAdapterItemClickListener,
@@ -268,20 +270,15 @@ public class HomeActivity extends AppCompatActivity
      */
 
 
-
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
-        dialog.getDialog().cancel();
+        new TaskHandler().changeUsername("SettingsFragment", userId, sessionId);
     }
 
-    @Override
-    public void onChangeUsernameDialogNegativeClick(DialogFragment dialog){
-        dialog.getDialog().cancel();
-    }
 
     @Override
     public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
-
+        //new TaskHandler().changeUserPassword("SettingsFragment");
     }
 
     @Override
@@ -302,6 +299,10 @@ public class HomeActivity extends AppCompatActivity
         new JoinHouse().execute(houseName, housePw, sessionToken);
     }
     // "on negative click" functions
+    @Override
+    public void onChangeUsernameDialogNegativeClick(DialogFragment dialog){
+        dialog.getDialog().cancel();
+    }
     @Override
     public void onChangePasswordDialogNegativeClick(DialogFragment dialog){
         dialog.getDialog().cancel();
