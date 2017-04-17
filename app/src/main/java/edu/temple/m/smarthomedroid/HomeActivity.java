@@ -16,11 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,18 +26,14 @@ import java.util.ArrayList;
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Handlers.JSONHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 
-public class HomeActivity extends AppCompatActivity
-        implements HouseAdapter.OnHouseAdapterItemClickListener,
-        ChangeUsernameDialogFragment.ChangeUsernameDialogListener,
-        ChangeUserPasswordDialogFragment.ChangeUserPasswordDialogListener,
-        ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener,
-        ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
+public class HomeActivity extends AppCompatActivity implements HouseAdapter.OnHouseAdapterItemClickListener,
+        ChangeUsernameDialogFragment.ChangeUsernameDialogListener, ChangePasswordDialogFragment.ChangePasswordDialogListener,
+        ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener, ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener{
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -245,13 +238,14 @@ public class HomeActivity extends AppCompatActivity
         f.show(fragmentManager, null);
     }
 
+
     /* Dialog Fragment Listeners Implementations
      *
      */
 
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
-
+        dialog.getDialog().cancel();
     }
 
     @Override
@@ -260,7 +254,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onChangeUserPasswordDialogPositiveClick(DialogFragment dialog){
+    public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
 
     }
 
@@ -279,7 +273,7 @@ public class HomeActivity extends AppCompatActivity
 
     // "on negative click" functions
     @Override
-    public void onChangeUserPasswordDialogNegativeClick(DialogFragment dialog){
+    public void onChangePasswordDialogNegativeClick(DialogFragment dialog){
         dialog.getDialog().cancel();
     }
     @Override

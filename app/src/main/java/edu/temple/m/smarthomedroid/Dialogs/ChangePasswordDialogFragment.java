@@ -1,6 +1,5 @@
 package edu.temple.m.smarthomedroid.Dialogs;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,40 +10,62 @@ import android.view.LayoutInflater;
 
 import edu.temple.m.smarthomedroid.R;
 
-public class ChangePasswordDialogFragment extends DialogFragment {
+/**
+ * Created by M on 4/9/2017.
+ */
 
-    public static ChangePasswordDialogFragment newInstance() {
-        ChangePasswordDialogFragment frag = new ChangePasswordDialogFragment();
-        Bundle args = new Bundle();
-        args.putString("title", "Change Your Password");
-        frag.setArguments(args);
-        return frag;
+public class ChangePasswordDialogFragment extends DialogFragment{
+
+    private final String TAG = "ChangePasswordDialog";
+    ChangePasswordDialogListener mListener;
+
+    /* The activity that creates instance of dialog fragment must implement
+    *  this interface in order to recieve event callbacks
+     */
+    public interface ChangePasswordDialogListener{
+        public void onChangePasswordDialogPositiveClick(DialogFragment dialog);
+        public void onChangePasswordDialogNegativeClick(DialogFragment dialog);
+    }
+
+    //Override the Fragment.onAttach method to instantiate listener
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+
+        //Verify that the host activity implements the callback interface
+        try{
+            //Instantiate listener so events can be sent to host
+            mListener = (ChangePasswordDialogListener) activity;
+        } catch(ClassCastException e){
+            //Activity doesn't implement
+            throw new ClassCastException(activity.toString() + " must implement ChangePasswordListener");
+        }
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState){
+        //Builder Class for dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        String title = getArguments().getString("title");
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
+        //Get Layout inflater for custom layout
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        //Inflate dialog with custom layout
+        //null for parent view as in dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_changepw, null))
-                // Add action buttons
-                .setTitle(title)
-                .setPositiveButton("Change", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // switch to the new house...
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        //Send the positive button event back to host activity
+                        mListener.onChangePasswordDialogPositiveClick(ChangePasswordDialogFragment.this);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //ChangePasswordDialogFragment.this.getDialog().cancel();
-
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        //send the negative button event back to host activity
+                        mListener.onChangePasswordDialogNegativeClick(ChangePasswordDialogFragment.this);
                     }
                 });
+        //Create Dialog object and return it
         return builder.create();
     }
 }

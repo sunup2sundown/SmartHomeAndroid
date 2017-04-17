@@ -1,39 +1,25 @@
 package edu.temple.m.smarthomedroid;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Objects;
 
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.JoinHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
-import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 /**
@@ -77,10 +63,19 @@ public class UserSettingsFragment extends Fragment {
 
         username.setText(usern);
 
+        ((Button)v.findViewById(R.id.button_changeusername)).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                ChangeUsernameDialogFragment f = new ChangeUsernameDialogFragment();
+                f.setArguments(bundle);
+                f.show(fm, null);
+            }
+        });
+
         ((Button)v.findViewById(R.id.button_changepw)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeUserPasswordDialogFragment f = new ChangeUserPasswordDialogFragment();
+                ChangePasswordDialogFragment f = new ChangePasswordDialogFragment();
                 f.setArguments(bundle);
                 f.show(fm, null);
             }
@@ -88,7 +83,7 @@ public class UserSettingsFragment extends Fragment {
         ((Button)v.findViewById(R.id.button_newhouse)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewHouseDialogFragment f = NewHouseDialogFragment.newInstance();
+                NewHouseDialogFragment f =  new NewHouseDialogFragment();
                 f.setArguments(bundle);
                 f.show(fm, null);
             }
@@ -96,7 +91,31 @@ public class UserSettingsFragment extends Fragment {
         ((Button)v.findViewById(R.id.button_switchhouse)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SwitchHouseDialogFragment f = SwitchHouseDialogFragment.newInstance();
+                SwitchHouseDialogFragment f = new SwitchHouseDialogFragment();
+                f.setArguments(bundle);
+                f.show(fm, null);
+            }
+        });
+        ((Button)v.findViewById(R.id.button_joinhouse)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JoinHouseDialogFragment f = new JoinHouseDialogFragment();
+                f.setArguments(bundle);
+                f.show(fm, null);
+            }
+        });
+        ((Button)v.findViewById(R.id.button_changehousename)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeHouseNameDialogFragment f = new ChangeHouseNameDialogFragment();
+                f.setArguments(bundle);
+                f.show(fm, null);
+            }
+        });
+        ((Button)v.findViewById(R.id.button_changehousepassword)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeHousePasswordDialogFragment f = new ChangeHousePasswordDialogFragment();
                 f.setArguments(bundle);
                 f.show(fm, null);
             }
