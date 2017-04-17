@@ -173,7 +173,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         } catch(JSONException e){
             e.printStackTrace();
         }
-
     }
 }
 
