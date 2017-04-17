@@ -27,7 +27,7 @@
         android:layout_alignTop="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
-        android:text="House ID" />
+        android:text="You haven't joined a house yet." />
 
     <Button
         android:id="@+id/button_changepw"

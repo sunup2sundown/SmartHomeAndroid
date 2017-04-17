@@ -47,6 +47,7 @@ public class RenameBoardDialogFragment extends DialogFragment {
         //Inflate dialog with custom layout
         //null for parent view as in dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_rename_board, null))
+                .setTitle(getArguments().getString("title"))
                 .setPositiveButton("Rename", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         String houseName = ((EditText)RenameBoardDialogFragment.this.getDialog()

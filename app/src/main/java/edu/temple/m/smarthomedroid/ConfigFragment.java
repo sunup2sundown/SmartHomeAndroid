@@ -83,7 +83,6 @@ public class ConfigFragment extends Fragment{
     //TODO: Expandable List view of Houses->Boards->Peripheral types->Peripheral Names
     public void onViewCreated(View view, Bundle savedInstanceState) {
         houseName = "Hardwick";
-        sessionToken = "3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
         houseList = getHouseList(sessionToken);
         try {

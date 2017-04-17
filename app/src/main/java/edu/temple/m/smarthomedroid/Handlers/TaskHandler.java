@@ -120,10 +120,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", json);
 
-            if(response != null){
-                Log.d(tag, "Create House Response: " + response);
-            }
-
+            Log.d(tag, "Create House Response: " + response);
             return null;
         }
 
@@ -159,11 +156,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/listallhouses", json);
             TaskHandler.this.response = response;
-
-            if(response != null){
-                Log.d(tag, "List All Houses Response: " + response);
-            }
-
+            Log.d(tag, "List All Houses Response: " + response);
             return null;
         }
 
@@ -200,10 +193,7 @@ public class TaskHandler {
             }
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", json);
-            if(response != null){
-                Log.d(tag, "Remove Peripheral Response: " + response);
-            }
-
+            Log.d(tag, "Remove Peripheral Response: " + response);
             return null;
         }
 
@@ -246,9 +236,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/createperipheral", json);
 
-            if(response != null){
-                Log.d(tag, "Create Peripheral Response: " + response);
-            }
+            Log.d(tag, "Create Peripheral Response: " + response);
 
             return null;
         }
@@ -289,9 +277,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/changeperipheralname", json);
 
-            if(response != null){
                 Log.d(tag, "Rename Peripheral Response: " + response);
-            }
 
             return null;
         }
@@ -330,9 +316,7 @@ public class TaskHandler {
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/getboardsbyhouse", json);
             TaskHandler.this.response = response;
 
-            if(response != null){
                 Log.d(tag, "Get Boards by House Response: " + response);
-            }
 
             return null;
         }
@@ -373,10 +357,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", json);
 
-            if(response != null){
                 Log.d(tag, "Create Board Response: " + response);
-            }
-
             return null;
         }
 
@@ -415,9 +396,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/removeboard", json);
 
-            if(response != null){
                 Log.d(tag, "Remove Board Response: " + response);
-            }
 
             return null;
         }
@@ -458,9 +437,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/changeboardname", json);
 
-            if(response != null){
                 Log.d(tag, "Rename Board Response: " + response);
-            }
 
             return null;
         }

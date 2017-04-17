@@ -20,12 +20,13 @@ public class ChangeUserPasswordDialogFragment extends DialogFragment{
     ChangeUserPasswordDialogListener mListener;
 
     /* The activity that creates instance of dialog fragment must implement
-    *  this interface in order to recieve event callbacks
+     * this interface in order to recieve event callbacks
      */
     public interface ChangeUserPasswordDialogListener{
         public void onChangeUserPasswordDialogPositiveClick(DialogFragment dialog);
         public void onChangeUserPasswordDialogNegativeClick(DialogFragment dialog);
     }
+
 
     //Override the Fragment.onAttach method to instantiate listener
     @Override
@@ -41,6 +42,8 @@ public class ChangeUserPasswordDialogFragment extends DialogFragment{
             throw new ClassCastException(activity.toString() + " must implement SignupDialogListener");
         }
     }
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
