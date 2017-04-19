@@ -3,6 +3,7 @@ package edu.temple.m.smarthomedroid;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,7 +61,11 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
 
         return view;
     }
-
+    public void onBackPressed()
+    {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        fm.popBackStack();
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
 

@@ -127,7 +127,7 @@ public class HomeActivity extends AppCompatActivity
         //Insert the fragment by replacing any existing fragments
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flContent, fragment);
+        fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
         fragmentTransaction.commit();
 
     }
@@ -138,7 +138,9 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.popBackStack();
         }
     }
 
@@ -256,7 +258,7 @@ public class HomeActivity extends AppCompatActivity
             //Insert the fragment by replacing any existing fragments
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
             fragmentTransaction.commit();
         }
 
@@ -663,5 +665,6 @@ public class HomeActivity extends AppCompatActivity
         }
         return null;
     }
+
 }
 
