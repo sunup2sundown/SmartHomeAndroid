@@ -59,7 +59,7 @@ public class NewHouseDialogFragment extends DialogFragment {
 
     private void createHouse(String name, String password){
         if(true){
-            new TaskHandler().createHouse("SettingsFragment:", name, password, sessionID);
+            new TaskHandler().createHouse(getContext(), name, password, sessionID);
         }
     }
 }

@@ -61,7 +61,7 @@ public class PeripheralAdapter extends ArrayAdapter<Peripheral> {
         return convertView;
     }
     private void removePeripheral(House house, Peripheral peripheral, String sessionToken){
-        new TaskHandler().removePeripheral(TAG, house.getName(), peripheral.getName(), sessionToken);
+        new TaskHandler().removePeripheral(getContext(), house.getName(), peripheral.getName(), sessionToken);
     }
 
     public interface OnPeripheralAdapterItemClickListener {

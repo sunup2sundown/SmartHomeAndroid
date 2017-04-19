@@ -254,8 +254,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("username", userStr);
-                jsonObject.put("password", hash_pass(passStr));
+                jsonObject.put("token", "123");
+                jsonObject.put("user_id", "matt");
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -269,7 +269,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
 
             //Make a request to url and get response
             String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
-            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
+            //JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
             //String resp = json.getString();
 
 
@@ -373,6 +373,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             }
         }
     }
+
+
 
     /*
     * Misc. Functions

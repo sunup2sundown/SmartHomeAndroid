@@ -126,7 +126,7 @@ public class BoardAdapter extends BaseExpandableListAdapter {
         String name;
 
         try {
-            String response = new TaskHandler().retrieveBoards(TAG, houseName, sessionToken);
+            String response = new TaskHandler().retrieveBoards(activity, houseName, sessionToken);
             JSONObject respObject = new JSONObject(response);
             JSONArray respArray = respObject.getJSONArray("");
 
@@ -143,6 +143,6 @@ public class BoardAdapter extends BaseExpandableListAdapter {
     }
 
     private void removeBoard(House h, Board b){
-        new TaskHandler().removeBoard(TAG, h.getName(), b.getName(), sessionToken);
+        new TaskHandler().removeBoard(activity, h.getName(), b.getName(), sessionToken);
     }
 }

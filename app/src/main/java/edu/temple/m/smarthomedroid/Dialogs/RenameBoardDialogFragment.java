@@ -69,7 +69,7 @@ public class RenameBoardDialogFragment extends DialogFragment {
 
     private void renameBoard(String houseName, String oldName, String newName){
         if(true){
-            new TaskHandler().renameBoard(TAG, houseName, oldName, newName, sessionID);
+            new TaskHandler().renameBoard(getContext(), houseName, oldName, newName, sessionID);
         }
     }
 }

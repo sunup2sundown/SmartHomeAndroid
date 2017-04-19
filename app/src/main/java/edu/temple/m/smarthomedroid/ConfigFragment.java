@@ -99,7 +99,7 @@ public class ConfigFragment extends Fragment{
         String name;
 
         try {
-            String response = new TaskHandler().retrieveHouses(TAG, sessionToken);
+            String response = new TaskHandler().retrieveHouses(getContext(), sessionToken);
             JSONObject respObject = new JSONObject(response);
             JSONArray respArray = respObject.getJSONArray("");
 
@@ -120,7 +120,7 @@ public class ConfigFragment extends Fragment{
         String name;
 
         try {
-            String response = new TaskHandler().retrieveBoards(TAG, houseName, sessionToken);
+            String response = new TaskHandler().retrieveBoards(getContext(), houseName, sessionToken);
             JSONObject respObject = new JSONObject(response);
             JSONArray respArray = respObject.getJSONArray("");
 
