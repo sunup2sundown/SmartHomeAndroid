@@ -26,5 +26,6 @@
     <string name="welcome">Welcome to SmartHome Gateway</string>
     <string name="textON">ON</string>
     <string name="textOFF">OFF</string>
+    <string name="house_list_config_text">List of available houses:</string>
 
 </resources>

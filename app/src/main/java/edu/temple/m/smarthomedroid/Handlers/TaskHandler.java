@@ -66,7 +66,7 @@ public class TaskHandler {
         JSONObject temp = new JSONObject();
 
         try {
-            temp.put("houseName", houseName);
+            temp.put("houseName", name);
             temp.put("sessionToken", session);
         } catch(JSONException e){
             e.printStackTrace();
@@ -77,7 +77,7 @@ public class TaskHandler {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("houseName", houseName);
+            jsonObject.put("houseName", name);
             jsonObject.put("housePassword", hashingHandler.hash_pass(password));
             jsonObject.put("sessionToken", session);
         } catch(JSONException e){
