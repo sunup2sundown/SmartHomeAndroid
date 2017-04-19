@@ -32,7 +32,6 @@ public class TaskHandler {
 
     public void login(Context context, String username, String password){
         mContext = context;
-        new UsernameAvailability().execute(username);
 
         JSONObject jsonObject = new JSONObject();
 
@@ -67,7 +66,7 @@ public class TaskHandler {
 
         try {
             temp.put("houseName", houseName);
-            temp.put("sessionToken", sessionToken);
+            temp.put("sessionToken", session);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -79,7 +78,7 @@ public class TaskHandler {
         try {
             jsonObject.put("houseName", houseName);
             jsonObject.put("housePassword", hashingHandler.hash_pass(password));
-            jsonObject.put("sessionToken", sessionToken);
+            jsonObject.put("sessionToken", session);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -168,9 +167,6 @@ public class TaskHandler {
     public void changeUsername(Context context, String username, String sessionToken){
         mContext = context;
 
-        new UsernameAvailability().execute(username);
-
-
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -179,19 +175,7 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        if(nameIsGood) {
             new ChangeUsername().execute(jsonObject);
-        } else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage("The Username you want is already taken. Try again")
-                    .setTitle("Change Username Failed...")
-                    .setNegativeButton("OK", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id){
-                            dialog.cancel();
-                        }
-                    });
-        }
     }
 
     public void changeUserPassword(Context context, String password, String sessionToken){
@@ -365,37 +349,6 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    /**
-     * Asynchronous Tasks -- HTTP GET Calls
-     */
-
-    private class UsernameAvailability extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(String...args){
-
-            response = new HttpHandler().makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + args[0], "GET");
-
-            if(response.equals("1")){
-                nameIsGood = true;
-            } else {
-                nameIsGood = false;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
-        }
-    }
-
     /*
     ** Asynchronous Tasks -- HTTP POST Calls
      *
@@ -474,9 +427,21 @@ public class TaskHandler {
         @Override
         protected Void doInBackground(JSONObject...args){
             HttpHandler sh = new HttpHandler();
+            String username = "";
+            try {
+                username = args[0].get("username").toString();
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
 
-            //Make a request to url and get response
-            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", args[0]);
+
+            String resp = new HttpHandler().makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + username, "GET");
+
+            if(resp.equals("1")){
+                response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", args[0]);
+            } else {
+
+            }
 
             Log.d("TaskHandler", "Change Username Response: " + response);
             return null;

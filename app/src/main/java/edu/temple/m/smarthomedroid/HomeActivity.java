@@ -61,6 +61,7 @@ public class HomeActivity extends AppCompatActivity
         // , BoardAdapter.OnBoardAdapterItemClickListener,
         , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , SwitchHouseDialogFragment.SwitchHouseDialogListener
+        , DataPassListener
         {
 
     private final String TAG = "HomeActivity";
@@ -209,7 +210,7 @@ public class HomeActivity extends AppCompatActivity
         boolean activityClosing= false;
 
         bundle.putString("Username", userId);
-        bundle.putString("SessionToken", sessionToken);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
         bundle.putString("HouseName",housename_dashboard);
 
         //Generate Fragment ONLY WHEN FRAGMENT IS COMPLETED to make sure it will
