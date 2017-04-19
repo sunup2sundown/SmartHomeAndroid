@@ -64,7 +64,7 @@ public class AddBoardDialogFragment extends DialogFragment {
 
     private void newBoard(String houseName, String boardName, String boardSerialNo){
         if(true){
-            new TaskHandler().addBoard("ConfigFragment:", houseName, boardName, boardSerialNo, sessionID);
+            new TaskHandler().addBoard(getContext(), houseName, boardName, boardSerialNo, sessionID);
         }
     }
 }

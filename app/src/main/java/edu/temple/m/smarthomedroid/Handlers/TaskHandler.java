@@ -1,5 +1,9 @@
 package edu.temple.m.smarthomedroid.Handlers;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -7,41 +11,49 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+
+import edu.temple.m.smarthomedroid.HomeActivity;
+
 /**
  * Created by M on 4/9/2017.
  */
 
 public class TaskHandler {
-    String sessionToken = "";
-    String username = "", userPassword = "";
-    String houseName = "", housePassword = "";
-    String tag = "";
+    final String TAG = "TaskHandler";
+    String sessionToken;
+    ProgressDialog pDialog;
+    boolean nameIsGood;
+    Context mContext;
     String response;
+    String houseName;
+    String housePassword;
+    HashingHandler hashingHandler = new HashingHandler();
 
-    public void login(String context, String username, String password){
-        tag = context;
+    public void login(Context context, String username, String password){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
         try {
             jsonObject.put("username", username);
-            jsonObject.put("password", password);
+            jsonObject.put("password", hashingHandler.hash_pass(password));
         } catch(JSONException e){
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new Login().execute(jsonObject);
 
     }
 
-    public void register(String context, String username, String password){
-        tag = context;
-
+    public void register(Context context, String username, String password){
+        mContext = context;
         JSONObject jsonObject = new JSONObject();
 
         try {
             jsonObject.put("username", username);
-            jsonObject.put("password", password);
+            jsonObject.put("password", hashingHandler.hash_pass(password));
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -49,19 +61,45 @@ public class TaskHandler {
         //new register.execute();
     }
 
-    public void createHouse(String context, String name, String password, String session){
-        tag = context;
+    public void createHouse(Context context, String name, String password, String session){
+        mContext = context;
+        JSONObject temp = new JSONObject();
 
-        //TODO: Check House name availability
-        houseName = name;
-        housePassword = password;
-        sessionToken = session;
+        try {
+            temp.put("houseName", houseName);
+            temp.put("sessionToken", session);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
 
-        new CreateHouse().execute();
+        new CheckHouseNameAvailability().execute(temp);
+
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("houseName", houseName);
+            jsonObject.put("housePassword", hashingHandler.hash_pass(password));
+            jsonObject.put("sessionToken", session);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        if(nameIsGood) {
+            new CreateHouse().execute(jsonObject);
+        } else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage("The House Name you want is already taken. Try again")
+                    .setTitle("Change House Name Failed...")
+                    .setNegativeButton("OK", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id){
+                            dialog.cancel();
+                        }
+                    });
+        }
     }
 
-    public void joinHouse(String context, String houseName, String housePassword, String sessionToken){
-        tag = context;
+    public void joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -76,8 +114,8 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void leaveHouse(String context, String sessionToken, String houseName){
-        tag = context;
+    public void leaveHouse(Context context, String sessionToken, String houseName){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -91,9 +129,9 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void changeHouseName(String context, String oldHouseName, String housePassword,
+    public void changeHouseName(Context context, String oldHouseName, String housePassword,
                                 String newHouseName, String sessionToken){
-        tag = context;
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -109,9 +147,9 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void changeHousePassword(String context, String houseName, String oldHousePassword,
+    public void changeHousePassword(Context context, String houseName, String oldHousePassword,
                                     String newHousePassword, String sessionToken){
-        tag = context;
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -127,8 +165,8 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void changeUsername(String context, String username, String sessionToken){
-        tag = context;
+    public void changeUsername(Context context, String username, String sessionToken){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -138,17 +176,16 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new ChangeUsername().execute(jsonObject);
+            new ChangeUsername().execute(jsonObject);
     }
 
-    public void changeUserPassword(String context, String password, String sessionToken){
-        tag = context;
+    public void changeUserPassword(Context context, String password, String sessionToken){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("password", password);
+            jsonObject.put("password", hashingHandler.hash_pass(password));
             jsonObject.put("sessionToken", sessionToken);
         } catch(JSONException e){
             e.printStackTrace();
@@ -157,8 +194,8 @@ public class TaskHandler {
         new ChangePassword().execute(jsonObject);
     }
 
-    public void checkHouseAvailability(String context, String houseName, String sessionToken){
-        tag = context;
+    public void checkHouseAvailability(Context context, String houseName, String sessionToken){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -169,11 +206,11 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new CheckHouseNameAvailability().execute(jsonObject);
     }
 
-    public void removeHouse(String context, String sessionToken, String houseName, String housePassword){
-        tag = context;
+    public void removeHouse(Context context, String sessionToken, String houseName, String housePassword){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -188,23 +225,23 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void addPeripheral(String context, String houseName, String boardName,
+    public void addPeripheral(Context context, String houseName, String boardName,
                               String peripheralName, String peripheralModel,
                               String pinConnection,  String session){
-        tag = context;
+        mContext = context;
         sessionToken = session;
         new AddPeripheral().execute(houseName, boardName, peripheralName, peripheralModel, pinConnection);
     }
 
-    public void removePeripheral(String context, String houseName, String peripheralName, String session){
-        tag = context;
+    public void removePeripheral(Context context, String houseName, String peripheralName, String session){
+        mContext = context;
         sessionToken = session;
         new RemovePeripheral().execute(houseName, peripheralName);
     }
 
-    public void renamePeripheral(String context, String houseName, String oldPeripheralName,
+    public void renamePeripheral(Context context, String houseName, String oldPeripheralName,
                                  String newPeripheralName, String session) {
-        tag = context;
+        mContext = context;
         sessionToken = session;
         new RenameBoard().execute(houseName, oldPeripheralName, newPeripheralName);
     }
@@ -213,8 +250,8 @@ public class TaskHandler {
 
     }
 
-    public void peripheralModelByType(String context, String peripheralTypeName, String sessionToken){
-        tag = context;
+    public void peripheralModelByType(Context context, String peripheralTypeName, String sessionToken){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -228,9 +265,9 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void checkPeripheralAvailability(String context, String sessionToken,
+    public void checkPeripheralAvailability(Context context, String sessionToken,
                                             String houseName, String peripheralName){
-        tag = context;
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -245,35 +282,35 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public void addBoard(String context, String houseName, String boardName,
+    public void addBoard(Context context, String houseName, String boardName,
                               String boardSerialNo, String session){
-        tag = context;
+        mContext = context;
         sessionToken = session;
         new AddBoard().execute(houseName, boardName, boardSerialNo);
     }
 
-    public void removeBoard(String context, String houseName, String boardName, String session) {
-        tag = context;
+    public void removeBoard(Context context, String houseName, String boardName, String session) {
+        mContext = context;
         sessionToken = session;
         new RemoveBoard().execute(houseName, boardName);
     }
 
-    public void renameBoard(String context, String houseName, String oldBoardName, String newBoardName,
+    public void renameBoard(Context context, String houseName, String oldBoardName, String newBoardName,
                             String session) {
-        tag = context;
+        mContext = context;
         sessionToken = session;
         new RenameBoard().execute(houseName, oldBoardName, newBoardName);
     }
 
-    public String retrieveBoards(String context, String houseName, String session){
-        tag = context;
+    public String retrieveBoards(Context context, String houseName, String session){
+        mContext = context;
         sessionToken=session;
         new GetBoardsByHouse().execute(houseName);
         return response;
     }
 
-    public void checkBoardNameAvailability(String context, String houseName, String sessionToken, String boardName){
-        tag = context;
+    public void checkBoardNameAvailability(Context context, String houseName, String sessionToken, String boardName){
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -288,16 +325,16 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    public String retrieveHouses(String context, String session){
-        tag = context;
+    public String retrieveHouses(Context context, String session){
+        mContext = context;
         sessionToken = session;
         new ListAllHouses().execute();
         return response;
     }
 
-    public void availablePins(String context,String houseName, String sessionToken,
+    public void availablePins(Context context,String houseName, String sessionToken,
                               String boardName, String peripheralTypeName){
-        tag = context;
+        mContext = context;
 
         JSONObject jsonObject = new JSONObject();
 
@@ -313,89 +350,154 @@ public class TaskHandler {
         //new login.execute();
     }
 
-    /**
-     * Asynchronous Tasks -- HTTP GET Calls
-     */
-
-
     /*
     ** Asynchronous Tasks -- HTTP POST Calls
      *
      */
-    private class ChangeUsername extends AsyncTask<JSONObject, Void, Void>{
+    private class Login extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String response;
+
         @Override
         protected void onPreExecute(){
-
+            super.onPreExecute();
         }
 
         @Override
-        protected Void doInBackground(JSONObject...arg0){
-            HttpHandler sh = new HttpHandler();
+        protected Void doInBackground(JSONObject...args){
 
-            //Make a request to url and get response
-            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", arg0[0]);
+            jsonObject = args[0];
 
-            Log.d(tag, "Change Username Response: " + response);
+            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/login", args[0]);
+            if(json!=null) {
+                Log.d("", json.toString());
+                try {
+                    response = json.getString("SessionToken");
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+        }
+    }
+
+    private class Register extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+
+
+    private class ChangeUsername extends AsyncTask<JSONObject, Void, Void>{
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+            HttpHandler sh = new HttpHandler();
+            String username = "";
+            try {
+                username = args[0].get("username").toString();
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
+
+
+            String resp = new HttpHandler().makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + username, "GET");
+
+            if(resp.equals("1")){
+                response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", args[0]);
+            } else {
+
+            }
+
+            Log.d("TaskHandler", "Change Username Response: " + response);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
     private class ChangePassword extends AsyncTask<JSONObject, Void, Void>{
         @Override
         protected void onPreExecute(){
-
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(JSONObject...arg0){
-            HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", arg0[0]);
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", arg0[0]);
 
-            Log.d(tag, "Change Password Response: " + response);
+            Log.d("TaskHandler", "Change Password Response: " + response);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result){
-
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
-    // for API call 8. Create House
-    private class CreateHouse extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject json = new JSONObject();
+    private class ChangeHouseName extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
         String response;
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-
-            if(houseName != null && sessionToken != null) {
-                try {
-                    json.put("houseName", houseName);
-                    json.put("housePassword", housePassword);
-                    json.put("sessionToken", sessionToken);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         @Override
-        protected Void doInBackground(JSONObject... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            //Make a request to url and get response
-            response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", json);
-
-            Log.d(tag, "Create House Response: " + response);
+        protected Void doInBackground(JSONObject...args){
 
             return null;
         }
@@ -403,7 +505,133 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+        }
+    }
 
+    private class ChangeHousePassword extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    private class JoinHouse extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    private class RemoveHouse extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    private class CheckHouseNameAvailability extends AsyncTask<JSONObject, Void, Void> {
+        JSONObject jsonObject = new JSONObject();
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/check-house-availability", args[0]);
+
+            Log.d(TAG, "Check House Name: " + response);
+
+            if(response.equals("1")){
+                nameIsGood = true;
+            } else {
+                nameIsGood = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    // for API call 8. Create House
+    private class CreateHouse extends AsyncTask<JSONObject, Void, Void> {
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject... args) {
+
+            //Make a request to url and get response
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
+
+            Log.d("TaskHandler", "Create house response: " + response);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
@@ -431,7 +659,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/listallhouses", json);
             TaskHandler.this.response = response;
-            Log.d(tag, "List All Houses Response: " + response);
+            Log.d(TAG, "List All Houses Response: " + response);
             return null;
         }
 
@@ -468,7 +696,7 @@ public class TaskHandler {
             }
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", json);
-            Log.d(tag, "Remove Peripheral Response: " + response);
+            Log.d(TAG, "Remove Peripheral Response: " + response);
             return null;
         }
 
@@ -511,7 +739,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/createperipheral", json);
 
-            Log.d(tag, "Create Peripheral Response: " + response);
+            Log.d(TAG, "Create Peripheral Response: " + response);
 
             return null;
         }
@@ -552,7 +780,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/changeperipheralname", json);
 
-                Log.d(tag, "Rename Peripheral Response: " + response);
+                Log.d(TAG, "Rename Peripheral Response: " + response);
 
             return null;
         }
@@ -591,7 +819,7 @@ public class TaskHandler {
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/getboardsbyhouse", json);
             TaskHandler.this.response = response;
 
-                Log.d(tag, "Get Boards by House Response: " + response);
+                Log.d(TAG, "Get Boards by House Response: " + response);
 
             return null;
         }
@@ -632,7 +860,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", json);
 
-                Log.d(tag, "Create Board Response: " + response);
+                Log.d(TAG, "Create Board Response: " + response);
             return null;
         }
 
@@ -671,7 +899,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/removeboard", json);
 
-                Log.d(tag, "Remove Board Response: " + response);
+                Log.d(TAG, "Remove Board Response: " + response);
 
             return null;
         }
@@ -712,7 +940,7 @@ public class TaskHandler {
             //Make a request to url and get response
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/changeboardname", json);
 
-                Log.d(tag, "Rename Board Response: " + response);
+                Log.d(TAG, "Rename Board Response: " + response);
 
             return null;
         }

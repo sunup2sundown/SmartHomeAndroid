@@ -68,7 +68,7 @@ public class RenamePeripheralDialogFragment extends DialogFragment {
 
     private void renamePeripheral(String houseName, String oldName, String newName){
         if(true){
-            new TaskHandler().renameBoard(TAG, houseName, oldName, newName, sessionID);
+            new TaskHandler().renameBoard(getContext(), houseName, oldName, newName, sessionID);
         }
     }
 }

@@ -295,13 +295,22 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
-        new TaskHandler().changeUsername("SettingsFragment", userId, sessionId);
+        EditText name = (EditText) dialog.getDialog().findViewById(R.id.change_username_dialog_username);
+
+        new TaskHandler().changeUsername(this, name.getText().toString(), sessionId);
     }
 
 
     @Override
     public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
-        //new TaskHandler().changeUserPassword("SettingsFragment");
+        EditText pw1 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_password);
+        EditText pw2 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_confirm_pw);
+
+        if(pw1.getText().toString().equals(pw2.getText().toString())) {
+            new TaskHandler().changeUserPassword(this, pw1.getText().toString(), sessionId);
+        } else{
+
+        }
     }
 
     @Override

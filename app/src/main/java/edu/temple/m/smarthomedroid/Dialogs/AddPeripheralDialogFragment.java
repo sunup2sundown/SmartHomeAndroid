@@ -69,7 +69,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
 
     private void newPeripheral(String houseName, String boardName, String peripheralName, String peripheralModel, String pinConnection){
         if(true){
-            new TaskHandler().addPeripheral("ConfigFragment:", houseName, boardName, peripheralName, peripheralModel, pinConnection, sessionID);
+            new TaskHandler().addPeripheral(getContext(), houseName, boardName, peripheralName, peripheralModel, pinConnection, sessionID);
         }
     }
 }
