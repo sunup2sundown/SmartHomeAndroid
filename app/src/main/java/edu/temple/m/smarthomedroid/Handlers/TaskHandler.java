@@ -58,7 +58,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new register.execute();
+        new Register().execute(jsonObject);
     }
 
     public void createHouse(Context context, String name, String password, String session){
@@ -124,7 +124,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new ChangeHouseName().execute(jsonObject);
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -203,6 +203,39 @@ public class TaskHandler {
         }
 
         new RemoveHouse().execute(jsonObject);
+    }
+
+    public void getRelayByHouse(Context context, String houseName, String sessionToken){
+        mContext = context;
+
+        JSONObject jsonObject = new JSONObject();
+
+        try{
+            jsonObject.put("HouseName", houseName);
+            jsonObject.put("SessionToken", sessionToken);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new GetRelayByHouse().execute(jsonObject);
+    }
+
+    public void setRelayStatus(Context context, String sessionToken, String peripheralName,
+                               String houseName, String peripheralValue){
+        mContext = context;
+
+        JSONObject jsonObject = new JSONObject();
+
+        try{
+            jsonObject.put("SessionToken", sessionToken);
+            jsonObject.put("PeripheralName", peripheralName);
+            jsonObject.put("HouseName", houseName);
+            jsonObject.put("PeripheralValue", peripheralValue);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new SetRelayStatus().execute(jsonObject);
     }
 
     public void addPeripheral(Context context, String houseName, String boardName,
@@ -367,7 +400,7 @@ public class TaskHandler {
         }
     }
 
-    private class CreateAccount extends AsyncTask<JSONObject, Void, Void> {
+    private class Register extends AsyncTask<JSONObject, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -415,8 +448,6 @@ public class TaskHandler {
             }
         }
     }
-
-
 
     private class ChangeUsername extends AsyncTask<JSONObject, Void, Void>{
         String response;
@@ -672,6 +703,96 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+        }
+    }
+
+    private class GetRelayByHouse extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    private class SetRelayStatus extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/setrelaystatus", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    private class GetPeripheralsByHouse extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/peripheral/getcurrentperipheralsbyhouse", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
