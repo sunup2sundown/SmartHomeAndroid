@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class Dashboard extends Fragment {
     private String TAG = "Dashboard";
     private String usern = "Tom Brady";
     private String sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
+    private String sessionId;
     DataPassListener mCallback;
 
     public interface DataPassListener{
@@ -54,6 +56,7 @@ public class Dashboard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.dashboard_layout,container,false);
+        sessionId = getArguments().getString("SessionToken");
         listhouse = (Spinner)v.findViewById(R.id.listhouse);
         return v;
     }
@@ -125,7 +128,7 @@ public class Dashboard extends Fragment {
     }
     private class getlist extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
-        String session = sessionToken;
+        String session = sessionId;
 
         @Override
         protected void onPreExecute() {
@@ -170,7 +173,7 @@ public class Dashboard extends Fragment {
     private class getRe extends AsyncTask<Void, Void, Void> {
         JSONObject json = new JSONObject();
         String house = housename;
-        String session = sessionToken;
+        String session = sessionId;
         String resp1;
 
         @Override
@@ -213,5 +216,10 @@ public class Dashboard extends Fragment {
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
         }
+    }
+    public void onBackPressed()
+    {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        fm.popBackStack();
     }
 }
