@@ -2,6 +2,7 @@ package edu.temple.m.smarthomedroid.Handlers;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -395,6 +396,7 @@ public class TaskHandler {
             response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", json);
 
             Log.d(tag, "Create House Response: " + response);
+
             return null;
         }
 
