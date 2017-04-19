@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/dialog_join_house_name"
+        android:id="@+id/dialog_remove_house_name"
         android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:hint="House Name" />
 
     <EditText
-        android:id="@+id/dialog_join_house_password"
+        android:id="@+id/dialog_remove_house_password"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

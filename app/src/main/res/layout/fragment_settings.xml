@@ -87,6 +87,15 @@
         android:layout_below="@+id/button_newhouse"
         android:text="Change House Password" />
 
+    <Button
+        android:id="@+id/button_leavehouse"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:text="Leave House"
+        android:layout_alignBaseline="@+id/button_changehousename"
+        android:layout_alignBottom="@+id/button_changehousename"
+        android:layout_toStartOf="@+id/textView6" />
+
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
