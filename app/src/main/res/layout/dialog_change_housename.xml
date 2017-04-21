@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/signup_dialog_header"
+        android:id="@+id/dialog_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/colorPrimaryDark"
@@ -20,7 +20,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="House Name"
+        android:hint="Old House Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

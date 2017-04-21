@@ -23,6 +23,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.JoinHouseDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.LeaveHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
@@ -121,6 +122,14 @@ public class UserSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ChangeHousePasswordDialogFragment f = new ChangeHousePasswordDialogFragment();
+                f.setArguments(bundle);
+                f.show(fm, null);
+            }
+        });
+        ((Button)v.findViewById(R.id.button_leavehouse)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LeaveHouseDialogFragment f = new LeaveHouseDialogFragment();
                 f.setArguments(bundle);
                 f.show(fm, null);
             }

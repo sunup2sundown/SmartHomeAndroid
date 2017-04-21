@@ -47,8 +47,8 @@ public class JoinHouseDialogFragment extends DialogFragment {
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText houseName = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_newhouse_name);
-                        EditText housePassword = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_newhouse_password);
+                        EditText houseName = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_join_house_name);
+                        EditText housePassword = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_join_house_password);
                         joinHouse(houseName.getText().toString(), housePassword.getText().toString());
                         // switch to the new house...
                     }
@@ -63,7 +63,7 @@ public class JoinHouseDialogFragment extends DialogFragment {
 
     private void joinHouse(String name, String password){
         if(true){
-            //new TaskHandler().joinHouse("SettingsFragment:", name, password, sessionID);
+            new TaskHandler().joinHouse(getContext(), name, password, sessionID);
         }
     }
 }

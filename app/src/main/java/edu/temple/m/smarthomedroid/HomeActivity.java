@@ -40,6 +40,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.JoinHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
@@ -53,11 +54,8 @@ import static java.lang.Thread.sleep;
 
 public class HomeActivity extends AppCompatActivity
 
-        implements HouseAdapter.OnHouseAdapterItemClickListener
-        , ChangeUsernameDialogFragment.ChangeUsernameDialogListener
+        implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
-        , ChangeHouseNameDialogFragment.ChangeHouseNameDialogListener
-        , ChangeHousePasswordDialogFragment.ChangeHousePasswordDialogListener
         // , BoardAdapter.OnBoardAdapterItemClickListener,
         , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , SwitchHouseDialogFragment.SwitchHouseDialogListener
@@ -273,7 +271,7 @@ public class HomeActivity extends AppCompatActivity
     // Interface functions
 
 
-
+/*
     public void onHouseAdapterItemChangePasswordClick(String houseName){
         ChangeHousePasswordDialogFragment f = ChangeHousePasswordDialogFragment.newInstance(houseName);
         f.show(fragmentManager, null);
@@ -282,6 +280,7 @@ public class HomeActivity extends AppCompatActivity
         ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
         f.show(fragmentManager, null);
     }
+    */
     @Override
     public void onPeripheralAdapterItemClick(String peripheralName){
         RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
@@ -312,7 +311,7 @@ public class HomeActivity extends AppCompatActivity
 
         }
     }
-
+/*
     @Override
     public void onChangeHouseNameDialogPositiveClick(DialogFragment dialog){
         houseName = ((EditText)dialog.getDialog().findViewById(R.id.change_house_name_dialog_old_name)).getText().toString();
@@ -326,7 +325,7 @@ public class HomeActivity extends AppCompatActivity
     public void onChangeHousePasswordDialogPositiveClick(DialogFragment dialog){
 
     }
-
+*/
     public void onSwitchHouseDialogPositiveClick(String houseName, String housePw, String sessionToken){
         new JoinHouse().execute(houseName, housePw, sessionToken);
     }
@@ -339,6 +338,7 @@ public class HomeActivity extends AppCompatActivity
     public void onChangePasswordDialogNegativeClick(DialogFragment dialog){
         dialog.getDialog().cancel();
     }
+    /*
     @Override
     public void onChangeHouseNameDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
@@ -347,7 +347,7 @@ public class HomeActivity extends AppCompatActivity
     public void onChangeHousePasswordDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
     }
-
+*/
     @Override
     public void passData(String data) {
         this.housename_dashboard = data;

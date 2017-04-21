@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,7 @@ import edu.temple.m.smarthomedroid.Dialogs.LoginDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.SignupDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler2;
+import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 
 import static java.lang.Thread.sleep;
 
@@ -103,12 +105,6 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         passStr = password.getText().toString();
         String confirm = confirmPassword.getText().toString();
 
-        new CheckUsername().execute();
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if(Objects.equals(passStr, confirm)){
             if(username_error(userStr)){
                 //Toast.makeText(this, "Please enter a proper username", Toast.LENGTH_LONG);
@@ -123,22 +119,9 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
                         });
 
                 AlertDialog aDialog = builder.show();
-            }else if(!goodUser){
-                //Toast.makeText(this, "That Username already exists.", Toast.LENGTH_LONG);
-                //Show Dialog that info was wrong
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setMessage("The Username you want is already taken. Try again")
-                        .setTitle("Account Creation Failed...")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog aDialog = builder.show();
             }else{
                 //Log.d(TAG, "Got to Account Creation");
-                //Log.d(TAG, hash_pass(password.getText().toString()));
+                //Log.d(TAG, hash_pass(password.getText().toString()))
                 new CreateAccount().execute();
 
                 new LoginAccount().execute();
@@ -255,8 +238,8 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
             pDialog.show();
 
             try{
-                jsonObject.put("token", "123");
-                jsonObject.put("user_id", "matt");
+                jsonObject.put("username", userStr);
+                jsonObject.put("password", hash_pass(passStr));
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -265,11 +248,20 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
+            String resp = "";
+            String response = sh.makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + userStr, "GET");
 
             Log.d(TAG, jsonObject.toString());
 
-            //Make a request to url and get response
-            String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
+            if(response.equals(good)) {
+                //Make a request to url and get response
+                resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
+            }
+            else{
+                //
+            }
+
+
             //JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", jsonObject);
             //String resp = json.getString();
 

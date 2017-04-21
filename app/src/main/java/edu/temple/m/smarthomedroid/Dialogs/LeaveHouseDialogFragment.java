@@ -16,15 +16,15 @@ import edu.temple.m.smarthomedroid.R;
  * Created by M on 4/9/2017.
  */
 
-public class ChangeHouseNameDialogFragment extends DialogFragment {
-    private final String TAG = "ChangeHouseDialog";
+public class LeaveHouseDialogFragment extends DialogFragment {
+    private final String TAG = "LeaveHouseDialog";
 
     private String sessionID;
 
-    public static ChangeHouseNameDialogFragment newInstance() {
-        ChangeHouseNameDialogFragment frag = new ChangeHouseNameDialogFragment();
+    public static LeaveHouseDialogFragment newInstance() {
+        LeaveHouseDialogFragment frag = new LeaveHouseDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", "Change House Name");
+        args.putString("title", "Leave House");
         frag.setArguments(args);
         return frag;
     }
@@ -41,30 +41,28 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
         String title = getArguments().getString("title");
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_change_housename, null))
+        builder.setView(inflater.inflate(R.layout.dialog_leave_house, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText oldHouseName = (EditText) ChangeHouseNameDialogFragment.this.getDialog().findViewById(R.id.change_house_name_dialog_old_name);
-                        EditText housePassword = (EditText) ChangeHouseNameDialogFragment.this.getDialog().findViewById(R.id.change_house_name_dialog_password);
-                        EditText newHouseName = (EditText) ChangeHouseNameDialogFragment.this.getDialog().findViewById(R.id.change_house_name_dialog_new_name);
-                        ChangeHouse(oldHouseName.getText().toString(), housePassword.getText().toString(), newHouseName.getText().toString());
+                        EditText houseName = (EditText) LeaveHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_leave_house_name);
+                        LeaveHouse(houseName.getText().toString());
                         // switch to the new house...
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ChangeHouseNameDialogFragment.this.getDialog().cancel();
+                        LeaveHouseDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();
     }
 
-    private void ChangeHouse(String oldName, String password, String newName){
+    private void LeaveHouse(String name){
         if(true){
-            new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID);
+            new TaskHandler().leaveHouse(getContext(), sessionID, name);
         }
     }
 }

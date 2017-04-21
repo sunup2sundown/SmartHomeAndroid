@@ -58,11 +58,12 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new register.execute();
+        new Register().execute(jsonObject);
     }
 
     public void createHouse(Context context, String name, String password, String session){
         mContext = context;
+
         JSONObject temp = new JSONObject();
 
         try {
@@ -74,6 +75,7 @@ public class TaskHandler {
 
         new CheckHouseNameAvailability().execute(temp);
 
+
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -84,18 +86,8 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        if(nameIsGood) {
-            new CreateHouse().execute(jsonObject);
-        } else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage("The House Name you want is already taken. Try again")
-                    .setTitle("Change House Name Failed...")
-                    .setNegativeButton("OK", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id){
-                            dialog.cancel();
-                        }
-                    });
-        }
+        new CreateHouse().execute(jsonObject);
+
     }
 
     public void joinHouse(Context context, String houseName, String housePassword, String sessionToken){
@@ -111,7 +103,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new JoinHouse().execute(jsonObject);
     }
 
     public void leaveHouse(Context context, String sessionToken, String houseName){
@@ -126,7 +118,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new LeaveHouse().execute(jsonObject);
     }
 
     public void changeHouseName(Context context, String oldHouseName, String housePassword,
@@ -144,7 +136,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new ChangeHouseName().execute(jsonObject);
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -162,7 +154,7 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new ChangeHousePassword().execute(jsonObject);
     }
 
     public void changeUsername(Context context, String username, String sessionToken){
@@ -222,7 +214,40 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        //new login.execute();
+        new RemoveHouse().execute(jsonObject);
+    }
+
+    public void getRelayByHouse(Context context, String houseName, String sessionToken){
+        mContext = context;
+
+        JSONObject jsonObject = new JSONObject();
+
+        try{
+            jsonObject.put("HouseName", houseName);
+            jsonObject.put("SessionToken", sessionToken);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new GetRelayByHouse().execute(jsonObject);
+    }
+
+    public void setRelayStatus(Context context, String sessionToken, String peripheralName,
+                               String houseName, String peripheralValue){
+        mContext = context;
+
+        JSONObject jsonObject = new JSONObject();
+
+        try{
+            jsonObject.put("SessionToken", sessionToken);
+            jsonObject.put("PeripheralName", peripheralName);
+            jsonObject.put("HouseName", houseName);
+            jsonObject.put("PeripheralValue", peripheralValue);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new SetRelayStatus().execute(jsonObject);
     }
 
     public void addPeripheral(Context context, String houseName, String boardName,
@@ -388,30 +413,53 @@ public class TaskHandler {
     }
 
     private class Register extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject jsonObject = new JSONObject();
-        String response;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
+        protected Void doInBackground(JSONObject... args) {
+            HttpHandler sh = new HttpHandler();
+            String username = "";
+            try {
+                username = args[0].get("username").toString();
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
+            String resp = sh.makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + username, "GET");
 
-            JSONObject json = new HttpHandler2().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", args[0]);
+            Log.d(TAG, "Check Username Response: " + resp);
 
+            if(resp.contentEquals("1")) {
+                //Make a request to url and get response
+                response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/register", args[0]);
+            } else{
+
+            }
+
+            if(resp != null){
+                Log.d(TAG, "Account Creation: " + resp);
+            }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
-
-
 
     private class ChangeUsername extends AsyncTask<JSONObject, Void, Void>{
         String response;
@@ -438,10 +486,12 @@ public class TaskHandler {
 
             String resp = new HttpHandler().makeGetCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/checkusername/" + username, "GET");
 
+            Log.d(TAG, "Check Username Response: " + resp);
+
             if(resp.equals("1")){
                 response = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changeusername", args[0]);
             } else {
-
+                Toast.makeText(mContext, "That Username already exists.", Toast.LENGTH_SHORT).show();
             }
 
             Log.d("TaskHandler", "Change Username Response: " + response);
@@ -488,16 +538,21 @@ public class TaskHandler {
     }
 
     private class ChangeHouseName extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject jsonObject = new JSONObject();
-        String response;
-
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(JSONObject...args){
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousename", args[0]);
+
+            Log.d(TAG, "Change House Password: " + response);
 
             return null;
         }
@@ -505,20 +560,29 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
     private class ChangeHousePassword extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject jsonObject = new JSONObject();
-        String response;
-
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(JSONObject...args){
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", args[0]);
+
+            Log.d(TAG, "Change House Password: " + response);
 
             return null;
         }
@@ -526,20 +590,29 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
     private class JoinHouse extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject jsonObject = new JSONObject();
-        String response;
-
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(JSONObject...args){
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", args[0]);
+
+            Log.d(TAG, "Join House Name: " + response);
 
             return null;
         }
@@ -547,20 +620,60 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    private class LeaveHouse extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/leavehouse", args[0]);
+
+            Log.d(TAG, "Leave House Response: " + response);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
     private class RemoveHouse extends AsyncTask<JSONObject, Void, Void> {
-        JSONObject jsonObject = new JSONObject();
-        String response;
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
         }
 
         @Override
         protected Void doInBackground(JSONObject...args){
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/removehouse", args[0]);
+
+            Log.d(TAG, "Remove House Response: " + response);
 
             return null;
         }
@@ -568,6 +681,10 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
         }
     }
 
@@ -601,6 +718,96 @@ public class TaskHandler {
         }
     }
 
+    private class GetRelayByHouse extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    private class SetRelayStatus extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/setrelaystatus", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
+    private class GetPeripheralsByHouse extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/peripheral/getcurrentperipheralsbyhouse", args[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        }
+    }
+
     // for API call 8. Create House
     private class CreateHouse extends AsyncTask<JSONObject, Void, Void> {
 
@@ -616,11 +823,26 @@ public class TaskHandler {
 
         @Override
         protected Void doInBackground(JSONObject... args) {
+            JSONObject json = new JSONObject();
+            try{
+                json.put("houseName", args[0].get("houseName").toString());
+                json.put("sessionToken", args[0].get("sessionToken").toString());
+            } catch(JSONException e){
+                e.printStackTrace();
+            }
 
-            //Make a request to url and get response
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
+            String resp = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/check-house-availability", json);
 
-            Log.d("TaskHandler", "Create house response: " + response);
+            Log.d(TAG, "Check House Name: " + resp);
+
+            if(resp.equals("1")){
+                //Make a request to url and get response
+                response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
+            } else {
+                //TODO Alert House name is taken
+            }
+
+            Log.d(TAG, "Create house response: " + response);
 
             return null;
         }
