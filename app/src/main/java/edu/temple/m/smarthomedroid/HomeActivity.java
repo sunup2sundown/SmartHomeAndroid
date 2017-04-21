@@ -82,6 +82,7 @@ public class HomeActivity extends AppCompatActivity
     String response;
     String userPassword;
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    String fragmentToStart;
 
     private String houseName, newHouseName, housePassword, newHousePassword;
     private ArrayList<House> houseList;
@@ -97,6 +98,8 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
+
+        fragmentToStart = "";
 
 
         //Receive session ID and Username from Login Activity
@@ -393,8 +396,16 @@ public class HomeActivity extends AppCompatActivity
             Log.d("MAtches contains", matches.get(0) + " " + matches.get(1));
 
             if(matches.contains("relays") || matches.contains("relay")){
-                startRelaysTab();
+                fragmentToStart = "RelayFragment";
             }
+        }
+    }
+
+    @Override
+    public void onPostResume(){
+        super.onPostResume();
+        if(fragmentToStart.contentEquals("RelayFragment")){
+            startRelaysTab();
         }
     }
 
@@ -408,17 +419,22 @@ public class HomeActivity extends AppCompatActivity
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
         bundle.putString("HouseName",housename_dashboard);
 
-        if(fragment != null) {
-            //Set Fragment Arguments
-            fragment.setArguments(bundle);
-            //Insert the fragment by replacing any existing fragments
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
-            fragmentTransaction.commit();
+        //Set Fragment Arguments
+        fragment.setArguments(bundle);
+        //Insert the fragment by replacing any existing fragments
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.flContent, fragment);
+        fragmentTransaction.commit();
+    }
+/*
+    @Override
+    public void onResumeFragments(){
+        if(fragmentToStart.contentEquals("RelayFragment")){
+            startRelaysTab();
         }
     }
-
+*/
     /**
      * HTTP Calls --Async Task
      */
