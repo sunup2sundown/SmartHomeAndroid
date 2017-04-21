@@ -231,6 +231,7 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         protected void onPreExecute() {
             super.onPreExecute();
             //Show progress dialog
+
             pDialog = new ProgressDialog(LoginActivity.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
