@@ -1,6 +1,8 @@
 package edu.temple.m.smarthomedroid;
 
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -27,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
@@ -77,6 +81,7 @@ public class HomeActivity extends AppCompatActivity
     String userId, sessionId;
     String response;
     String userPassword;
+    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
     private String houseName, newHouseName, housePassword, newHousePassword;
     private ArrayList<House> houseList;
@@ -102,7 +107,19 @@ public class HomeActivity extends AppCompatActivity
         Log.d(TAG, "Username: " + userId);
         Log.d(TAG, "SessionToken: " + sessionId);
 
-
+        Button voiceButton = (Button)findViewById(R.id.voice);
+        // Check to see if a recognition activity is present
+// if running on AVD virtual device it will give this message. The mic
+// required only works on an actual android device
+        PackageManager pm = getPackageManager();
+        List activities = pm.queryIntentActivities(new Intent(
+                RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        if (activities.size() != 0) {
+            //voiceButton.setOnClickListener(this);
+        } else {
+            voiceButton.setEnabled(false);
+            voiceButton.setText("Recognizer not present");
+        }
 
         //get toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -179,6 +196,10 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if(id == R.id.voice){
+            //TODO: Implement Voice Recognition and Commands
+            Log.d(TAG, "Clicked Voice Button");
+            startVoiceRecognitionActivity();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -351,6 +372,51 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void passData(String data) {
         this.housename_dashboard = data;
+    }
+
+    /**
+     *
+     */
+    public void startVoiceRecognitionActivity(){
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Smart Home Speech Recognition");
+        startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK){
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            Log.d("MAtches contains", matches.get(0) + " " + matches.get(1));
+
+            if(matches.contains("relays") || matches.contains("relay")){
+                startRelaysTab();
+            }
+        }
+    }
+
+    private void startRelaysTab(){
+
+        Log.d(TAG, "Starting relay tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new RelayFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     /**
