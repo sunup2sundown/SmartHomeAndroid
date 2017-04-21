@@ -64,6 +64,18 @@ public class TaskHandler {
     public void createHouse(Context context, String name, String password, String session){
         mContext = context;
 
+        JSONObject temp = new JSONObject();
+
+        try {
+            temp.put("houseName", name);
+            temp.put("sessionToken", session);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new CheckHouseNameAvailability().execute(temp);
+
+
         JSONObject jsonObject = new JSONObject();
 
         try {

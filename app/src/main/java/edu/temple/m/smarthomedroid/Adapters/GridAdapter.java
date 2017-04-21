@@ -1,6 +1,7 @@
 package edu.temple.m.smarthomedroid.Adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.Objects.Relay2;
 import edu.temple.m.smarthomedroid.R;
+
+import static android.graphics.Color.BLACK;
+import static android.graphics.Typeface.BOLD;
 
 /**
  * Created by quido on 4/16/17.
@@ -41,7 +45,13 @@ public class GridAdapter extends ArrayAdapter<Relay2> {
                         convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_relay_grid, parent, false);
                 }
                 TextView name = (TextView) convertView.findViewById(R.id.houseN);
+                name.setTextSize(25);
+                name.setTextColor(BLACK);
+                name.setTypeface(name.getTypeface(),BOLD);
                 TextView stt = (TextView) convertView.findViewById(R.id.textView5);
+                stt.setTextSize(25);
+                stt.setTextColor(BLACK);
+
                 name.setText(relay2.getName());
                 if (relay2.getStatus()) {
                         stt.setText("ON");
