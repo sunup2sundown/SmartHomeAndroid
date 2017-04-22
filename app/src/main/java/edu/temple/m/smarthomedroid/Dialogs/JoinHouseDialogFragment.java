@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.R;
@@ -44,7 +45,7 @@ public class JoinHouseDialogFragment extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_join_house, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Join", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         EditText houseName = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_join_house_name);
@@ -62,8 +63,7 @@ public class JoinHouseDialogFragment extends DialogFragment {
     }
 
     private void joinHouse(String name, String password){
-        if(true){
-            new TaskHandler().joinHouse(getContext(), name, password, sessionID);
+        if(true) {
         }
     }
 }

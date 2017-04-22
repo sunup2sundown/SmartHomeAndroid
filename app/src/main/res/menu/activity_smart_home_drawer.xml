@@ -27,6 +27,10 @@
             android:icon="@android:drawable/ic_menu_save"
             android:title="@string/sys" />
         <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="@string/camera" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@android:drawable/btn_dialog"
             android:title="@string/log_out" />

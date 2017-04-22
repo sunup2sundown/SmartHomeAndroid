@@ -32,26 +32,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
-import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
-
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
 import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
 
-import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.ChangeUserPasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.JoinHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.SwitchHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
-import edu.temple.m.smarthomedroid.Objects.Peripheral;
 
 import static java.lang.Thread.sleep;
 
@@ -62,7 +53,6 @@ public class HomeActivity extends AppCompatActivity
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
         // , BoardAdapter.OnBoardAdapterItemClickListener,
         , PeripheralAdapter.OnPeripheralAdapterItemClickListener
-        , SwitchHouseDialogFragment.SwitchHouseDialogListener
         , DataPassListener
         {
 
@@ -254,6 +244,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.nav_system:
                 fragment = new RelayFragment();
+                break;
+            case R.id.nav_camera:
+                fragment = new CameraFragment();
                 break;
             case R.id.nav_logout:
                 activityClosing = true;
