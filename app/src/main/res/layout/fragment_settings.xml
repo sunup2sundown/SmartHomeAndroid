@@ -55,21 +55,12 @@
         android:layout_marginTop="12dp" />
 
     <Button
-        android:id="@+id/button_switchhouse"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Switch House"
-        android:layout_below="@+id/button_changehousename"
-        android:layout_alignStart="@+id/button_changehousename" />
-
-    <Button
         android:id="@+id/button_joinhouse"
         android:layout_width="130dp"
         android:layout_height="60dp"
         android:text="Join House"
-        android:layout_below="@+id/button_switchhouse"
-        android:layout_alignStart="@+id/button_switchhouse"
-        android:layout_alignEnd="@+id/button_switchhouse" />
+        android:layout_below="@+id/button_leavehouse"
+        android:layout_alignStart="@+id/button_changehousename" />
 
     <Button
         android:id="@+id/button_changehousename"
@@ -105,14 +96,6 @@
         android:layout_marginTop="14dp"
         android:text="Current House:"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-    <ExpandableListView
-        android:id="@+id/listview_houses"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/button_newhouse"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="206dp" />
 
 
 </RelativeLayout>
