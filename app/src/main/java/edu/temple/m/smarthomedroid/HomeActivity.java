@@ -255,6 +255,9 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_system:
                 fragment = new RelayFragment();
                 break;
+            case R.id.nav_camera:
+                fragment = new CameraFragment();
+                break;
             case R.id.nav_logout:
                 activityClosing = true;
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
