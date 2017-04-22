@@ -83,7 +83,7 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
             e.printStackTrace();
         }
         //Create and set custom adapter for relay list
-        RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
+        RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList, sessionToken);
 
         int k=0;
         if(jArray!=null) {

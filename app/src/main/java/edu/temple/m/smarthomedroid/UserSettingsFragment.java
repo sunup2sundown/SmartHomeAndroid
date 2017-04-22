@@ -145,12 +145,13 @@ public class UserSettingsFragment extends Fragment {
         houseList = new ArrayList<House>();
         // Populate list from API call
         new RetrieveHouses().execute();
-
+/*
         //Create and set custom adapter for relay list
         HouseAdapter adapter = new HouseAdapter(getActivity(), houseList);
 
         ExpandableListView lv = (ExpandableListView)getView().findViewById(R.id.listview_houses);
         lv.setAdapter(adapter);
+        */
     }
 
     private class RetrieveHouses extends AsyncTask<Void, Void, Void> {

@@ -13,6 +13,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.R;
 
@@ -24,14 +25,16 @@ import edu.temple.m.smarthomedroid.R;
 public class RelayAdapter extends ArrayAdapter<Relay> {
     private Context context;
     private boolean useList = true;
+    String sessionToken;
 
     /**
      * Constructor Method
      * @param context
      * @param relays
      */
-    public RelayAdapter(Context context, ArrayList<Relay> relays){
+    public RelayAdapter(Context context, ArrayList<Relay> relays, String sessionToken){
         super(context, android.R.layout.simple_list_item_1, relays);
+        this.sessionToken = sessionToken;
     }
 
 
@@ -56,15 +59,18 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
                     if (isChecked) {
                         try {
                             relay.switchOn();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        new TaskHandler().setRelayStatus(getContext(), sessionToken, relay.getName(), relay.getHouseName(), "1");
                     } else {
                         try {
                             relay.switchOff();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        new TaskHandler().setRelayStatus(getContext(), sessionToken, relay.getName(), relay.getHouseName(), "0");
                     }
                 }
             });
