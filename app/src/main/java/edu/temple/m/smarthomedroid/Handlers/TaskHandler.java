@@ -27,6 +27,7 @@ public class TaskHandler {
     boolean nameIsGood;
     Context mContext;
     String response;
+    String response2;
     String houseName;
     String housePassword;
     HashingHandler hashingHandler = new HashingHandler();
@@ -121,7 +122,7 @@ public class TaskHandler {
         new LeaveHouse().execute(jsonObject);
     }
 
-    public void changeHouseName(Context context, String oldHouseName, String housePassword,
+    public String changeHouseName(Context context, String oldHouseName, String housePassword,
                                 String newHouseName, String sessionToken){
         mContext = context;
 
@@ -137,6 +138,7 @@ public class TaskHandler {
         }
 
         new ChangeHouseName().execute(jsonObject);
+        return response;
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -611,7 +613,6 @@ public class TaskHandler {
         @Override
         protected Void doInBackground(JSONObject...args){
             response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", args[0]);
-
             Log.d(TAG, "Join House Name: " + response);
 
             return null;
@@ -623,6 +624,22 @@ public class TaskHandler {
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
+            response = "8 House credentials incorrect";
+            switch(response) {
+                case "1 Unknown error":
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "2 User not found":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "4 User is already affiliated with the house":
+                    Toast.makeText(mContext, "You already joined this house", Toast.LENGTH_SHORT).show();
+                    break;
+                case "8 House credentials incorrect":
+                    Toast.makeText(mContext, "House credentials incorrect", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
             }
         }
     }

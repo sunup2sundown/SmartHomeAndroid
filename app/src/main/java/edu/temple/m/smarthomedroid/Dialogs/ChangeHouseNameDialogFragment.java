@@ -64,7 +64,8 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
 
     private void ChangeHouse(String oldName, String password, String newName){
         if(true){
-            new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID);
+            String result;
+            result = new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID);
         }
     }
 }

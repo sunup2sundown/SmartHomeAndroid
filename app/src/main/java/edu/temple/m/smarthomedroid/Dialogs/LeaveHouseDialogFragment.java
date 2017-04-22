@@ -49,7 +49,6 @@ public class LeaveHouseDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         EditText houseName = (EditText) LeaveHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_leave_house_name);
                         LeaveHouse(houseName.getText().toString());
-                        // switch to the new house...
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
