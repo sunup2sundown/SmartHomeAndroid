@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
@@ -388,15 +390,23 @@ public class HomeActivity extends AppCompatActivity
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
+    private ArrayList<String> parseCommand(ArrayList<String> commandString){
+        String command = commandString.get(0);
+        ArrayList<String> strings = new ArrayList<String>(Arrays.asList(command.split(" ")));
+
+        return strings;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK){
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            ArrayList<String> temp = parseCommand(matches);
 
-            Log.d("MAtches contains", matches.get(0) + " " + matches.get(1));
-
-            if(matches.contains("relays") || matches.contains("relay")){
+            if(temp.contains("go") && (temp.contains("relays") || temp.contains("relay"))){
                 fragmentToStart = "RelayFragment";
+            } else if(temp.contains("go") && (temp.contains("settings") || temp.contains("setting"))){
+                fragmentToStart = "SettingsFragment";
             }
         }
     }
@@ -404,13 +414,24 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPostResume(){
         super.onPostResume();
-        if(fragmentToStart.contentEquals("RelayFragment")){
-            startRelaysTab();
+
+        switch(fragmentToStart){
+            case "RelayFragment":
+                    startRelaysTab();
+                break;
+            case "SettingsFragment":
+                startSettingsTab();
+                break;
+            default:
         }
     }
 
-    private void startRelaysTab(){
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
+    private void startRelaysTab(){
         Log.d(TAG, "Starting relay tab");
         Bundle bundle = new Bundle();
         Fragment fragment = new RelayFragment();
@@ -419,22 +440,40 @@ public class HomeActivity extends AppCompatActivity
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
         bundle.putString("HouseName",housename_dashboard);
 
-        //Set Fragment Arguments
-        fragment.setArguments(bundle);
-        //Insert the fragment by replacing any existing fragments
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flContent, fragment);
-        fragmentTransaction.commit();
-    }
-/*
-    @Override
-    public void onResumeFragments(){
-        if(fragmentToStart.contentEquals("RelayFragment")){
-            startRelaysTab();
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
-*/
+
+    private void startSettingsTab(){
+        Log.d(TAG, "Starting Settings tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new UserSettingsFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+
     /**
      * HTTP Calls --Async Task
      */

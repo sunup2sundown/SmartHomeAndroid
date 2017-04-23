@@ -183,7 +183,6 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new ChangePassword().execute(jsonObject);
     }
 
     public void checkHouseAvailability(Context context, String houseName, String sessionToken){
@@ -583,6 +582,7 @@ public class TaskHandler {
             response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", args[0]);
 
             Log.d(TAG, "Change House Password: " + response);
+
 
             return null;
         }
