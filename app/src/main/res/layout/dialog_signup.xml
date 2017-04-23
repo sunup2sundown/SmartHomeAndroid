@@ -6,13 +6,12 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/signup_dialog_header"
+        android:id="@+id/dialog_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:contentDescription="@string/app_name"
         app:srcCompat="@mipmap/ic_logo" />
-
     <EditText
         android:id="@+id/signup_dialog_username"
         android:inputType="textPersonName"

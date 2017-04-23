@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/login_dialog_header"
+        android:id="@+id/dialog_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@android:color/background_light"
+        android:background="@color/colorPrimary"
         android:contentDescription="@string/app_name"
         app:srcCompat="@mipmap/ic_logo" />
 
