@@ -51,7 +51,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:id="@+id/listView"
+        android:id="@+id/listview_houses"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
