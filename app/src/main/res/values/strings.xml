@@ -27,5 +27,6 @@
     <string name="textON">ON</string>
     <string name="textOFF">OFF</string>
     <string name="house_list_config_text">List of available houses:</string>
+    <string name="camera">Camera</string>
 
 </resources>
