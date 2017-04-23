@@ -23,8 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.RelayAdapter;
+import edu.temple.m.smarthomedroid.Adapters.SensorAdapter;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Objects.Relay;
+import edu.temple.m.smarthomedroid.Objects.Sensor;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by M on 4/4/2017.
@@ -32,21 +36,30 @@ import edu.temple.m.smarthomedroid.Objects.Relay;
 
 public class SensorFragment extends ListFragment implements AdapterView.OnItemClickListener{
 
-    ArrayList<Relay> relayList;
-    Adapter mAdapter;
+    ArrayList<Sensor> sensorList;
 
     final String TAG = "SensorFragment";
     private String sessionToken = "";
     private String houseName = "";
     private JSONArray jArray;
 
+    private Bundle bundle;
+    private String userID;
+    private String sessionID;
+
     private ProgressDialog pDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        //Create new view from relay fragment layout
+        //Create new view from Sensor fragment layout
         View view = inflater.inflate(R.layout.fragment_sensors, container, false);
+        bundle = new Bundle();
+        //Receive argument bundle from Home Activity
+        userID = getArguments().getString("Username");
+        sessionID = getArguments().getString("SessionToken");
+
+        bundle.putString("SessionToken", sessionID);
 
         return view;
     }
@@ -55,22 +68,42 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
     public void onViewCreated(View view, Bundle savedInstanceState){
 
         jArray = new JSONArray();
-        houseName = "Hardwick";
-        sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
+        houseName = getArguments().getString("HouseName");
+        sessionToken = getArguments().getString("SessionToken");//"018C98BB-C886-44B1-8667-DA304872B452";//"3CEB721D-BDE8-4CBC-950F-E70568D2A2DE";
         //Construct data source
-        relayList = new ArrayList<Relay>();
-        //Populate relaysList from API call
-        //populateList();
-
+        sensorList = new ArrayList<Sensor>();
         new RetrieveSensors().execute();
 
-        //Create and set custom adapter for relay list
-        RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList, sessionToken);
+
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //Create and set custom adapter for sensor  list
+        SensorAdapter sAdapter = new SensorAdapter(getContext(), sensorList, sessionToken);
 
 
+        int k=0;
+        if(jArray!=null) {
+            int o =0;
+            for(;o<jArray.length();o++){
+                String name="";
+                int val=0;
+                try {
+                    JSONObject check= jArray.getJSONObject(o);
+                    name = check.getString("PeripheralName");
+                    val = check.getInt("PeripheralValue");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                sAdapter.add(new Sensor(sessionToken, houseName, name, val));
+            }
+        }else{
 
-        ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
-        lv.setAdapter(rAdapter);
+        }
+        ListView lv = (ListView)getView().findViewById(R.id.fragment_sensors_listview);
+        lv.setAdapter(sAdapter);
     }
 
     @Override
@@ -78,11 +111,6 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         Toast.makeText(getActivity(), "Clicked: " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateList(){
-        //Relay newRelay = new Relay("0", "Test Relay", 0);
-
-        //relayList.add(0, newRelay);
-    }
 
     /*
     ** Asynchronous Tasks -- HTTP Calls
@@ -101,8 +129,8 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
 
             if(house != null && session != null) {
                 try {
-                    json.put("HouseName", house);
-                    json.put("SessionToken", session);
+                    json.put("houseName", house);
+                    json.put("sessionToken", session);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -114,10 +142,17 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
             HttpHandler sh = new HttpHandler();
 
             //Make a request to url and get response
-            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/dev/relay/getrelayvaluesbyhouseid", json);
+            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/sensor/getsensorvaluesbyhouse", json);
 
             if(resp != null){
-                Log.d(TAG, "Retrieve Relay Response: " + resp);
+                Log.d(TAG, "Retrieve Sensor Response: " + resp);
+                try {
+                    jArray=new JSONArray(resp);
+                    jArray=jArray.getJSONArray(0);
+                    Log.d(TAG, "Retrieve Sensor Array: " + jArray);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             return null;
