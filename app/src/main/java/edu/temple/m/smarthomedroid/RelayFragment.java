@@ -50,7 +50,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        Log.d(TAG, "Relay View created!");
         //Create new view from relay fragment layout
         View view = inflater.inflate(R.layout.fragment_relay, container, false);
         bundle = new Bundle();

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,13 +45,13 @@ import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 import static java.lang.Thread.sleep;
 
 
 public class HomeActivity extends AppCompatActivity
-
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
         // , BoardAdapter.OnBoardAdapterItemClickListener,
@@ -64,7 +65,6 @@ public class HomeActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    private JSONObject houses;
     //Fragment Management Declarations
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity
     private ArrayList<House> houseList;
     private Spinner listhouse;
     FragmentManager dialogManager;
+    private JSONArray houses;
 
 
     /**
@@ -139,7 +140,6 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
         fragmentTransaction.commit();
-
     }
 
     @Override
@@ -247,12 +247,17 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_setting:
                 fragment = new UserSettingsFragment();
                 break;
-            case R.id.nav_system:
-                fragment = new RelayFragment();
-                break;
             case R.id.nav_camera:
                 fragment = new CameraFragment();
                 break;
+            case R.id.nav_system:
+                fragment = new RelayFragment();
+                break;
+            /*
+            case R.id.nav_camera:
+                fragment = new CameraFragment();
+                break;
+                */
             case R.id.nav_logout:
                 activityClosing = true;
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -383,24 +388,14 @@ public class HomeActivity extends AppCompatActivity
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
-    private ArrayList<String> parseCommand(ArrayList<String> commandString){
-        String command = commandString.get(0);
-        ArrayList<String> strings = new ArrayList<String>(Arrays.asList(command.split(" ")));
-
-        return strings;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK){
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            ArrayList<String> temp = parseCommand(matches);
 
-            if(temp.contains("go") && (temp.contains("relays") || temp.contains("relay"))){
-                fragmentToStart = "RelayFragment";
-            } else if(temp.contains("go") && (temp.contains("settings") || temp.contains("setting"))){
-                fragmentToStart = "SettingsFragment";
-            }
+            VoiceHandler vh = new VoiceHandler(getApplicationContext(), sessionId, matches);
+            fragmentToStart = vh.getResult();
         }
     }
 
@@ -415,6 +410,20 @@ public class HomeActivity extends AppCompatActivity
             case "SettingsFragment":
                 startSettingsTab();
                 break;
+            case "Logout":
+                Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
+                finish();
+                startActivity(mIntent);
+                break;
+            case "ConfigFragment":
+                startConfigTab();
+                break;
+            case "SensorFragment":
+                startSensorTab();
+                break;
+            case "DashboardFragment":
+                startDashboardTab();
+                break;
             default:
         }
     }
@@ -428,6 +437,69 @@ public class HomeActivity extends AppCompatActivity
         Log.d(TAG, "Starting relay tab");
         Bundle bundle = new Bundle();
         Fragment fragment = new RelayFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+    private void startSensorTab(){
+        Log.d(TAG, "Starting Sensor tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new SensorFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+            private void startDashboardTab(){
+                Log.d(TAG, "Starting Dashboard tab");
+                Bundle bundle = new Bundle();
+                Fragment fragment = new Dashboard();
+
+                bundle.putString("Username", userId);
+                bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+                bundle.putString("HouseName",housename_dashboard);
+
+                if(fragment != null) {
+                    //Set Fragment Arguments
+                    fragment.setArguments(bundle);
+                    //Insert the fragment by replacing any existing fragments
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            }
+
+    private void startConfigTab(){
+        Log.d(TAG, "Starting Config tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new ConfigFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -781,4 +853,3 @@ public class HomeActivity extends AppCompatActivity
     }
 
 }
-
