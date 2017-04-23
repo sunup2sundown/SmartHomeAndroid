@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:backgroundTint="@color/colorBackground"
     tools:context="edu.temple.m.smarthomedroid.CameraFragment">
 
     <ListView
@@ -12,10 +14,10 @@
         android:divider="@android:drawable/bottom_bar"
         android:dividerHeight="10dp"></ListView>
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="97dp" />
+
 
 </FrameLayout>

@@ -64,5 +64,6 @@ public class JoinHouseDialogFragment extends DialogFragment {
 
     private void joinHouse(String name, String password){
         new TaskHandler().joinHouse(getContext(), name, password, sessionID);
+
     }
 }

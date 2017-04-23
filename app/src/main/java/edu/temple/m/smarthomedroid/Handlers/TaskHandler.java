@@ -132,7 +132,7 @@ public class TaskHandler {
 
         try {
             jsonObject.put("oldHouseName", oldHouseName);
-            jsonObject.put("housePassword", housePassword);
+            jsonObject.put("housePassword", hashingHandler.hash_pass(housePassword));
             jsonObject.put("newHouseName", newHouseName);
             jsonObject.put("sessionToken", sessionToken);
         } catch(JSONException e){
@@ -151,8 +151,8 @@ public class TaskHandler {
 
         try {
             jsonObject.put("houseName", houseName);
-            jsonObject.put("oldHousePassword", oldHousePassword);
-            jsonObject.put("newHousePassword", newHousePassword);
+            jsonObject.put("oldHousePassword", hashingHandler.hash_pass(oldHousePassword));
+            jsonObject.put("newHousePassword", hashingHandler.hash_pass(newHousePassword));
             jsonObject.put("sessionToken", sessionToken);
         } catch(JSONException e){
             e.printStackTrace();
@@ -211,7 +211,7 @@ public class TaskHandler {
         try {
             jsonObject.put("sessionToken", sessionToken);
             jsonObject.put("houseName", houseName);
-            jsonObject.put("housePassword", housePassword);
+            jsonObject.put("housePassword", hashingHandler.hash_pass(housePassword));
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -574,7 +574,7 @@ public class TaskHandler {
         }
     }
 
-    private class ChangeHouseName extends AsyncTask<JSONObject, Void, Void> {
+    private class ChangeHouseName extends AsyncTask<JSONObject, Void, String> {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -586,101 +586,44 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousename", args[0]);
+        protected String doInBackground(JSONObject...args){
+            String result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousename", args[0]);
 
-            Log.d(TAG, "Change House Password: " + response);
+            Log.d(TAG, "Change House Name: " + result);
 
-            return null;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-        }
-    }
-
-    private class ChangeHousePassword extends AsyncTask<JSONObject, Void, Void> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            //Show progress dialog
-            pDialog = new ProgressDialog(mContext);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(JSONObject...args){
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", args[0]);
-
-            Log.d(TAG, "Change House Password: " + response);
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
-            //Dismiss the progress dialog
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-        }
-    }
-
-    private class JoinHouse extends AsyncTask<JSONObject, Void, Void> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            //Show progress dialog
-            pDialog = new ProgressDialog(mContext);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(JSONObject...args){
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", args[0]);
-            Log.d(TAG, "Join House Name: " + response);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result){
-            super.onPostExecute(result);
-            //Dismiss the progress dialog
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-            //response = "8 House credentials incorrect";
-            switch(response) {
-                case "1 Unknown error":
+            switch(result) {
+                case "\"1 Unknown error\"":
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
                     break;
-                case "2 User not found":
+                case "\"2 User not found\"":
                     Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
                     break;
-                case "4 User is already affiliated with the house":
-                    Toast.makeText(mContext, "You already joined this house", Toast.LENGTH_SHORT).show();
+                case "\"4 User does not have access to the old house\"":
+                    Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
                     break;
-                case "8 House credentials incorrect":
-                    Toast.makeText(mContext, "House credentials incorrect", Toast.LENGTH_SHORT).show();
+                case "\"8 Old house credentials incorrect\"":
+                    Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"16 New house name unavailable\"":
+                    Toast.makeText(mContext, "House name is already taken", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    Toast.makeText(mContext, "Renamed house", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private class LeaveHouse extends AsyncTask<JSONObject, Void, Void> {
+    private class ChangeHousePassword extends AsyncTask<JSONObject, Void, String> {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
@@ -692,25 +635,132 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/leavehouse", args[0]);
+        protected String doInBackground(JSONObject...args){
+            String result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/changehousepassword", args[0]);
 
-            Log.d(TAG, "Leave House Response: " + response);
+            Log.d(TAG, "Change House Password: " + response);
 
-            return null;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
+
+            switch(result) {
+                case "\"1 Unknown error\"":
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"2 User not found\"":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"4 User does not have access to the house\"":
+                    Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "Changed house password", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    private class RemoveHouse extends AsyncTask<JSONObject, Void, Void> {
+    private class JoinHouse extends AsyncTask<JSONObject, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(JSONObject...args){
+            String result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/joinhouse", args[0]);
+            Log.d(TAG, "Join House: " + result);
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
+            //response = "8 House credentials incorrect";
+            switch(result) {
+                case "\"1 Unknown error\"":
+
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"2 User not found\"":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"4 User is already affiliated with the house\"":
+                    Toast.makeText(mContext, "You already joined this house", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"8 House credentials incorrect\"":
+                    Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "Joined house", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class LeaveHouse extends AsyncTask<JSONObject, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //Show progress dialog
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(JSONObject...args){
+            String result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/leavehouse", args[0]);
+
+            Log.d(TAG, "Leave House Response: " + result);
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            //Dismiss the progress dialog
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+
+            switch(result) {
+                case "\"1 Unknown error\"":
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"2 User not found\"":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"4 User does not have access to the house\"":
+                    Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "Left house", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private class RemoveHouse extends AsyncTask<JSONObject, Void, String> {
 
         @Override
         protected void onPreExecute(){
@@ -723,20 +773,36 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
-            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/removehouse", args[0]);
+        protected String doInBackground(JSONObject...args){
+            String result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/removehouse", args[0]);
 
-            Log.d(TAG, "Remove House Response: " + response);
+            Log.d(TAG, "Remove House Response: " + result);
 
-            return null;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
+            switch(result) {
+                case "\"1 Unknown error\"":
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"2 User not found\"":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"4 User does not have access to the house\"":
+                    Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"8 House credentials incorrect\"":
+                    Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "Removed house", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -862,7 +928,7 @@ public class TaskHandler {
     }
 
     // for API call 8. Create House
-    private class CreateHouse extends AsyncTask<JSONObject, Void, Void> {
+    private class CreateHouse extends AsyncTask<JSONObject, Void, String> {
 
         @Override
         protected void onPreExecute(){
@@ -875,7 +941,7 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject... args) {
+        protected String doInBackground(JSONObject... args) {
             JSONObject json = new JSONObject();
             try{
                 json.put("houseName", args[0].get("houseName").toString());
@@ -883,29 +949,43 @@ public class TaskHandler {
             } catch(JSONException e){
                 e.printStackTrace();
             }
-
+            String result;
             String resp = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/check-house-availability", json);
 
             Log.d(TAG, "Check House Name: " + resp);
 
             if(resp.equals("1")){
                 //Make a request to url and get response
-                response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
+                result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
             } else {
                 //TODO Alert House name is taken
+                result = "house name unavailable";
             }
 
             Log.d(TAG, "Create house response: " + response);
 
-            return null;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
+            switch(result) {
+                case "\"1 Unknown error\"":
+                    Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
+                    break;
+                case "\"2 User not found\"":
+                    Toast.makeText(mContext, "User not found", Toast.LENGTH_SHORT).show();
+                    break;
+                case "house name unavailable":
+                case "\"4 New house name unavailable\"":
+                    Toast.makeText(mContext, "House name unavailable", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
             }
         }
     }

@@ -7,13 +7,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp">
+
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
-            android:layout_weight=".8"
             android:layout_height="match_parent"
+            android:layout_weight=".8"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="@android:color/white" />
 
         <View
             android:id="@+id/status"
