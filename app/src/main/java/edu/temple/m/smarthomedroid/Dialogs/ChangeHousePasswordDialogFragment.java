@@ -44,7 +44,7 @@ public class ChangeHousePasswordDialogFragment extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_change_house_password, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Change", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         EditText houseName = (EditText) ChangeHousePasswordDialogFragment.this.getDialog().findViewById(R.id.change_house_password_dialog_name);

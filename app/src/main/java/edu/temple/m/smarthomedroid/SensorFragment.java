@@ -65,7 +65,7 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         new RetrieveSensors().execute();
 
         //Create and set custom adapter for relay list
-        RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList);
+        RelayAdapter rAdapter = new RelayAdapter(getContext(), relayList, sessionToken);
 
 
 

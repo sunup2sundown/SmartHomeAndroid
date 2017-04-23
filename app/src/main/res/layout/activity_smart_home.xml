@@ -16,6 +16,7 @@
         <FrameLayout
             android:id="@+id/flContent"
             android:layout_width="match_parent"
+            android:backgroundTint="@color/colorBackground"
             android:layout_height="match_parent">
         </FrameLayout>
 
@@ -26,8 +27,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_smart_home"
-        app:itemIconTint="@android:color/background_dark"
-        app:itemTextColor="@android:color/background_dark"
+        app:itemIconTint="@android:color/background_light"
+        app:itemTextColor="@android:color/primary_text_dark"
         app:menu="@menu/activity_smart_home_drawer">
 
     </android.support.design.widget.NavigationView>
