@@ -99,30 +99,6 @@ public class UserSettingsFragment extends Fragment {
                 f.show(fm, null);
             }
         });
-        ((Button)v.findViewById(R.id.button_changehousename)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangeHouseNameDialogFragment f = new ChangeHouseNameDialogFragment();
-                f.setArguments(bundle);
-                f.show(fm, null);
-            }
-        });
-        ((Button)v.findViewById(R.id.button_changehousepassword)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChangeHousePasswordDialogFragment f = new ChangeHousePasswordDialogFragment();
-                f.setArguments(bundle);
-                f.show(fm, null);
-            }
-        });
-        ((Button)v.findViewById(R.id.button_leavehouse)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LeaveHouseDialogFragment f = new LeaveHouseDialogFragment();
-                f.setArguments(bundle);
-                f.show(fm, null);
-            }
-        });
 
         return v;
     }

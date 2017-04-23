@@ -61,7 +61,7 @@ public class LeaveHouseDialogFragment extends DialogFragment {
 
     private void LeaveHouse(String name){
         if(true){
-            new TaskHandler().leaveHouse(getContext(), sessionID, name);
+            new TaskHandler().leaveHouse(getActivity(), sessionID, name);
         }
     }
 }

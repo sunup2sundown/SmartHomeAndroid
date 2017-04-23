@@ -46,12 +46,9 @@ public class GridAdapter extends ArrayAdapter<Relay2> {
                 }
                 TextView name = (TextView) convertView.findViewById(R.id.houseN);
                 name.setTextSize(25);
-                name.setTextColor(BLACK);
                 name.setTypeface(name.getTypeface(),BOLD);
                 TextView stt = (TextView) convertView.findViewById(R.id.textView5);
                 stt.setTextSize(25);
-                stt.setTextColor(BLACK);
-
                 name.setText(relay2.getName());
                 if (relay2.getStatus()) {
                         stt.setText("ON");

@@ -44,7 +44,7 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
         builder.setView(inflater.inflate(R.layout.dialog_change_housename, null))
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Change", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         EditText oldHouseName = (EditText) ChangeHouseNameDialogFragment.this.getDialog().findViewById(R.id.change_house_name_dialog_old_name);

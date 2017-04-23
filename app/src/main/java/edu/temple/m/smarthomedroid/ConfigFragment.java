@@ -79,7 +79,6 @@ public class ConfigFragment extends Fragment{
         });*/
         return v;
     }
-    //TODO: Expandable List view of Houses->Boards->Peripheral types->Peripheral Names
     public void onViewCreated(View view, Bundle savedInstanceState) {
         additem();
     }
@@ -102,7 +101,7 @@ public class ConfigFragment extends Fragment{
                 }
             }
             ArrayAdapter<String> dataAdapter;
-            dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,list1);
+            dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.item_spinner,list1);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);
         }else{

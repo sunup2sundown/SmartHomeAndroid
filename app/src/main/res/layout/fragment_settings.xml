@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@android:color/background_light"
+    android:background="@color/colorBackground"
+    android:backgroundTint="@color/colorBackground"
     android:orientation="vertical"
     android:weightSum="1">
+
 
     <TextView
         android:id="@+id/text_username"
@@ -16,86 +18,58 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:text="Username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
-
-    <TextView
-        android:id="@+id/text_housename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView6"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
-        android:text="You haven't joined a house yet." />
+        android:layout_marginTop="6dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <Button
         android:id="@+id/button_changeusername"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="39dp"
+        android:layout_marginTop="10dp"
         android:text="Change Username"
-        android:layout_above="@+id/button_changepw"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/text_username"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/button_changepw"
         android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_alignStart="@+id/button_changeusername"
+        android:layout_below="@+id/button_changeusername"
+        android:text="Change Password" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change Password"
-        android:layout_below="@+id/button_newhouse"
+        android:text="Houses:"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:id="@+id/textView7"
+        android:layout_below="@+id/button_changepw"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/listView"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/button_newhouse"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="New House"
-        android:layout_below="@+id/text_housename"
-        android:layout_toEndOf="@+id/textView6"
-        android:layout_marginTop="12dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:layout_below="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="Add New House" />
 
     <Button
         android:id="@+id/button_joinhouse"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Join House"
-        android:layout_below="@+id/button_leavehouse"
-        android:layout_alignStart="@+id/button_changehousename" />
-
-    <Button
-        android:id="@+id/button_changehousename"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Change House Name"
-        android:layout_below="@+id/button_changehousepassword"
-        android:layout_alignStart="@+id/button_changehousepassword" />
-
-    <Button
-        android:id="@+id/button_changehousepassword"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:layout_alignStart="@+id/button_newhouse"
-        android:layout_below="@+id/button_newhouse"
-        android:text="Change House Password" />
-
-    <Button
-        android:id="@+id/button_leavehouse"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Leave House"
-        android:layout_alignBaseline="@+id/button_changehousename"
-        android:layout_alignBottom="@+id/button_changehousename"
-        android:layout_toStartOf="@+id/textView6" />
-
-    <TextView
-        android:id="@+id/textView6"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_username"
+        android:layout_height="39dp"
+        android:layout_below="@+id/button_newhouse"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="Current House:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
+        android:text="Join Existing House" />
 
 </RelativeLayout>
