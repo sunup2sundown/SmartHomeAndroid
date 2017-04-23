@@ -112,12 +112,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         Toast.makeText(getActivity(), "Clicked: " + position, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateList(){
-        Relay newRelay = new Relay(sessionToken,houseName, "Test Relay", 0);
-
-        relayList.add(0, newRelay);
-    }
-
     /*
     ** Asynchronous Tasks -- HTTP Calls
      *
@@ -166,26 +160,6 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
-        }
-    }
-
-    private void populateList(String response){
-        String name;
-        String value;
-
-        try {
-            JSONObject respObject = new JSONObject(response);
-            JSONArray respArray = respObject.getJSONArray("");
-
-            for(int i = 0; i < respArray.length(); i++){
-                JSONObject curr = respArray.getJSONObject(i);
-                name = curr.getString("PeripheralName");
-                value = curr.getString("PeripheralValue");
-                Log.d(TAG, "Name: "+ name);
-                Log.d(TAG, "Value:" + value);
-            }
-        } catch(JSONException e){
-            e.printStackTrace();
         }
     }
 }

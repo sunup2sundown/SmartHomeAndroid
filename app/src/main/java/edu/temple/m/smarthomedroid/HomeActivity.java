@@ -231,7 +231,7 @@ public class HomeActivity extends AppCompatActivity
                 fragment = new Dashboard();
                 break;
             case R.id.nav_sensor:
-                fragment = new RelayFragment();
+                fragment = new SensorFragment();
                 break;
             case R.id.nav_relay:
                 fragment = new RelayFragment();

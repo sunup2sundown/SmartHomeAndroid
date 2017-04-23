@@ -23,8 +23,6 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class RelayAdapter extends ArrayAdapter<Relay> {
-    private Context context;
-    private boolean useList = true;
     String sessionToken;
 
     /**

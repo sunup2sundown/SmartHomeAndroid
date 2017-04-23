@@ -5,20 +5,22 @@ package edu.temple.m.smarthomedroid.Objects;
  */
 
 public class Sensor {
+    String session;
+    int currentValue;
     String id;
     String name;
     String houseName;
-    int value;
 
-    public Sensor(){}
-
-    public Sensor(String id, int value){
-        this.id = id;
-        this.value = value;
+    public Sensor(String sess,String house, String name, int status){
+        this.houseName = house;
+        this.currentValue = status;
+        this.name = name;
+        this.session= sess;
     }
 
+
     public int getValue(){
-        return value;
+        return currentValue;
     }
 
     // Peripheral interface functions
