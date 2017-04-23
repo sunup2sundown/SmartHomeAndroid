@@ -5,7 +5,8 @@
     android:id="@+id/configlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
+    android:background="@color/colorBackground"
+    android:backgroundTint="@color/colorBackground"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -23,11 +24,11 @@
         android:id="@+id/button_add_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add\nBoard"
-        android:layout_marginStart="51dp"
         android:layout_alignBaseline="@+id/button_edit_peripheral"
         android:layout_alignBottom="@+id/button_edit_peripheral"
-        android:layout_toEndOf="@+id/button_edit_peripheral" />
+        android:layout_marginStart="51dp"
+        android:layout_toEndOf="@+id/button_edit_peripheral"
+        android:text="Add\nBoard" />
 
     <ExpandableListView
         android:id="@+id/elv_peripherals"
@@ -50,7 +51,7 @@
         android:layout_above="@+id/spinner2"
         android:layout_centerHorizontal="true"
         android:text="@string/house_list_config_text"
-        android:textColor="@android:color/background_dark"
+        android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 
 </RelativeLayout>
