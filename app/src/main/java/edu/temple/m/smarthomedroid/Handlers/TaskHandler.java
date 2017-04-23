@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ public class TaskHandler {
     String houseName;
     String housePassword;
     HashingHandler hashingHandler = new HashingHandler();
+    JSONArray returnedArray;
 
     public void login(Context context, String username, String password){
         mContext = context;
@@ -184,8 +186,6 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new ChangePassword().execute(jsonObject);
     }
 
     public void checkHouseAvailability(Context context, String houseName, String sessionToken){
@@ -375,6 +375,41 @@ public class TaskHandler {
         }
 
         //new login.execute();
+    }
+
+    public JSONArray getCurrentCameraByHouse(Context context, String session, String houseName){
+        mContext = context;
+        this.sessionToken = session;
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("sessionToken", sessionToken);
+            jsonObject.put("houseName", houseName);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new GetCurrentCameraByHouse().execute(jsonObject);
+
+        while(returnedArray == null){
+
+        }
+
+        return returnedArray;
+    }
+
+    public void TakePictureFromCamera(Context context, String session, String peripheralName, String houseName){
+        mContext = context;
+        sessionToken = session;
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("sessionToken", sessionToken);
+            jsonObject.put("peripheralName", peripheralName);
+            jsonObject.put("houseName", houseName);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        new TakePictureFromCamera().execute(jsonObject);
     }
 
     /*
@@ -658,8 +693,11 @@ public class TaskHandler {
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
+
+            //response = "8 House credentials incorrect";
             switch(result) {
                 case "\"1 Unknown error\"":
+
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
                     break;
                 case "\"2 User not found\"":
@@ -1267,6 +1305,61 @@ public class TaskHandler {
             super.onPostExecute(result);
             houseName = "";
             housePassword = "";
+        }
+    }
+
+    private class GetCurrentCameraByHouse extends AsyncTask<JSONObject, Void, Void>{
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+            JSONArray ii=null;
+
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/getcurrentcamerasbyhouse", args[0]);
+
+            if(response != null){
+                Log.d(TAG, "Join House: " + response);
+                try {
+                    ii = new JSONArray(response);
+                    returnedArray=ii.getJSONArray(0);
+                    Log.d(TAG,"Resp: " + returnedArray);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    private class TakePictureFromCamera extends AsyncTask<JSONObject, Void, Void>{
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject...args){
+
+            response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/takepicture", args[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
         }
     }
 }

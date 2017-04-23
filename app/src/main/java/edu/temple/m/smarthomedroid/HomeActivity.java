@@ -22,7 +22,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
@@ -42,13 +45,13 @@ import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 import static java.lang.Thread.sleep;
 
 
 public class HomeActivity extends AppCompatActivity
-
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
         // , BoardAdapter.OnBoardAdapterItemClickListener,
@@ -62,7 +65,6 @@ public class HomeActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    private JSONObject houses;
     //Fragment Management Declarations
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -72,11 +74,13 @@ public class HomeActivity extends AppCompatActivity
     String response;
     String userPassword;
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    String fragmentToStart;
 
     private String houseName, newHouseName, housePassword, newHousePassword;
     private ArrayList<House> houseList;
     private Spinner listhouse;
     FragmentManager dialogManager;
+    private JSONArray houses;
 
 
     /**
@@ -87,6 +91,8 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_home);
+
+        fragmentToStart = "";
 
 
         //Receive session ID and Username from Login Activity
@@ -134,7 +140,6 @@ public class HomeActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
         fragmentTransaction.commit();
-
     }
 
     @Override
@@ -242,12 +247,17 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_setting:
                 fragment = new UserSettingsFragment();
                 break;
-            case R.id.nav_system:
-                fragment = new RelayFragment();
-                break;
             case R.id.nav_camera:
                 fragment = new CameraFragment();
                 break;
+            case R.id.nav_system:
+                fragment = new RelayFragment();
+                break;
+            /*
+            case R.id.nav_camera:
+                fragment = new CameraFragment();
+                break;
+                */
             case R.id.nav_logout:
                 activityClosing = true;
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -378,21 +388,52 @@ public class HomeActivity extends AppCompatActivity
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK){
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            Log.d("MAtches contains", matches.get(0) + " " + matches.get(1));
-
-            if(matches.contains("relays") || matches.contains("relay")){
-                startRelaysTab();
-            }
+            VoiceHandler vh = new VoiceHandler(getApplicationContext(), sessionId, matches);
+            fragmentToStart = vh.getResult();
         }
     }
 
-    private void startRelaysTab(){
+    @Override
+    public void onPostResume(){
+        super.onPostResume();
 
+        switch(fragmentToStart){
+            case "RelayFragment":
+                    startRelaysTab();
+                break;
+            case "SettingsFragment":
+                startSettingsTab();
+                break;
+            case "Logout":
+                Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
+                finish();
+                startActivity(mIntent);
+                break;
+            case "ConfigFragment":
+                startConfigTab();
+                break;
+            case "SensorFragment":
+                startSensorTab();
+                break;
+            case "DashboardFragment":
+                startDashboardTab();
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void startRelaysTab(){
         Log.d(TAG, "Starting relay tab");
         Bundle bundle = new Bundle();
         Fragment fragment = new RelayFragment();
@@ -407,10 +448,96 @@ public class HomeActivity extends AppCompatActivity
             //Insert the fragment by replacing any existing fragments
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.flContent, fragment).addToBackStack(null);
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
+
+    private void startSensorTab(){
+        Log.d(TAG, "Starting Sensor tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new SensorFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+            private void startDashboardTab(){
+                Log.d(TAG, "Starting Dashboard tab");
+                Bundle bundle = new Bundle();
+                Fragment fragment = new Dashboard();
+
+                bundle.putString("Username", userId);
+                bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+                bundle.putString("HouseName",housename_dashboard);
+
+                if(fragment != null) {
+                    //Set Fragment Arguments
+                    fragment.setArguments(bundle);
+                    //Insert the fragment by replacing any existing fragments
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.flContent, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            }
+
+    private void startConfigTab(){
+        Log.d(TAG, "Starting Config tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new ConfigFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+    private void startSettingsTab(){
+        Log.d(TAG, "Starting Settings tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new UserSettingsFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
 
     /**
      * HTTP Calls --Async Task
@@ -726,4 +853,3 @@ public class HomeActivity extends AppCompatActivity
     }
 
 }
-
