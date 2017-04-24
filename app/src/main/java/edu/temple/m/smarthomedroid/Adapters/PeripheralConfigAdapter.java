@@ -9,7 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
 import edu.temple.m.smarthomedroid.R;
 
@@ -20,10 +23,12 @@ import edu.temple.m.smarthomedroid.R;
 public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
     private Context context;
     private String session;
-    ArrayList<Peripheral> header;
-    public PeripheralConfigAdapter(Context context, ArrayList<Peripheral> header, String session){
+    ArrayList<Board> header;
+    private HashMap<Board, List<Peripheral>> children;
+    public PeripheralConfigAdapter(Context context, ArrayList<Board> header,HashMap<Board, List<Peripheral>>children, String session){
         this.context = context;
         this.header=header;
+        this.children=children;
         this.session=session;
     }
     @Override
@@ -33,7 +38,12 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 2;
+        if (children!=null){
+            return this.children.get(this.header.get(groupPosition))
+                    .size();
+        }else{
+            return 0;
+        }
     }
 
     @Override
@@ -43,7 +53,7 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return null;
+        return this.children.get((this.header.get(groupPosition))).get(childPosition);
     }
 
     @Override
@@ -53,7 +63,7 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return 0;
+        return childPosition;
     }
 
     @Override
@@ -63,7 +73,24 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Peripheral peri = (Peripheral)getGroup(groupPosition);
+        Board boa = (Board)getGroup(groupPosition);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.board_config, null);
+        }
+        TextView boardname = (TextView)convertView.findViewById(R.id.boa_name);
+        TextView boardquantity = (TextView)convertView.findViewById(R.id.quantity);
+        boardname.setText(boa.getName());
+        if(getChildrenCount(groupPosition)!=0){
+            boardquantity.setText((Integer.toString(getChildrenCount(groupPosition))));
+        }
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        Peripheral peri = this.children.get(this.header.get(groupPosition)).get(childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -77,20 +104,7 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.child_peripherals, null);
-        }
-        Button edit = (Button)convertView.findViewById(R.id.edit_peripheral);
-        Button remove = (Button)convertView.findViewById(R.id.remove_peripheral);
-
-        return null;
-    }
-
-    @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }

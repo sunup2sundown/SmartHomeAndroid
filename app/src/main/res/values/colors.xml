@@ -5,5 +5,5 @@
     <color name="colorAccent">#808283</color>
     <color name="colorBackground">#FF303030</color>
     <color name="accent_material_dark_1">#40c4ff</color>
-    <color name="primary_text_material_dark">#ffffff</color>
+    <color name="primary_text_material_dark">#d1d1d1</color>
 </resources>

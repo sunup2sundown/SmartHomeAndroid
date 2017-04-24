@@ -62,8 +62,6 @@ public class LoginActivity extends AppCompatActivity implements SignupDialogFrag
         btnSignin = (Button)findViewById(R.id.sign_in);
         btnSignup = (Button)findViewById(R.id.sign_up);
 
-        //goodUser = false;
-
         btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

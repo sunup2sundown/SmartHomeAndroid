@@ -7,13 +7,18 @@ package edu.temple.m.smarthomedroid.Objects;
 public class Board {
     private String name;
     private String houseName;
+    private String session;
 
     public String getName() {
         return name;
     }
 
-    public Board(String name, String houseName){
+    public Board(String name, String houseName, String session){
         this.name = name;
         this.houseName = houseName;
+        this.session = session;
+    }
+    public void setname(String name){
+        this.name=name;
     }
 }
