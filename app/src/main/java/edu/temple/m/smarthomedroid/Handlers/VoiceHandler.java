@@ -42,6 +42,7 @@ public class VoiceHandler {
         commandList = new ArrayList<String>();
         commandList.add("off");
         commandList.add("on");
+        relayList = new ArrayList<String>();
     }
 
     private ArrayList<String> parseCommand(ArrayList<String> commandString){
@@ -53,6 +54,7 @@ public class VoiceHandler {
 
 
     public String getResult(){
+        ArrayList<String> relayName = new ArrayList<String>();
         String command = "";
         ArrayList<String> temp = parseCommand(matches);
         int pos;
@@ -74,8 +76,8 @@ public class VoiceHandler {
             houseList.retainAll(temp);
             commandList.retainAll(temp);
             if(houseList.size() > 0){
-                getRelayList(houseList.get(0));
                 Log.d(TAG, houseList.get(0));
+                getRelayList(houseList.get(0));
                 if(commandList.size() > 0){
                     Log.d(TAG, commandList.get(0));
                     pos = temp.indexOf(commandList.get(0)) + 1;
@@ -86,15 +88,15 @@ public class VoiceHandler {
                             Log.d(TAG, relay.toString());
                         }
                         Log.d(TAG, relayList.get(0));
+                        relayName.add(relay.toString());
+                        relayList.retainAll(relayName);
                         if(relayList.size() > 0){
-                            if(relayList.contains(relay)){
-                                if(commandList.get(0).contentEquals("off")){
-                                    Log.d(TAG, "Turning off " + houseList.get(0) + "'s " + relay.toString());
-                                    new TaskHandler().setRelayStatus(mContext, sessionToken, relay.toString(), houseList.get(0), "0");
-                                } else {
-                                    Log.d(TAG, "Turning on " + houseList.get(0) + "'s " + relay.toString());
-                                    new TaskHandler().setRelayStatus(mContext, sessionToken, relay.toString(), houseList.get(0), "1");
-                                }
+                            if(commandList.get(0).contentEquals("off")){
+                                Log.d(TAG, "Turning off " + houseList.get(0) + "'s " + relayList.get(0));
+                                new TaskHandler().setRelayStatus(mContext, sessionToken, relayList.get(0), houseList.get(0), "0");
+                            } else {
+                                Log.d(TAG, "Turning on " + houseList.get(0) + "'s " + relayList.get(0));
+                                new TaskHandler().setRelayStatus(mContext, sessionToken, relayList.get(0), houseList.get(0), "1");
                             }
                         }
                     } else {

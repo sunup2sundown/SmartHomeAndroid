@@ -18,57 +18,29 @@
         android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="House Name" />
+        app:srcCompat="@mipmap/ic_logo" />
 
     <EditText
-        android:id="@+id/dialog_board_name"
-        android:inputType="textPersonName"
+        android:id="@+id/peri_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="sans-serif"
-        android:hint="Board Name"/>
+        android:ems="10"
+        android:hint="@string/Peripheral_name"
+        android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/dialog_peripheral_name"
-        android:inputType="textPersonName"
+    <Spinner
+        android:id="@+id/type"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="sans-serif"
-        android:hint="Peripheral Name"/>
+        android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/dialog_peripheral_model"
-        android:inputType="textPersonName"
+    <Spinner
+        android:id="@+id/model"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="sans-serif"
-        android:hint="Peripheral Model"/>
+        android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/dialog_pin_connection"
-        android:inputType="textPersonName"
+    <Spinner
+        android:id="@+id/pin_connection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="sans-serif"
-        android:hint="Pin Connection"/>
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

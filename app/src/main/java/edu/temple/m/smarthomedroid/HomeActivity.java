@@ -46,6 +46,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
+
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
@@ -61,6 +62,7 @@ public class HomeActivity extends AppCompatActivity
         , HouseAdapter.OnHouseItemClickListener
         , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , ChangeHousePasswordDialogFragment.Listener
+         , BoardAdapter.OnBoardAdapterItemClickListener,
         , DataPassListener
         {
 
@@ -314,11 +316,13 @@ public class HomeActivity extends AppCompatActivity
         HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName, sessionToken);
         f.show(fragmentManager, null);
     }
+
     @Override
     public void onPeripheralAdapterItemClick(String peripheralName){
         RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
         f.show(fragmentManager, null);
     }
+
 
     /* Dialog Fragment Listeners Implementations
      *

@@ -99,8 +99,10 @@ public class CameraFragment extends ListFragment{
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = parent.getItemAtPosition(position).toString();
+                Object object = parent.getItemAtPosition(position);
+                Camera camera = (Camera)object;
 
+                String name = camera.getName();
                 Log.d(TAG, "Clicked Camera: " + name);
 
                 Bundle bundle = new Bundle();

@@ -29,5 +29,9 @@
     <string name="textOFF">OFF</string>
     <string name="house_list_config_text">List of available houses:</string>
     <string name="camera">Camera</string>
+    <string name="new_board_name_hint">New Name</string>
+    <string name="Peripheral_name">Peripheral Name</string>
+    <string name="Peripheral_type">Peripheral Type</string>
+    <string name="get_model">Get Models/PINs</string>
 
 </resources>
