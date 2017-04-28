@@ -10,10 +10,10 @@
         android:layout_alignParentTop="true" />
 
     <Button
-        android:id="@+id/button_setcamera"
+        android:id="@+id/button_camera_feed_takepicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Feed Settings"
+        android:text="Take a Picture"
         android:layout_below="@+id/imageView_camera"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp" />
@@ -21,7 +21,7 @@
         android:id="@+id/button_startcamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Feed"
+        android:text="Start Camera Feed"
         android:layout_above="@+id/button_stopcamera"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
-        android:text="Stop Feed"
+        android:text="Stop Camera Feed"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

@@ -88,7 +88,7 @@ public class SensorGraphFragment extends Fragment {
         //graph.addSeries(mSeries1);
         graph.addSeries(mSeries2);
 
-        mSeries2.resetData(generateData());
+//        mSeries2.resetData(generateData());
 
         return view;
     }
@@ -159,7 +159,6 @@ public class SensorGraphFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            Log.d(TAG, "Times: " + startTime.toString() + " " + endTime.toString());
             return values;
         }
 
