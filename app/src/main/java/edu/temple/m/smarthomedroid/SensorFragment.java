@@ -4,6 +4,8 @@ package edu.temple.m.smarthomedroid;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +36,7 @@ import static java.lang.Thread.sleep;
  * Created by M on 4/4/2017.
  */
 
-public class SensorFragment extends ListFragment implements AdapterView.OnItemClickListener{
+public class SensorFragment extends ListFragment{
 
     ArrayList<Sensor> sensorList;
 
@@ -74,7 +76,6 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         sensorList = new ArrayList<Sensor>();
         new RetrieveSensors().execute();
 
-
         try {
             sleep(2000);
         } catch (InterruptedException e) {
@@ -104,11 +105,29 @@ public class SensorFragment extends ListFragment implements AdapterView.OnItemCl
         }
         ListView lv = (ListView)getView().findViewById(R.id.fragment_sensors_listview);
         lv.setAdapter(sAdapter);
-    }
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object object = parent.getItemAtPosition(position);
+                Sensor sensor = (Sensor)object;
+                String name = sensor.getName();
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-        Toast.makeText(getActivity(), "Clicked: " + position, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked Sensor: " + name);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("SessionToken", sessionID);
+                bundle.putString("HouseName", houseName);
+                bundle.putString("PeripheralName", name);
+
+
+                Fragment fragment = new SensorGraphFragment();
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContent, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
 
