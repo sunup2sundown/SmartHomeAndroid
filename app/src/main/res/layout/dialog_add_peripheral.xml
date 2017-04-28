@@ -14,13 +14,6 @@
         app:srcCompat="@mipmap/ic_logo" />
 
     <EditText
-        android:id="@+id/dialog_house_name"
-        android:inputType="textPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_logo" />
-
-    <EditText
         android:id="@+id/peri_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -11,27 +11,22 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <Button
-        android:id="@+id/button_edit_peripheral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="101dp"
-        android:text="Edit\nPeripheral" />
 
     <Button
         android:id="@+id/button_add_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button_edit_peripheral"
-        android:layout_alignBottom="@+id/button_edit_peripheral"
-        android:layout_marginStart="51dp"
-        android:layout_toEndOf="@+id/button_edit_peripheral"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="102dp"
         android:elevation="0dp"
         android:text="Add\nBoard" />
-
+    <Spinner
+        android:id="@+id/config_listhouse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
     <ExpandableListView
         android:id="@+id/elv_peripherals"
         android:layout_width="match_parent"
@@ -39,21 +34,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="153dp" />
 
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_add_board"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/spinner2"
-        android:layout_centerHorizontal="true"
         android:text="@string/house_list_config_text"
         android:textColor="@android:color/background_light"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />
 
 </RelativeLayout>
