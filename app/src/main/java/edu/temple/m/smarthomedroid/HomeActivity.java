@@ -246,6 +246,9 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_relay:
                 fragment = new RelayFragment();
                 break;
+            case R.id.nav_autom:
+                fragment = new AutomationFragment();
+                break;
             case R.id.nav_config:
                 fragment = new ConfigFragment();
                 break;
