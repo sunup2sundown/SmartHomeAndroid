@@ -329,7 +329,6 @@ public class HomeActivity extends AppCompatActivity
         new TaskHandler().changeUsername(this, name.getText().toString(), sessionId);
     }
 
-
     @Override
     public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
         EditText pw1 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_password);
@@ -338,7 +337,7 @@ public class HomeActivity extends AppCompatActivity
         if(pw1.getText().toString().equals(pw2.getText().toString())) {
             new TaskHandler().changeUserPassword(this, pw1.getText().toString(), sessionId);
         } else{
-
+            Toast.makeText(this, "\"Confirm Password\" must match \"New Password\"", Toast.LENGTH_SHORT).show();
         }
     }
 /*
