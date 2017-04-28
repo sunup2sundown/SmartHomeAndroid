@@ -15,17 +15,6 @@
         app:srcCompat="@mipmap/ic_logo" />
 
     <EditText
-        android:id="@+id/change_house_name_dialog_old_name"
-        android:inputType="textPersonName"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Old House Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
         android:id="@+id/change_house_name_dialog_password"
         android:inputType="textPassword"
         android:layout_marginTop="4dp"
@@ -39,13 +28,13 @@
 
     <EditText
         android:id="@+id/change_house_name_dialog_new_name"
-        android:inputType="textPassword"
-        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginBottom="16dp"
-        android:hint="New House Name"
+        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:hint="New House Name"
+        android:inputType="textPersonName" />
 </LinearLayout>
