@@ -43,6 +43,7 @@ public class Dashboard extends Fragment {
     private String sessionToken = "018C98BB-C886-44B1-8667-DA304872B452";
     private String sessionId;
     DataPassListener mCallback;
+    private int done=0;
 
     public interface DataPassListener{
         public void passData(String data);
@@ -60,6 +61,9 @@ public class Dashboard extends Fragment {
         listhouse = (Spinner)v.findViewById(R.id.listhouse);
         return v;
     }
+    private synchronized void setdone(int n){
+        this.done =n;
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         additem();
@@ -74,7 +78,7 @@ public class Dashboard extends Fragment {
                         mCallback.passData(housename);
                         new getRe().execute();
                         try {
-                            sleep(1500);
+                            sleep(1800);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -105,7 +109,7 @@ public class Dashboard extends Fragment {
         List<String> list1 = new ArrayList<String>();
         new getlist().execute();
         try {
-            sleep(1500);
+            sleep(1800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -160,7 +164,6 @@ public class Dashboard extends Fragment {
                 }
 
             }
-
             return null;
         }
 

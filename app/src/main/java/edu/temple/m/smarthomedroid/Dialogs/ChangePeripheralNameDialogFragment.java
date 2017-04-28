@@ -11,12 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
 
@@ -25,10 +23,11 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Jhang Myong Ja on 4/15/2017.
  */
-public class AddBoardDialogFragment extends DialogFragment {
-    private String sessionID,housename;
+public class ChangePeripheralNameDialogFragment extends DialogFragment {
+    private String sessionID,housename,oldname;
     private String TAG = "AddBoardDialog";
     private refresh update;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -39,63 +38,59 @@ public class AddBoardDialogFragment extends DialogFragment {
 
         sessionID = getArguments().getString("SessionToken");
         housename = getArguments().getString("HouseName");
-
+        oldname = getArguments().getString("OldName");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_add_board, null))
+        builder.setView(inflater.inflate(R.layout.dialog_rename_peripheral, null))
                 // Add action buttons
-                .setTitle("Add Board")
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setTitle("Change Peripheral's Name")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        String boardName =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).toString();
-                        String boardSerialNo =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).toString();
-                        new add_board(sessionID,housename,boardName,boardSerialNo).execute();
+                        EditText tt = (EditText) ChangePeripheralNameDialogFragment.this.getDialog().findViewById(R.id.dialog_new_peripheral_name);
+                        String newname = tt.getText().toString();
+                        Log.d("Newname :", newname);
+                        new rename(sessionID,housename,oldname,newname).execute();
                         try {
-                            sleep(1600);
+                            sleep(1800);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        AddBoardDialogFragment.this.getDialog().cancel();
+                        ChangePeripheralNameDialogFragment.this.getDialog().cancel();
                         update.config_update();
                         // switch to the new house...
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        AddBoardDialogFragment.this.getDialog().cancel();
+                        ChangePeripheralNameDialogFragment.this.getDialog().cancel();
                     }
                 });
         return builder.create();
     }
 
-    private class add_board extends AsyncTask<Void, Void, Void> {
+    private class rename extends AsyncTask<Void, Void, Void> {
         JSONObject jsonObject = new JSONObject();
         JSONObject check = new JSONObject();
-        String session,house,boardname,serial;
+        String session,house,oldname,newname;
 
-        public add_board(String sesstoken,String housename,String boardname,String serial){
+        public rename(String sesstoken,String housename,String oldname,String newname){
             this.session=sesstoken;
             this.house=housename;
-            this.boardname=boardname;
-            this.serial=serial;
+            this.oldname=oldname;
+            this.newname=newname;
         }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             try{
-                jsonObject.put("SessionToken", this.session)
-                    .put("BoardSerialNumber",this.serial)
-                    .put("HouseName",this.house)
-                    .put("BoardName",this.boardname);
-                check.put("BoardName",this.boardname)
-                    .put("HouseName",this.house)
-                    .put("SessionToken",this.session);
+                jsonObject.put("sessionToken", this.session)
+                    .put("oldPeripheralName",this.oldname)
+                    .put("houseName",this.house)
+                    .put("newPeripheralName",this.newname);
+                check.put("peripheralName",this.newname)
+                    .put("houseName",this.house)
+                    .put("sessionToken",this.session);
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
@@ -103,11 +98,14 @@ public class AddBoardDialogFragment extends DialogFragment {
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
-            String checkname=sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", check);
+            String checkname=sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/checkpheriperalnameavailability", check);
+            if(checkname!=null){
+                Log.d(TAG, "Check Name : " + checkname);
+            }
             if(checkname.equalsIgnoreCase("1")){
-                String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", jsonObject);
+                String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/changeperipheralname", jsonObject);
                 if (resp != null) {
-                    Log.d(TAG, "CreateBoard : " + resp);
+                    Log.d(TAG, "ChangePeripheralName : " + resp);
                 }
             }
             return null;

@@ -45,6 +45,7 @@ import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
+import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 import static java.lang.Thread.sleep;
@@ -53,8 +54,9 @@ import static java.lang.Thread.sleep;
 public class HomeActivity extends AppCompatActivity
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
-        // , BoardAdapter.OnBoardAdapterItemClickListener,
+        // , BoardAdapter.OnBoardAdapterIteistener,
         , DataPassListener
+        , refresh
         {
 
     private final String TAG = "HomeActivity";
@@ -79,9 +81,7 @@ public class HomeActivity extends AppCompatActivity
     private Spinner listhouse;
     FragmentManager dialogManager;
     private JSONArray houses;
-
-
-    /**
+            /**
      * Class Methods
      * @param savedInstanceState
      */
@@ -531,8 +531,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-
-    /**
+            /**
      * HTTP Calls --Async Task
      */
     private class ChangeUserName extends AsyncTask<Void, Void, Void> {
@@ -844,5 +843,18 @@ public class HomeActivity extends AppCompatActivity
         }
         return null;
     }
-
+            @Override
+            public void config_update() {
+                Bundle bundle = new Bundle();
+                Fragment fragment = new ConfigFragment();
+                bundle.putString("Username", userId);
+                bundle.putString("SessionToken", sessionId);
+                bundle.putString("HouseName",housename_dashboard);
+                fragment.setArguments(bundle);
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
 }

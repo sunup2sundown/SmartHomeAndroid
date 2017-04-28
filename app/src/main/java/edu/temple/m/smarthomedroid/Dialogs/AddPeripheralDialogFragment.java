@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid.Dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -30,6 +31,7 @@ import edu.temple.m.smarthomedroid.ConfigFragment;
 import edu.temple.m.smarthomedroid.Dashboard;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
 import edu.temple.m.smarthomedroid.R;
@@ -38,7 +40,7 @@ import static edu.temple.m.smarthomedroid.ConfigFragment.dat;
 import static java.lang.Thread.sleep;
 
 /**
- * Created by Jhang Myong Ja on 4/15/2017.
+ * Created by Qui Do on 4/15/2017.
  */
 
 public class AddPeripheralDialogFragment extends DialogFragment {
@@ -48,11 +50,14 @@ public class AddPeripheralDialogFragment extends DialogFragment {
     private Spinner model,pin,type;
     private String fname,ftype,fpin,fmodel;
     private int fcheck=0;
-
-
+    private refresh update;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        update = (refresh) activity;
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         sessionID = getArguments().getString("SessionToken");
         housename = getArguments().getString("HouseName");
         boardname = getArguments().getString("OldBoard");
@@ -106,7 +111,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                         fname = ((EditText)myView.findViewById(R.id.peri_name)).getText().toString();
                         new addperi(fname,fpin,fmodel).execute();
                         try {
-                            sleep(2000);
+                            sleep(1800);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -118,6 +123,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                             Log.d(TAG,"oh NO");
                         }
                         AddPeripheralDialogFragment.this.getDialog().cancel();
+                        update.config_update();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -135,7 +141,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
         List<String> list1 = new ArrayList<String>();
         new gettype().execute();
         try {
-            sleep(1500);
+            sleep(1940);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -185,7 +191,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                     e.printStackTrace();
                 }
             }
-                return null;
+            return null;
         }
         @Override
         protected void onPostExecute(Void result) {
@@ -202,7 +208,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
         List<String> list2 = new ArrayList<String>();
         new populate(type).execute();
         try {
-            sleep(3000);
+            sleep(3500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -348,8 +354,6 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                     fcheck=0;
                 }
             }
-
-
             return null;
         }
         @Override

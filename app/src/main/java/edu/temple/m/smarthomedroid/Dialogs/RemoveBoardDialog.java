@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid.Dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
 
 import static edu.temple.m.smarthomedroid.ConfigFragment.dat;
@@ -27,27 +29,17 @@ public class RemoveBoardDialog extends DialogFragment {
     private String board,sessionID,housename;
     private final String TAG = "ChangeBoardDialog";
     private EditText username, password;
-    //ChangeBoardDialogListener mListener;
+    private refresh update;
+    private int done=0;
 
-    //public interface ChangeBoardDialogListener{
-    //    public void onLoginDialogPositiveClick(DialogFragment dialog);
-    //    public void onLoginDialogNegativeClick(DialogFragment dialog);
-    //}
-
-    //Override the Fragment.onAttach method to instantiate listener
-    /*@Override
-    public void onAttach(Activity activity){
+    private synchronized void setdone(int n){
+        this.done=n;
+    }
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        //Verify that the host activity implements the callback interface
-        try{
-            //Instantiate listener so events can be sent to host
-            mListener = (ChangeBoardNameDialogFragment.ChangeBoardDialogListener) activity;
-        } catch(ClassCastException e){
-            //Activity doesn't implement
-            throw new ClassCastException(activity.toString() + " must implement ChangeBoardDialogListener");
-        }
-    }*/
+        update = (refresh) activity;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -62,12 +54,16 @@ public class RemoveBoardDialog extends DialogFragment {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         new remove().execute();
-                        try {
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        while(done==0){
+                            try {
+                                sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        setdone(0);
                         RemoveBoardDialog.this.getDialog().cancel();
+                        update.config_update();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener(){
@@ -107,6 +103,7 @@ public class RemoveBoardDialog extends DialogFragment {
                 if (resp != null) {
                     Log.d(TAG, "remove : " + resp);
                 }
+            setdone(1);
             return null;
         }
         @Override
