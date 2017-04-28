@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -41,22 +42,23 @@ public class JoinHouseDialogFragment extends DialogFragment {
 
         String title = getArguments().getString("title");
         // Inflate and set the layout for the dialog
+        View view = inflater.inflate(R.layout.dialog_join_house, null);
+        final String houseName = ((EditText)view.findViewById(R.id.dialog_join_house_name)).getText().toString();
+        final String password = ((EditText)view.findViewById(R.id.dialog_join_house_password)).getText().toString();
+
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_join_house, null))
+        builder.setView(view)
                 // Add action buttons
                 .setTitle(title)
-                .setPositiveButton("Join", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        EditText houseName = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_join_house_name);
-                        EditText housePassword = (EditText) JoinHouseDialogFragment.this.getDialog().findViewById(R.id.dialog_join_house_password);
-                        joinHouse(houseName.getText().toString(), housePassword.getText().toString());
-                        // switch to the new house...
-                    }
-                })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         JoinHouseDialogFragment.this.getDialog().cancel();
+                    }
+                })
+                .setPositiveButton("Join", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        joinHouse(houseName, password);
                     }
                 });
         return builder.create();

@@ -35,12 +35,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
 import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
 
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
+
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
@@ -54,7 +60,10 @@ import static java.lang.Thread.sleep;
 public class HomeActivity extends AppCompatActivity
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
-        // , BoardAdapter.OnBoardAdapterIteistener,
+        , HouseAdapter.OnHouseItemClickListener
+        , PeripheralAdapter.OnPeripheralAdapterItemClickListener
+        , ChangeHousePasswordDialogFragment.Listener
+         , BoardAdapter.OnBoardAdapterItemClickListener
         , DataPassListener
         , refresh
         {
@@ -239,6 +248,9 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_relay:
                 fragment = new RelayFragment();
                 break;
+            case R.id.nav_autom:
+                fragment = new AutomationFragment();
+                break;
             case R.id.nav_config:
                 fragment = new ConfigFragment();
                 break;
@@ -298,11 +310,19 @@ public class HomeActivity extends AppCompatActivity
         ChangeHousePasswordDialogFragment f = ChangeHousePasswordDialogFragment.newInstance(houseName);
         f.show(fragmentManager, null);
     }
-    public void onHouseAdapterItemRenameClick(String houseName) {
-        ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(houseName);
+    */
+
+    public void onHouseItemClick(String houseName, String sessionToken) {
+        HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName, sessionToken);
         f.show(fragmentManager, null);
     }
-    */
+
+    @Override
+    public void onPeripheralAdapterItemClick(String peripheralName){
+        RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
+        f.show(fragmentManager, null);
+    }
+
 
     /* Dialog Fragment Listeners Implementations
      *
@@ -316,7 +336,6 @@ public class HomeActivity extends AppCompatActivity
         new TaskHandler().changeUsername(this, name.getText().toString(), sessionId);
     }
 
-
     @Override
     public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
         EditText pw1 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_password);
@@ -325,7 +344,7 @@ public class HomeActivity extends AppCompatActivity
         if(pw1.getText().toString().equals(pw2.getText().toString())) {
             new TaskHandler().changeUserPassword(this, pw1.getText().toString(), sessionId);
         } else{
-
+            Toast.makeText(this, "\"Confirm Password\" must match \"New Password\"", Toast.LENGTH_SHORT).show();
         }
     }
 /*
@@ -337,12 +356,25 @@ public class HomeActivity extends AppCompatActivity
 
         (new ChangeHouseName()).execute();
     }
-
+*/
     @Override
-    public void onChangeHousePasswordDialogPositiveClick(DialogFragment dialog){
+    public void onChangeHousePasswordDialogPositiveClick(String houseName, DialogFragment dialog, String sessionToken){
+
+        String oldHousePassword = ((EditText) dialog.getDialog()
+                .findViewById(R.id.change_house_password_dialog_password)).getText().toString();
+        String newHousePassword = ((EditText) dialog.getDialog()
+                .findViewById(R.id.change_house_password_dialog_new_password)).getText().toString();
+        String confirmPassword = ((EditText) dialog.getDialog()
+                .findViewById(R.id.change_house_password_dialog_confirm_password)).getText().toString();
+        if (newHousePassword.equals(confirmPassword)) {
+            new TaskHandler().changeHousePassword(this, houseName, oldHousePassword, newHousePassword, sessionToken);
+        }
+        else {
+            Toast.makeText(this, "\"Confirm Password\" must match \"New Password\"", Toast.LENGTH_SHORT).show();
+        }
 
     }
-*/
+
     public void onSwitchHouseDialogPositiveClick(String houseName, String housePw, String sessionToken){
         new JoinHouse().execute(houseName, housePw, sessionToken);
     }
