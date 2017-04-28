@@ -871,11 +871,6 @@ public class TaskHandler {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //Show progress dialog
-            pDialog = new ProgressDialog(mContext);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
         }
 
         @Override
@@ -890,10 +885,6 @@ public class TaskHandler {
         @Override
         protected void onPostExecute(Void result){
             super.onPostExecute(result);
-            //Dismiss the progress dialog
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
         }
     }
 

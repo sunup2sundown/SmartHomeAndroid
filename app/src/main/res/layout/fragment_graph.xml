@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/sensor_graph"
+        app:seriesType="line"
+        android:layout_marginTop="@dimen/nav_header_height"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"/>
+</RelativeLayout>
