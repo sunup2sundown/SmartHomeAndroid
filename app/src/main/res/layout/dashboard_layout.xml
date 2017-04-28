@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
+        android:layout_marginTop="25dp"
         android:background="@color/colorBackground"
         android:foregroundGravity="center_horizontal"
         android:gravity="center_horizontal"
@@ -30,12 +31,12 @@
         android:id="@+id/houses_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="@dimen/activity_horizontal_margin"
         android:background="@color/colorBackground"
         android:backgroundTint="@color/colorBackground"
-        android:layout_alignParentBottom="true"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="12dp"
+        android:layout_below="@+id/listhouse"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>

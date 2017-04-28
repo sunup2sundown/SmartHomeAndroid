@@ -134,7 +134,7 @@ public class BoardAdapter extends BaseExpandableListAdapter {
                 JSONObject curr = respArray.getJSONObject(i);
                 name = curr.getString("BoardName");
                 Log.d(TAG, "Name: "+ name);
-                list.add(i, new Board(name, houseName));
+                //list.add(i, new Board(name, houseName));
             }
         } catch(JSONException e){
             e.printStackTrace();
