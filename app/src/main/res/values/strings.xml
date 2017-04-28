@@ -12,8 +12,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dashboard">Dashboard</string>
     <string name="sensor_stt">Sensor Status</string>
-    <string name="relay_stt">Relays Status and Control</string>
-    <string name="configuration">Automation/Notification </string>
+    <string name="relay_stt">Relay Status and Control</string>
+    <string name="automation">Automation</string>
+    <string name="configuration">Configuration</string>
     <string name="acc_setting">Account Settings</string>
     <string name="sys">System</string>
     <string name="log_out">Log Out</string>
