@@ -24,7 +24,7 @@ public class AutomationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         //Create new view from relay fragment layout
-        View view = inflater.inflate(R.layout.fragment_camera, container, false);
+        View view = inflater.inflate(R.layout.fragment_automation, container, false);
         bundle = new Bundle();
         //Receive argument bundle from Home Activity
         userID = getArguments().getString("Username");
