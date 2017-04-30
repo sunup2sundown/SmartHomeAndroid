@@ -32,21 +32,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
-import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
-import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
-
-import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.ChangePeripheralNameDialogFragment;
 
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
@@ -62,14 +54,15 @@ import static java.lang.Thread.sleep;
 public class HomeActivity extends AppCompatActivity
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
-        , HouseAdapter.OnHouseItemClickListener
+        , UserSettingsFragment.OnHouseItemClickListener
       //  , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , ChangeHousePasswordDialogFragment.Listener
          //, BoardAdapter.OnBoardAdapterItemClickListener
+        , NotifySettingsFragmentListener
         , DataPassListener
         , refresh
         {
-
+    private Fragment fragment;
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -88,7 +81,6 @@ public class HomeActivity extends AppCompatActivity
     String fragmentToStart;
 
     private String houseName, newHouseName, housePassword, newHousePassword;
-    private ArrayList<House> houseList;
     private Spinner listhouse;
     FragmentManager dialogManager;
     private JSONArray houses;
@@ -231,7 +223,7 @@ public class HomeActivity extends AppCompatActivity
         //We do not need to save entire fragment b/c we want to
         //reload data on create anyway
         Bundle bundle = new Bundle();
-        Fragment fragment = null;
+        fragment = null;
         boolean activityClosing= false;
 
         bundle.putString("Username", userId);
@@ -314,8 +306,9 @@ public class HomeActivity extends AppCompatActivity
     }
     */
 
-    public void onHouseItemClick(String houseName, String sessionToken) {
-        HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName, sessionToken);
+    @Override
+    public void onHouseItemClick(int index, String houseName, String sessionToken) {
+        UserSettingsFragment.HouseOptionsDialogFragment f = UserSettingsFragment.HouseOptionsDialogFragment.newInstance(index, houseName, sessionToken);
         f.show(fragmentManager, null);
     }
 /*
@@ -400,6 +393,36 @@ public class HomeActivity extends AppCompatActivity
     }
 */
     @Override
+    public void notifyHouseRemoved(int index){
+        try {
+            ((UserSettingsFragment)fragment).getHouseList().remove(index);
+            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyHouseNameChanged(int index, String newHouseName){
+        try {
+            ((UserSettingsFragment)fragment).getHouseList().get(index).setName(newHouseName);
+            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyHouseAdded(String houseName){
+        try {
+            ((UserSettingsFragment)fragment).getHouseList().add(new House(houseName));
+            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void passData(String data) {
         this.housename_dashboard = data;
     }
@@ -463,7 +486,7 @@ public class HomeActivity extends AppCompatActivity
     private void startRelaysTab(){
         Log.d(TAG, "Starting relay tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new RelayFragment();
+        fragment = new RelayFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -484,7 +507,7 @@ public class HomeActivity extends AppCompatActivity
     private void startSensorTab(){
         Log.d(TAG, "Starting Sensor tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new SensorFragment();
+        fragment = new SensorFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -526,7 +549,7 @@ public class HomeActivity extends AppCompatActivity
     private void startConfigTab(){
         Log.d(TAG, "Starting Config tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new ConfigFragment();
+        fragment = new ConfigFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -547,7 +570,7 @@ public class HomeActivity extends AppCompatActivity
     private void startSettingsTab(){
         Log.d(TAG, "Starting Settings tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new UserSettingsFragment();
+        fragment = new UserSettingsFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
