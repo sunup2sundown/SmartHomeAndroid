@@ -67,6 +67,41 @@ public class UserSettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void refresh(){
+        sessionToken = getArguments().getString("SessionToken");
+        //Construct data source
+        houseList = new ArrayList<>();
+        new RetrieveHouses().execute();
+
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //Create and set custom adapter for relay list
+        rAdapter = new HouseAdapter(getContext(), houseList, sessionToken);
+
+
+        int k=0;
+        if(jArray!=null) {
+            int o =0;
+            for(;o<jArray.length();o++){
+                String name="";
+                try {
+                    JSONObject check= jArray.getJSONObject(o);
+                    name = check.getString("HouseName");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                rAdapter.add(new House(name));
+            }
+        }else{
+
+        }
+        ListView lv = (ListView)getView().findViewById(R.id.listview_houses);
+        lv.setAdapter(rAdapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -214,6 +249,7 @@ public class UserSettingsFragment extends Fragment {
          */
         public HouseAdapter(Context context, ArrayList<House> houses, String sessionToken) {
             super(context, R.layout.item_house, houses);
+            this.houseList = houses;
             this.sessionToken = sessionToken;
             try {
                 this.activity = (OnHouseItemClickListener) context;
@@ -295,8 +331,12 @@ public class UserSettingsFragment extends Fragment {
         }
 
         private void createHouse(String name, String password) {
+            Log.d("UserSettingsFragment", "createHouse");
             if (new TaskHandler().createHouse(getContext(), name, password, sessionID)) {
-                mListener.notifyHouseAdded(name);
+                Log.d("UserSettingsFragment", "Returned true");
+                mListener.updateSettingsFragment();
+            } else {
+                Log.d("UserSettingsFragment", "Returned false");
             }
         }
     }
@@ -353,7 +393,7 @@ public class UserSettingsFragment extends Fragment {
 
         private void joinHouse(String name, String password){
             if (new TaskHandler().joinHouse(getContext(), name, password, sessionID)) {
-                mListener.notifyHouseAdded(name);
+                mListener.updateSettingsFragment();
             }
         }
     }
@@ -427,7 +467,7 @@ public class UserSettingsFragment extends Fragment {
         }
         private void LeaveHouse(String name){
             if(new TaskHandler().leaveHouse(getActivity(), sessionID, name)){
-                mListener.notifyHouseRemoved(index);
+                mListener.updateSettingsFragment();
             }
         }
     }

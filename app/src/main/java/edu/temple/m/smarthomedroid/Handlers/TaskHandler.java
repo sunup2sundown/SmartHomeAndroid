@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 
 import edu.temple.m.smarthomedroid.HomeActivity;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by M on 4/9/2017.
  */
@@ -91,7 +93,16 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new CreateHouse().execute(jsonObject);
+        try {
+            if (new CreateHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         return success;
     }
 
@@ -108,8 +119,15 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new JoinHouse().execute(jsonObject);
+        try {
+            if (new JoinHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return success;
     }
 
@@ -126,7 +144,16 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new LeaveHouse().execute(jsonObject);
+        try {
+            if (new LeaveHouse().execute(jsonObject).get().equals("\"You have left the house!\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ;
         return success;
     }
 
@@ -145,8 +172,15 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new ChangeHouseName().execute(jsonObject);
+        try {
+            if(new ChangeHouseName().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return success;
     }
 
@@ -625,7 +659,6 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name is already taken", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    success = true;
                     Toast.makeText(mContext, "Renamed house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -717,7 +750,6 @@ public class TaskHandler {
                     Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    success = true;
                     Toast.makeText(mContext, "Joined house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -762,7 +794,6 @@ public class TaskHandler {
                     Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    success = true;
                     Toast.makeText(mContext, "Left house", Toast.LENGTH_SHORT).show();
             }
 
@@ -811,7 +842,6 @@ public class TaskHandler {
                     Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    success = true;
                     Toast.makeText(mContext, "Removed house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -957,14 +987,13 @@ public class TaskHandler {
 
             if(resp.equals("1")){
                 //Make a request to url and get response
-                success = true;
                 result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
             } else {
                 //TODO Alert House name is taken
                 result = "house name unavailable";
             }
 
-            Log.d(TAG, "Create house response: " + response);
+            Log.d(TAG, "Create house response: " + result);
 
             return result;
         }
@@ -988,6 +1017,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name unavailable", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
             }
         }
     }
