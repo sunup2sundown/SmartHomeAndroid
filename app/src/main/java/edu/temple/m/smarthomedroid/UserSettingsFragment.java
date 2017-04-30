@@ -1,6 +1,5 @@
 package edu.temple.m.smarthomedroid;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -29,7 +28,6 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.NewHouseDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.House;
@@ -362,7 +360,7 @@ public class UserSettingsFragment extends Fragment {
     public static class HouseOptionsDialogFragment extends DialogFragment{
         private String sessionID;
         private String houseName;
-        private int i;
+        private int index;
         private NotifySettingsFragmentListener mListener;
         public void onAttach(Context context){
             super.onAttach(context);
@@ -382,7 +380,7 @@ public class UserSettingsFragment extends Fragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            i = getArguments().getInt("index");
+            index = getArguments().getInt("index");
             houseName = getArguments().getString("HouseName");
             sessionID = getArguments().getString("SessionToken");
 
@@ -397,7 +395,7 @@ public class UserSettingsFragment extends Fragment {
             ((Button)view.findViewById(R.id.button_change_name)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(i, houseName, sessionID);
+                    ChangeHouseNameDialogFragment f = ChangeHouseNameDialogFragment.newInstance(index, houseName, sessionID);
                     f.show(getFragmentManager(), null);
                     HouseOptionsDialogFragment.this.getDialog().cancel();
                 }
@@ -429,7 +427,7 @@ public class UserSettingsFragment extends Fragment {
         }
         private void LeaveHouse(String name){
             if(new TaskHandler().leaveHouse(getActivity(), sessionID, name)){
-                mListener.notifyHouseRemoved(i);
+                mListener.notifyHouseRemoved(index);
             }
         }
     }
