@@ -214,6 +214,7 @@ public class UserSettingsFragment extends Fragment {
          */
         public HouseAdapter(Context context, ArrayList<House> houses, String sessionToken) {
             super(context, R.layout.item_house, houses);
+            this.houseList = houses;
             this.sessionToken = sessionToken;
             try {
                 this.activity = (OnHouseItemClickListener) context;
@@ -238,6 +239,11 @@ public class UserSettingsFragment extends Fragment {
                 }
             });
             return convertView;
+        }
+        public void refresh(ArrayList<House> houses)
+        {
+            this.houseList = houses;
+            notifyDataSetChanged();
         }
     }
     public interface OnHouseItemClickListener{
