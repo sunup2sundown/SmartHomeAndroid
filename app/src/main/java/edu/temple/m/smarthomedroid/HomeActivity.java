@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.temple.m.smarthomedroid.Adapters.BoardAdapter;
 import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
@@ -45,7 +46,8 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangePeripheralNameDialogFragment;
+
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
@@ -61,9 +63,9 @@ public class HomeActivity extends AppCompatActivity
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
         , HouseAdapter.OnHouseItemClickListener
-        , PeripheralAdapter.OnPeripheralAdapterItemClickListener
+      //  , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , ChangeHousePasswordDialogFragment.Listener
-         , BoardAdapter.OnBoardAdapterItemClickListener
+         //, BoardAdapter.OnBoardAdapterItemClickListener
         , DataPassListener
         , refresh
         {
@@ -316,13 +318,13 @@ public class HomeActivity extends AppCompatActivity
         HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName, sessionToken);
         f.show(fragmentManager, null);
     }
-
+/*
     @Override
     public void onPeripheralAdapterItemClick(String peripheralName){
-        RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
+        ChangePeripheralNameDialogFragment f = new ChangePeripheralNameDialogFragment(peripheralName);
         f.show(fragmentManager, null);
     }
-
+*/
 
     /* Dialog Fragment Listeners Implementations
      *
