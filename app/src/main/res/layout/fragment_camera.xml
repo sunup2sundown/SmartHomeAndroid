@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:backgroundTint="@color/colorBackground"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context="edu.temple.m.smarthomedroid.CameraFragment">
 
     <ListView

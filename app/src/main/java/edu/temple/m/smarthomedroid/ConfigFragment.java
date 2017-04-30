@@ -1,14 +1,11 @@
 package edu.temple.m.smarthomedroid;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -28,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.GridAdapter;
 import edu.temple.m.smarthomedroid.Adapters.PeripheralConfigAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.AddBoardDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.AddPeripheralDialogFragment;
@@ -37,12 +32,10 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangePeripheralNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RemoveBoardDialog;
 import edu.temple.m.smarthomedroid.Dialogs.RemovePeripheralDialog;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.DataHolder;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
-import edu.temple.m.smarthomedroid.Objects.Relay2;
 
 import static java.lang.Thread.sleep;
 
@@ -73,7 +66,7 @@ public class ConfigFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentManager dialogManager;
-        final View v = inflater.inflate(R.layout.config_layout,container,false);
+        final View v = inflater.inflate(R.layout.fragment_config,container,false);
 
         bundle = new Bundle();
         //Receive argument bundle from Home Activity

@@ -33,6 +33,7 @@ public class TaskHandler {
     String housePassword;
     HashingHandler hashingHandler = new HashingHandler();
     JSONArray returnedArray;
+    boolean success;
 
     public void login(Context context, String username, String password){
         mContext = context;
@@ -64,7 +65,8 @@ public class TaskHandler {
         new Register().execute(jsonObject);
     }
 
-    public void createHouse(Context context, String name, String password, String session){
+    public boolean createHouse(Context context, String name, String password, String session){
+        success = false;
         mContext = context;
 
         JSONObject temp = new JSONObject();
@@ -90,10 +92,11 @@ public class TaskHandler {
         }
 
         new CreateHouse().execute(jsonObject);
-
+        return success;
     }
 
-    public void joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+    public boolean joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -107,9 +110,11 @@ public class TaskHandler {
         }
 
         new JoinHouse().execute(jsonObject);
+        return success;
     }
 
-    public void leaveHouse(Context context, String sessionToken, String houseName){
+    public boolean leaveHouse(Context context, String sessionToken, String houseName){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -122,10 +127,12 @@ public class TaskHandler {
         }
 
         new LeaveHouse().execute(jsonObject);
+        return success;
     }
 
-    public String changeHouseName(Context context, String oldHouseName, String housePassword,
+    public boolean changeHouseName(Context context, String oldHouseName, String housePassword,
                                 String newHouseName, String sessionToken){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -140,7 +147,7 @@ public class TaskHandler {
         }
 
         new ChangeHouseName().execute(jsonObject);
-        return response;
+        return success;
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -618,6 +625,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name is already taken", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
                     Toast.makeText(mContext, "Renamed house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -697,7 +705,6 @@ public class TaskHandler {
             //response = "8 House credentials incorrect";
             switch(result) {
                 case "\"1 Unknown error\"":
-
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
                     break;
                 case "\"2 User not found\"":
@@ -710,6 +717,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
                     Toast.makeText(mContext, "Joined house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -754,6 +762,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "You haven't joined this house", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
                     Toast.makeText(mContext, "Left house", Toast.LENGTH_SHORT).show();
             }
 
@@ -802,6 +811,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "Wrong house name or password", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
                     Toast.makeText(mContext, "Removed house", Toast.LENGTH_SHORT).show();
             }
         }
@@ -947,6 +957,7 @@ public class TaskHandler {
 
             if(resp.equals("1")){
                 //Make a request to url and get response
+                success = true;
                 result = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/house/createhouse", args[0]);
             } else {
                 //TODO Alert House name is taken

@@ -3,6 +3,7 @@ package edu.temple.m.smarthomedroid.Dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.NotifySettingsFragmentListener;
 import edu.temple.m.smarthomedroid.R;
 
 /**
@@ -18,13 +20,18 @@ import edu.temple.m.smarthomedroid.R;
 
 public class ChangeHouseNameDialogFragment extends DialogFragment {
     private final String TAG = "ChangeHouseDialog";
-
+    private int i;
     private String sessionID;
     private String houseName;
-
-    public static ChangeHouseNameDialogFragment newInstance(String houseName, String sessionToken) {
+    private NotifySettingsFragmentListener mListener;
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mListener = (NotifySettingsFragmentListener) context;
+    }
+    public static ChangeHouseNameDialogFragment newInstance(int index, String houseName, String sessionToken) {
         ChangeHouseNameDialogFragment frag = new ChangeHouseNameDialogFragment();
         Bundle args = new Bundle();
+        args.putInt("index", index);
         args.putString("title", "Rename House \"" + houseName + "\"");
         args.putString("SessionToken", sessionToken);
         args.putString("HouseName", houseName);
@@ -36,6 +43,7 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         houseName = getArguments().getString("HouseName");
         sessionID = getArguments().getString("SessionToken");
+        i = getArguments().getInt("Index");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -64,9 +72,8 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
     }
 
     private void changeHouseName(String oldName, String password, String newName){
-        if(true){
-            String result;
-            result = new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID);
+        if(new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID)){
+            mListener.notifyHouseNameChanged(i, newName);
         }
     }
 }

@@ -42,7 +42,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Houses:"
+        android:text="Houses you've joined:"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:id="@+id/textView7"
         android:layout_below="@+id/button_changepw"
@@ -52,6 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:id="@+id/listview_houses"
+        android:layout_marginTop="4dp"
+        android:layout_below="@+id/textView7"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
