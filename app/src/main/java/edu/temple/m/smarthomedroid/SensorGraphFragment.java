@@ -27,6 +27,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
@@ -72,21 +73,32 @@ public class SensorGraphFragment extends Fragment {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new PopulateData().execute(jsonObject);
+        Log.d("SensorGraphFragment", jsonObject.toString());
+        boolean dataIsValid = false;
+        try {
+            dataIsValid = new PopulateData().execute(jsonObject).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         Log.d(TAG, houseName + " " + peripheralName);
+        if (dataIsValid) {
+            Log.d("SensorGraphFragment", "dataIsValid == true");
+            GraphView graph = (GraphView) view.findViewById(R.id.sensor_graph);
+            DataPoint[] data = generateData();
+            mSeries1 = new LineGraphSeries<>(data);
+            graph.addSeries(mSeries1);
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+            graph.getViewport().setMinX(data[0].getX());
+            graph.getViewport().setMaxX(data[data.length-1].getX());
+            graph.getViewport().setXAxisBoundsManual(true);
 
-        GraphView graph = (GraphView)view.findViewById(R.id.sensor_graph);
-       // mSeries1 = new LineGraphSeries<>(generateData());
-        mSeries2 = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(0,1),
-                new DataPoint(1, 2),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2)
-        });
-        //graph.addSeries(mSeries1);
-        graph.addSeries(mSeries2);
+            graph.getGridLabelRenderer().setHumanRounding(false);
+        } else {
+            Log.d("SensorGraphFragment", "dataIsValid == false");
+        }
 
 //        mSeries2.resetData(generateData());
 
@@ -123,19 +135,16 @@ public class SensorGraphFragment extends Fragment {
     }
 
     private DataPoint[] generateData() {
-        ArrayList<String> time = new ArrayList<String>();
-        ArrayList<Integer> data = new ArrayList<Integer>();
+        ArrayList<String> time = new ArrayList<>();
+        ArrayList<Integer> data = new ArrayList<>();
         JSONObject tempJson = new JSONObject();
         int xTime, yData;
         Date date;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         DataPoint[] values;
 
-        while(dataArray == null){
-
-        }
-
         if(dataArray != null){
+            Log.d("generateData", "dataArray != null");
             int length = dataArray.length();
             values = new DataPoint[length];
             for(int i = 0; i < length; i++){
@@ -171,30 +180,33 @@ public class SensorGraphFragment extends Fragment {
         return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
     }
 
-    private class PopulateData extends AsyncTask<JSONObject, Void, Void>{
+    private class PopulateData extends AsyncTask<JSONObject, Void, Boolean>{
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
+        protected Boolean doInBackground(JSONObject...args){
 
             String response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/gethistoricdata", args[0]);
+
+            Log.d("SensorGraphFragment", response);
 
             if(response != null){
                 try {
                     dataArray=new JSONArray(response);
                     dataArray=dataArray.getJSONArray(0);
+                    return true;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            return null;
+            return false;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Boolean result){
             super.onPostExecute(result);
         }
     }
