@@ -11,11 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.PointsGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +54,7 @@ public class SensorGraphFragment extends Fragment {
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private Runnable mTimer2;
-    private LineGraphSeries<DataPoint> mSeries1;
+    private PointsGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
     private double graph2LastXValue = 5d;
     Date startTime;
@@ -86,22 +92,35 @@ public class SensorGraphFragment extends Fragment {
         Log.d(TAG, houseName + " " + peripheralName);
         if (dataIsValid) {
             Log.d("SensorGraphFragment", "dataIsValid == true");
+
             GraphView graph = (GraphView) view.findViewById(R.id.sensor_graph);
             DataPoint[] data = generateData();
-            mSeries1 = new LineGraphSeries<>(data);
+
+            mSeries1 = new PointsGraphSeries<>(data);
             graph.addSeries(mSeries1);
-            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+
+            mSeries1.setShape(PointsGraphSeries.Shape.POINT);
+            mSeries1.setColor(Color.BLUE);
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(), new SimpleDateFormat("MM/dd HH:mm")));
             graph.getViewport().setMinX(data[0].getX());
             graph.getViewport().setMaxX(data[data.length-1].getX());
             graph.getViewport().setXAxisBoundsManual(true);
-
             graph.getGridLabelRenderer().setHumanRounding(false);
+            final TextView display = (TextView) view.findViewById(R.id.display);
+            mSeries1.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    String itemDateStr
+                            = new DateAsXAxisLabelFormatter(getActivity(),
+                            new SimpleDateFormat("MM/dd/YYYY HH:mm:ss")).formatLabel(dataPoint.getX(),
+                            true);
+                    display.setText("("+itemDateStr+", "+dataPoint.getY()+")");
+                }
+            });
         } else {
             Log.d("SensorGraphFragment", "dataIsValid == false");
         }
-
 //        mSeries2.resetData(generateData());
-
         return view;
     }
 /*
