@@ -393,32 +393,9 @@ public class HomeActivity extends AppCompatActivity
     }
 */
     @Override
-    public void notifyHouseRemoved(int index){
-        try {
-            ((UserSettingsFragment)fragment).getHouseList().remove(index);
-            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notifyHouseNameChanged(int index, String newHouseName){
-        try {
-            ((UserSettingsFragment)fragment).getHouseList().get(index).setName(newHouseName);
-            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notifyHouseAdded(String houseName){
-        try {
-            ((UserSettingsFragment)fragment).getHouseList().add(new House(houseName));
-            ((UserSettingsFragment)fragment).getHouseAdapter().notifyDataSetChanged();
-        } catch (ClassCastException e) {
-            e.printStackTrace();
+    public void updateSettingsFragment(){
+        if (fragment instanceof UserSettingsFragment){
+            ((UserSettingsFragment)fragment).refresh();
         }
     }
 
@@ -458,7 +435,7 @@ public class HomeActivity extends AppCompatActivity
                     startRelaysTab();
                 break;
             case "SettingsFragment":
-                startSettingsTab();
+                startSettingsTab(false);
                 break;
             case "Logout":
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -525,26 +502,26 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-            private void startDashboardTab(){
-                Log.d(TAG, "Starting Dashboard tab");
-                Bundle bundle = new Bundle();
-                Fragment fragment = new Dashboard();
+    private void startDashboardTab(){
+        Log.d(TAG, "Starting Dashboard tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new Dashboard();
 
-                bundle.putString("Username", userId);
-                bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
-                bundle.putString("HouseName",housename_dashboard);
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
 
-                if(fragment != null) {
-                    //Set Fragment Arguments
-                    fragment.setArguments(bundle);
-                    //Insert the fragment by replacing any existing fragments
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flContent, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            }
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
 
     private void startConfigTab(){
         Log.d(TAG, "Starting Config tab");
@@ -567,7 +544,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    private void startSettingsTab(){
+    private void startSettingsTab(boolean reload){
         Log.d(TAG, "Starting Settings tab");
         Bundle bundle = new Bundle();
         fragment = new UserSettingsFragment();
@@ -583,7 +560,9 @@ public class HomeActivity extends AppCompatActivity
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.flContent, fragment);
-            fragmentTransaction.addToBackStack(null);
+            if (reload) {
+                fragmentTransaction.addToBackStack(null);
+            }
             fragmentTransaction.commit();
         }
     }
