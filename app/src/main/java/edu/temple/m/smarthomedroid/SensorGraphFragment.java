@@ -101,7 +101,7 @@ public class SensorGraphFragment extends Fragment {
 
             mSeries1.setShape(PointsGraphSeries.Shape.POINT);
             mSeries1.setColor(Color.BLUE);
-            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(), new SimpleDateFormat("MM/dd HH:mm")));
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(), new SimpleDateFormat("\nHH:mm\nMM/dd")));
             graph.getViewport().setMinX(data[0].getX());
             graph.getViewport().setMaxX(data[data.length-1].getX());
             graph.getViewport().setXAxisBoundsManual(true);
