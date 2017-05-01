@@ -78,7 +78,7 @@ public class Dashboard extends Fragment {
                         mCallback.passData(housename);
                         new getRe().execute();
                         try {
-                            sleep(1800);
+                            sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
