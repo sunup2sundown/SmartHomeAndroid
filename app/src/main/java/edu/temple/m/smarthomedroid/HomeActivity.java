@@ -32,25 +32,20 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.HouseAdapter;
 import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
-import edu.temple.m.smarthomedroid.Adapters.PeripheralAdapter;
-
-import edu.temple.m.smarthomedroid.Dialogs.ChangeHouseNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.HouseOptionsDialogFragment;
-import edu.temple.m.smarthomedroid.Dialogs.RenamePeripheralDialogFragment;
+
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
+import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.Objects.House;
 
 import static java.lang.Thread.sleep;
@@ -59,13 +54,15 @@ import static java.lang.Thread.sleep;
 public class HomeActivity extends AppCompatActivity
         implements ChangeUsernameDialogFragment.ChangeUsernameDialogListener
         , ChangePasswordDialogFragment.ChangePasswordDialogListener
-        , HouseAdapter.OnHouseItemClickListener
-        , PeripheralAdapter.OnPeripheralAdapterItemClickListener
+        , UserSettingsFragment.OnHouseItemClickListener
+      //  , PeripheralAdapter.OnPeripheralAdapterItemClickListener
         , ChangeHousePasswordDialogFragment.Listener
-         , BoardAdapter.OnBoardAdapterItemClickListener,
+         //, BoardAdapter.OnBoardAdapterItemClickListener
+        , NotifySettingsFragmentListener
         , DataPassListener
+        , refresh
         {
-
+    private Fragment fragment;
     private final String TAG = "HomeActivity";
     //Drawer & Toolbar declarations
     private DrawerLayout mDrawer;
@@ -84,13 +81,10 @@ public class HomeActivity extends AppCompatActivity
     String fragmentToStart;
 
     private String houseName, newHouseName, housePassword, newHousePassword;
-    private ArrayList<House> houseList;
     private Spinner listhouse;
     FragmentManager dialogManager;
     private JSONArray houses;
-
-
-    /**
+            /**
      * Class Methods
      * @param savedInstanceState
      */
@@ -229,7 +223,7 @@ public class HomeActivity extends AppCompatActivity
         //We do not need to save entire fragment b/c we want to
         //reload data on create anyway
         Bundle bundle = new Bundle();
-        Fragment fragment = null;
+        fragment = null;
         boolean activityClosing= false;
 
         bundle.putString("Username", userId);
@@ -312,17 +306,18 @@ public class HomeActivity extends AppCompatActivity
     }
     */
 
-    public void onHouseItemClick(String houseName, String sessionToken) {
-        HouseOptionsDialogFragment f = HouseOptionsDialogFragment.newInstance(houseName, sessionToken);
+    @Override
+    public void onHouseItemClick(int index, String houseName, String sessionToken) {
+        UserSettingsFragment.HouseOptionsDialogFragment f = UserSettingsFragment.HouseOptionsDialogFragment.newInstance(index, houseName, sessionToken);
         f.show(fragmentManager, null);
     }
-
+/*
     @Override
     public void onPeripheralAdapterItemClick(String peripheralName){
-        RenamePeripheralDialogFragment f = RenamePeripheralDialogFragment.newInstance(peripheralName);
+        ChangePeripheralNameDialogFragment f = new ChangePeripheralNameDialogFragment(peripheralName);
         f.show(fragmentManager, null);
     }
-
+*/
 
     /* Dialog Fragment Listeners Implementations
      *
@@ -398,6 +393,13 @@ public class HomeActivity extends AppCompatActivity
     }
 */
     @Override
+    public void updateSettingsFragment(){
+        if (fragment instanceof UserSettingsFragment){
+            ((UserSettingsFragment)fragment).refresh();
+        }
+    }
+
+    @Override
     public void passData(String data) {
         this.housename_dashboard = data;
     }
@@ -433,7 +435,7 @@ public class HomeActivity extends AppCompatActivity
                     startRelaysTab();
                 break;
             case "SettingsFragment":
-                startSettingsTab();
+                startSettingsTab(false);
                 break;
             case "Logout":
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -461,7 +463,7 @@ public class HomeActivity extends AppCompatActivity
     private void startRelaysTab(){
         Log.d(TAG, "Starting relay tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new RelayFragment();
+        fragment = new RelayFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -482,7 +484,7 @@ public class HomeActivity extends AppCompatActivity
     private void startSensorTab(){
         Log.d(TAG, "Starting Sensor tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new SensorFragment();
+        fragment = new SensorFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -500,31 +502,31 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-            private void startDashboardTab(){
-                Log.d(TAG, "Starting Dashboard tab");
-                Bundle bundle = new Bundle();
-                Fragment fragment = new Dashboard();
+    private void startDashboardTab(){
+        Log.d(TAG, "Starting Dashboard tab");
+        Bundle bundle = new Bundle();
+        Fragment fragment = new Dashboard();
 
-                bundle.putString("Username", userId);
-                bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
-                bundle.putString("HouseName",housename_dashboard);
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
 
-                if(fragment != null) {
-                    //Set Fragment Arguments
-                    fragment.setArguments(bundle);
-                    //Insert the fragment by replacing any existing fragments
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flContent, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            }
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
 
     private void startConfigTab(){
         Log.d(TAG, "Starting Config tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new ConfigFragment();
+        fragment = new ConfigFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -542,10 +544,10 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    private void startSettingsTab(){
+    private void startSettingsTab(boolean reload){
         Log.d(TAG, "Starting Settings tab");
         Bundle bundle = new Bundle();
-        Fragment fragment = new UserSettingsFragment();
+        fragment = new UserSettingsFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -558,13 +560,14 @@ public class HomeActivity extends AppCompatActivity
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.flContent, fragment);
-            fragmentTransaction.addToBackStack(null);
+            if (reload) {
+                fragmentTransaction.addToBackStack(null);
+            }
             fragmentTransaction.commit();
         }
     }
 
-
-    /**
+            /**
      * HTTP Calls --Async Task
      */
     private class ChangeUserName extends AsyncTask<Void, Void, Void> {
@@ -876,5 +879,18 @@ public class HomeActivity extends AppCompatActivity
         }
         return null;
     }
-
+            @Override
+            public void config_update() {
+                Bundle bundle = new Bundle();
+                Fragment fragment = new ConfigFragment();
+                bundle.putString("Username", userId);
+                bundle.putString("SessionToken", sessionId);
+                bundle.putString("HouseName",housename_dashboard);
+                fragment.setArguments(bundle);
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
 }

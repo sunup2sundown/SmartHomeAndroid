@@ -119,7 +119,6 @@ public class SensorFragment extends ListFragment{
                 bundle.putString("HouseName", houseName);
                 bundle.putString("PeripheralName", name);
 
-
                 Fragment fragment = new SensorGraphFragment();
                 fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

@@ -38,11 +38,11 @@ public class PeripheralConfigAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        if (children!=null){
+        if ((this.children==null)||this.children.get(this.header.get(groupPosition))==null){
+            return 0;
+        }else{
             return this.children.get(this.header.get(groupPosition))
                     .size();
-        }else{
-            return 0;
         }
     }
 

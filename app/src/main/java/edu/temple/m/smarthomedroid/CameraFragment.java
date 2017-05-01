@@ -51,8 +51,6 @@ public class CameraFragment extends ListFragment{
         userID = getArguments().getString("Username");
         sessionID = getArguments().getString("SessionToken");
 
-        bundle.putString("SessionToken", sessionID);
-
         return view;
     }
 
@@ -106,8 +104,10 @@ public class CameraFragment extends ListFragment{
                 Log.d(TAG, "Clicked Camera: " + name);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("name", name);
-
+                bundle.putString("CameraName", name);
+                bundle.putString("HouseName", houseName);
+                bundle.putString("SessionToken", sessionID);
+                bundle.putString("Username", userID);
 
                 Fragment fragment = new CameraFeedFragment();
                 fragment.setArguments(bundle);

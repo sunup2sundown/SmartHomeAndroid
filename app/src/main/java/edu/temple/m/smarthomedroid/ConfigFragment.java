@@ -1,14 +1,11 @@
 package edu.temple.m.smarthomedroid;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -28,19 +24,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.GridAdapter;
 import edu.temple.m.smarthomedroid.Adapters.PeripheralConfigAdapter;
 import edu.temple.m.smarthomedroid.Dialogs.AddBoardDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.AddPeripheralDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeBoardNameDialogFragment;
+import edu.temple.m.smarthomedroid.Dialogs.ChangePeripheralNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RemoveBoardDialog;
+import edu.temple.m.smarthomedroid.Dialogs.RemovePeripheralDialog;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.DataHolder;
 import edu.temple.m.smarthomedroid.Objects.House;
 import edu.temple.m.smarthomedroid.Objects.Peripheral;
-import edu.temple.m.smarthomedroid.Objects.Relay2;
 
 import static java.lang.Thread.sleep;
 
@@ -51,6 +46,7 @@ import static java.lang.Thread.sleep;
 public class ConfigFragment extends Fragment {
     FragmentManager fm;
     private ExpandableListView lv;
+    private Button addboard;
     private JSONArray houses,peri,boards;
     private String sessionToken = "";
     private static final String TAG = "ConfigFragment";
@@ -62,18 +58,23 @@ public class ConfigFragment extends Fragment {
     ArrayList<Board> boardlist;
     HashMap<Board,List<Peripheral>> perilist;
     private PeripheralConfigAdapter rAdapter;
+    private int done=0;
+    private synchronized void setdone(int n){
+        this.done = n;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentManager dialogManager;
-        final View v = inflater.inflate(R.layout.config_layout,container,false);
+        final View v = inflater.inflate(R.layout.fragment_config,container,false);
 
         bundle = new Bundle();
         //Receive argument bundle from Home Activity
         userID = getArguments().getString("Username");
         sessionID = getArguments().getString("SessionToken");
         fm = getActivity().getSupportFragmentManager();
-        spinner = (Spinner)v.findViewById(R.id.spinner2);
+        spinner = (Spinner)v.findViewById(R.id.config_listhouse);
+        addboard = (Button)v.findViewById(R.id.button_add_board);
         return v;
     }
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class ConfigFragment extends Fragment {
                         //mCallback.passData(housename);
                         new getboard().execute();
                         try {
-                            sleep(1500);
+                            sleep(1800);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -108,7 +109,7 @@ public class ConfigFragment extends Fragment {
                             }
                             new getperi().execute();
                             try {
-                                sleep(1500);
+                                sleep(1800);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -157,7 +158,8 @@ public class ConfigFragment extends Fragment {
                                         }
         /*  if child item clicked */
                                         else if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                                            onPeri();
+                                            String old2 =perilist.get(boardlist.get(groupPosition)).get(childPosition).getName();
+                                            onPeri(old2);
                                         }
                                         return false;
                                     }
@@ -168,6 +170,19 @@ public class ConfigFragment extends Fragment {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+        addboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundleaddboard= new Bundle();
+                bundleaddboard.putString("SessionToken",sessionID);
+                bundleaddboard.putString("HouseName",housename);
+                FragmentManager dialogManager0;
+                dialogManager0 = getActivity().getSupportFragmentManager();
+                AddBoardDialogFragment fr = new AddBoardDialogFragment();
+                fr.setArguments(bundleaddboard);
+                fr.show(dialogManager0,null);
+            }
+        });
 
     }
     public void onBoard(String old, final int groupPosition){
@@ -188,11 +203,6 @@ public class ConfigFragment extends Fragment {
                         ChangeBoardNameDialogFragment f = new ChangeBoardNameDialogFragment();
                         f.setArguments(bundleboard);
                         f.show(dialogManager,null);
-                        int i = dat.gettoggle();
-                        if(i==1){
-                            String n = dat.getDistributor_id();
-                            boardlist.get(groupPosition).setname(n);
-                        }
                         break;
                     case 1:
                         FragmentManager dialogManager2;
@@ -218,14 +228,34 @@ public class ConfigFragment extends Fragment {
         });
         AlertDialog adialog = builder.show();
     }
-    public void onPeri(){
+    public void onPeri(String old2){
         CharSequence options[] = new CharSequence[] {"Rename Peripheral", "Remove Peripheral"};
+        final Bundle bundleboard = new Bundle();
+        bundleboard.putString("OldName",old2);
+        bundleboard.putString("SessionToken",sessionID);
+        bundleboard.putString("HouseName",housename);
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Options");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
+                switch (which){
+                    case 0:
+                        FragmentManager dialogManager;
+                        dialogManager = getActivity().getSupportFragmentManager();
+                        ChangePeripheralNameDialogFragment f = new ChangePeripheralNameDialogFragment();
+                        f.setArguments(bundleboard);
+                        f.show(dialogManager,null);
+                        break;
+                    case 1:
+                        FragmentManager dialogManager1;
+                        dialogManager1 = getActivity().getSupportFragmentManager();
+                        RemovePeripheralDialog ff = new RemovePeripheralDialog();
+                        ff.setArguments(bundleboard);
+                        ff.show(dialogManager1,null);
+                        break;
+                    default:
+                }
             }
         }).setNegativeButton("Back", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
@@ -238,11 +268,14 @@ public class ConfigFragment extends Fragment {
     public void additem(){
         List<String> list1 = new ArrayList<String>();
         new getlist1().execute();
-        try {
-            sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while(done==0){
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        setdone(1);
         if (houses!=null) {
             int o=0;
             for(;o<houses.length();o++){
@@ -295,7 +328,7 @@ public class ConfigFragment extends Fragment {
                 }
 
             }
-
+            setdone(1);
             return null;
         }
 
@@ -339,7 +372,6 @@ private class getboard extends AsyncTask<Void, Void, Void> {
             }
 
         }
-
         return null;
     }
 
@@ -383,7 +415,6 @@ private class getboard extends AsyncTask<Void, Void, Void> {
                 }
 
             }
-
             return null;
         }
 

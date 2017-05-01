@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 
 import edu.temple.m.smarthomedroid.HomeActivity;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by M on 4/9/2017.
  */
@@ -33,6 +35,7 @@ public class TaskHandler {
     String housePassword;
     HashingHandler hashingHandler = new HashingHandler();
     JSONArray returnedArray;
+    boolean success;
 
     public void login(Context context, String username, String password){
         mContext = context;
@@ -64,7 +67,8 @@ public class TaskHandler {
         new Register().execute(jsonObject);
     }
 
-    public void createHouse(Context context, String name, String password, String session){
+    public boolean createHouse(Context context, String name, String password, String session){
+        success = false;
         mContext = context;
 
         JSONObject temp = new JSONObject();
@@ -89,11 +93,21 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new CreateHouse().execute(jsonObject);
+        try {
+            if (new CreateHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
+        return success;
     }
 
-    public void joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+    public boolean joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -105,11 +119,20 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new JoinHouse().execute(jsonObject);
+        try {
+            if (new JoinHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
-    public void leaveHouse(Context context, String sessionToken, String houseName){
+    public boolean leaveHouse(Context context, String sessionToken, String houseName){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -121,11 +144,22 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new LeaveHouse().execute(jsonObject);
+        try {
+            if (new LeaveHouse().execute(jsonObject).get().equals("\"You have left the house!\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ;
+        return success;
     }
 
-    public String changeHouseName(Context context, String oldHouseName, String housePassword,
+    public boolean changeHouseName(Context context, String oldHouseName, String housePassword,
                                 String newHouseName, String sessionToken){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -138,9 +172,16 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new ChangeHouseName().execute(jsonObject);
-        return response;
+        try {
+            if(new ChangeHouseName().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -697,7 +738,6 @@ public class TaskHandler {
             //response = "8 House credentials incorrect";
             switch(result) {
                 case "\"1 Unknown error\"":
-
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
                     break;
                 case "\"2 User not found\"":
@@ -953,7 +993,7 @@ public class TaskHandler {
                 result = "house name unavailable";
             }
 
-            Log.d(TAG, "Create house response: " + response);
+            Log.d(TAG, "Create house response: " + result);
 
             return result;
         }
@@ -977,6 +1017,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name unavailable", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
             }
         }
     }
