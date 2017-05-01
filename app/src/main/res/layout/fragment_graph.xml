@@ -12,4 +12,14 @@
         android:layout_marginTop="@dimen/nav_header_height"
         android:layout_height="200dp"
         android:layout_width="match_parent"/>
+
+    <TextView
+        android:id="@+id/display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sensor_graph"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:text="Click on a data point to display its value"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
 </RelativeLayout>
