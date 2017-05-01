@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -62,7 +63,8 @@ public class RulesAdapter extends ArrayAdapter<String> {
                 //name.setTypeface(name.getTypeface(),BOLD);
                 name.setText(item);
                 name.isTextSelectable();
-                name.setOnClickListener(new View.OnClickListener() {
+                Button X = (Button)convertView.findViewById(R.id.button);
+                X.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View viewIn) {
                                 try {
