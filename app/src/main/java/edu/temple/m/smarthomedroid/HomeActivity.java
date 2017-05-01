@@ -38,9 +38,9 @@ import edu.temple.m.smarthomedroid.Dashboard.DataPassListener;
 
 import edu.temple.m.smarthomedroid.Dialogs.ChangeHousePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
+
+
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
-
-
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
@@ -327,15 +327,21 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onChangeUsernameDialogPositiveClick(DialogFragment dialog){
         EditText name = (EditText) dialog.getDialog().findViewById(R.id.change_username_dialog_username);
-
-        new TaskHandler().changeUsername(this, name.getText().toString(), sessionId);
+        if (new TaskHandler().changeUsername(this, name.getText().toString(), sessionId)) {
+            userId = name.getText().toString();
+            Log.d("changeUsername", "true");
+            if (fragment instanceof UserSettingsFragment){
+                updateSettingsFragment();
+            }
+        } else {
+            Log.d("changeUsername", "false");
+        }
     }
 
     @Override
     public void onChangePasswordDialogPositiveClick(DialogFragment dialog){
         EditText pw1 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_password);
         EditText pw2 = (EditText)dialog.getDialog().findViewById(R.id.change_password_dialog_confirm_pw);
-
         if(pw1.getText().toString().equals(pw2.getText().toString())) {
             new TaskHandler().changeUserPassword(this, pw1.getText().toString(), sessionId);
         } else{
@@ -395,7 +401,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void updateSettingsFragment(){
         if (fragment instanceof UserSettingsFragment){
-            ((UserSettingsFragment)fragment).refresh();
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction().detach(fragment).attach(fragment);
+            fragmentTransaction.commit();
         }
     }
 
