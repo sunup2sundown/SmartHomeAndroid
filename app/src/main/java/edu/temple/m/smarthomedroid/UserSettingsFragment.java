@@ -381,8 +381,8 @@ public class UserSettingsFragment extends Fragment {
             String title = getArguments().getString("title");
             // Inflate and set the layout for the dialog
             View view = inflater.inflate(R.layout.dialog_join_house, null);
-            final String houseName = ((EditText)view.findViewById(R.id.dialog_join_house_name)).getText().toString();
-            final String password = ((EditText)view.findViewById(R.id.dialog_join_house_password)).getText().toString();
+            final EditText houseName = ((EditText)view.findViewById(R.id.dialog_join_house_name));
+            final EditText password = ((EditText)view.findViewById(R.id.dialog_join_house_password));
 
             // Pass null as the parent view because its going in the dialog layout
             builder.setView(view)
@@ -396,7 +396,7 @@ public class UserSettingsFragment extends Fragment {
                     .setPositiveButton("Join", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            joinHouse(houseName, password);
+                            joinHouse(houseName.getText().toString(), password.getText().toString());
                         }
                     });
             return builder.create();
