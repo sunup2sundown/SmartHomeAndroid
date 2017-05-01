@@ -78,7 +78,7 @@ public class ListRulesDialog extends DialogFragment implements RulesAdapter.dial
                         ListRulesDialog.this.getDialog().cancel();
                     }
                 });
-        builder.setTitle("LIST OF CURRULES");
+        builder.setTitle("LIST OF CURRENT RULES");
         relayList = new ArrayList<String>();
         rAdapter = new RulesAdapter(getActivity().getApplicationContext(), relayList,sessionID,housename,ListRulesDialog.this);
         if (rules!=null){
