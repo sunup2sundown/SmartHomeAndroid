@@ -70,21 +70,15 @@ public class TaskHandler {
     public boolean createHouse(Context context, String name, String password, String session){
         success = false;
         mContext = context;
-
         JSONObject temp = new JSONObject();
-
         try {
             temp.put("houseName", name);
             temp.put("sessionToken", session);
         } catch(JSONException e){
             e.printStackTrace();
         }
-
         new CheckHouseNameAvailability().execute(temp);
-
-
         JSONObject jsonObject = new JSONObject();
-
         try {
             jsonObject.put("houseName", name);
             jsonObject.put("housePassword", hashingHandler.hash_pass(password));
@@ -92,7 +86,6 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
         try {
             if (new CreateHouse().execute(jsonObject).get().equals("\"Success\"")){
                 success = true;
@@ -102,16 +95,13 @@ public class TaskHandler {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
         return success;
     }
 
     public boolean joinHouse(Context context, String houseName, String housePassword, String sessionToken){
         success = false;
         mContext = context;
-
         JSONObject jsonObject = new JSONObject();
-
         try {
             jsonObject.put("houseName", houseName);
             jsonObject.put("housePassword", hashingHandler.hash_pass(housePassword));
@@ -749,8 +739,6 @@ public class TaskHandler {
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-
-            //response = "8 House credentials incorrect";
             switch(result) {
                 case "\"1 Unknown error\"":
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();

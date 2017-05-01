@@ -68,7 +68,18 @@ public class UserSettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void refresh(){
+    public void refresh(final Bundle args) {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                String newUsername = args.getString("Username");
+                ((TextView)UserSettingsFragment.this.getView().findViewById(R.id.text_username))
+                        .setText(newUsername);
+                UserSettingsFragment.this.refreshData();
+            }
+        });
+    }
+
+    public void refreshData(){
         sessionToken = getArguments().getString("SessionToken");
         //Construct data source
         houseList = new ArrayList<>();
@@ -334,10 +345,10 @@ public class UserSettingsFragment extends Fragment {
         private void createHouse(String name, String password) {
             Log.d("UserSettingsFragment", "createHouse");
             if (new TaskHandler().createHouse(getContext(), name, password, sessionID)) {
-                Log.d("UserSettingsFragment", "Returned true");
+                Log.d("UserSettingsFragment", "createHouse returned true");
                 mListener.updateSettingsFragment();
             } else {
-                Log.d("UserSettingsFragment", "Returned false");
+                Log.d("UserSettingsFragment", "createHouse returned false");
             }
         }
     }
@@ -361,7 +372,6 @@ public class UserSettingsFragment extends Fragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             sessionID = getArguments().getString("SessionToken");
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -393,7 +403,7 @@ public class UserSettingsFragment extends Fragment {
         }
 
         private void joinHouse(String name, String password){
-            if (new TaskHandler().joinHouse(getContext(), name, password, sessionID)) {
+            if (new TaskHandler().joinHouse(getActivity(), name, password, sessionID)) {
                 mListener.updateSettingsFragment();
             }
         }

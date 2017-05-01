@@ -330,9 +330,7 @@ public class HomeActivity extends AppCompatActivity
         if (new TaskHandler().changeUsername(this, name.getText().toString(), sessionId)) {
             userId = name.getText().toString();
             Log.d("changeUsername", "true");
-            if (fragment instanceof UserSettingsFragment){
-                updateSettingsFragment();
-            }
+            updateSettingsFragment();
         } else {
             Log.d("changeUsername", "false");
         }
@@ -401,9 +399,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void updateSettingsFragment(){
         if (fragment instanceof UserSettingsFragment){
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction().detach(fragment).attach(fragment);
-            fragmentTransaction.commit();
+            Bundle bundle = new Bundle();
+            bundle.putString("Username", userId);
+            ((UserSettingsFragment)fragment).refresh(bundle);
         }
     }
 
