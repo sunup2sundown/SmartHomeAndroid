@@ -109,9 +109,6 @@ public class HomeActivity extends AppCompatActivity
         sessionId = prevIntent.getStringExtra("SessionId");
         userId = prevIntent.getStringExtra("Username");
 
-        Log.d(TAG, "Username: " + userId);
-        Log.d(TAG, "SessionToken: " + sessionId);
-
         Button voiceButton = (Button)findViewById(R.id.voice);
         // Check to see if a recognition activity is present
 // if running on AVD virtual device it will give this message. The mic

@@ -164,13 +164,6 @@ public class SensorGraphFragment extends Fragment {
 
         return null;
     }
-
-    double mLastRandom = 2;
-    Random mRand = new Random();
-    private double getRandom() {
-        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
-    }
-
     private class PopulateData extends AsyncTask<JSONObject, Void, Void>{
         @Override
         protected void onPreExecute(){
