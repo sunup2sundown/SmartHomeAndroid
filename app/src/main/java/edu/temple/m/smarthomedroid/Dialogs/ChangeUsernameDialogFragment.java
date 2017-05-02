@@ -8,16 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 
+import edu.temple.m.smarthomedroid.NotifySettingsFragmentListener;
 import edu.temple.m.smarthomedroid.R;
 
-/**
- * Created by M on 4/9/2017.
- */
-
-public class ChangeUsernameDialogFragment extends DialogFragment{
+public class ChangeUsernameDialogFragment extends DialogFragment {
 
     private final String TAG = "ChangeUsernameDialog";
     ChangeUsernameDialogListener mListener;
+    NotifySettingsFragmentListener nstl;
+
 
     /* The activity that creates instance of dialog fragment must implement
     *  this interface in order to recieve event callbacks
@@ -39,6 +38,13 @@ public class ChangeUsernameDialogFragment extends DialogFragment{
         } catch(ClassCastException e){
             //Activity doesn't implement
             throw new ClassCastException(activity.toString() + " must implement SignupDialogListener");
+        }
+        try{
+            //Instantiate listener so events can be sent to host
+            nstl = (NotifySettingsFragmentListener) activity;
+        } catch(ClassCastException e){
+            //Activity doesn't implement
+            throw new ClassCastException(activity.toString() + " must implement NotifySettingsFragmentListener");
         }
     }
 

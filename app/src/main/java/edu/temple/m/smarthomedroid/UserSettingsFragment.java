@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -67,7 +68,18 @@ public class UserSettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void refresh(){
+    public void refresh(final Bundle args) {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                String newUsername = args.getString("Username");
+                ((TextView)UserSettingsFragment.this.getView().findViewById(R.id.text_username))
+                        .setText(newUsername);
+                UserSettingsFragment.this.refreshData();
+            }
+        });
+    }
+
+    public void refreshData(){
         sessionToken = getArguments().getString("SessionToken");
         //Construct data source
         houseList = new ArrayList<>();
@@ -333,10 +345,10 @@ public class UserSettingsFragment extends Fragment {
         private void createHouse(String name, String password) {
             Log.d("UserSettingsFragment", "createHouse");
             if (new TaskHandler().createHouse(getContext(), name, password, sessionID)) {
-                Log.d("UserSettingsFragment", "Returned true");
+                Log.d("UserSettingsFragment", "createHouse returned true");
                 mListener.updateSettingsFragment();
             } else {
-                Log.d("UserSettingsFragment", "Returned false");
+                Log.d("UserSettingsFragment", "createHouse returned false");
             }
         }
     }
@@ -360,7 +372,6 @@ public class UserSettingsFragment extends Fragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             sessionID = getArguments().getString("SessionToken");
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -370,8 +381,8 @@ public class UserSettingsFragment extends Fragment {
             String title = getArguments().getString("title");
             // Inflate and set the layout for the dialog
             View view = inflater.inflate(R.layout.dialog_join_house, null);
-            final String houseName = ((EditText)view.findViewById(R.id.dialog_join_house_name)).getText().toString();
-            final String password = ((EditText)view.findViewById(R.id.dialog_join_house_password)).getText().toString();
+            final EditText houseName = ((EditText)view.findViewById(R.id.dialog_join_house_name));
+            final EditText password = ((EditText)view.findViewById(R.id.dialog_join_house_password));
 
             // Pass null as the parent view because its going in the dialog layout
             builder.setView(view)
@@ -385,14 +396,14 @@ public class UserSettingsFragment extends Fragment {
                     .setPositiveButton("Join", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            joinHouse(houseName, password);
+                            joinHouse(houseName.getText().toString(), password.getText().toString());
                         }
                     });
             return builder.create();
         }
 
         private void joinHouse(String name, String password){
-            if (new TaskHandler().joinHouse(getContext(), name, password, sessionID)) {
+            if (new TaskHandler().joinHouse(getActivity(), name, password, sessionID)) {
                 mListener.updateSettingsFragment();
             }
         }
