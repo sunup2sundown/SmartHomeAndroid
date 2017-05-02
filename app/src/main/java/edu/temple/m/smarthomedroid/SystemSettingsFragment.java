@@ -43,13 +43,13 @@ import static java.lang.Thread.sleep;
  * Created by M on 3/16/2017.
  */
 
-public class ConfigFragment extends Fragment {
+public class SystemSettingsFragment extends Fragment {
     FragmentManager fm;
     private ExpandableListView lv;
     private Button addboard;
     private JSONArray houses,peri,boards;
     private String sessionToken = "";
-    private static final String TAG = "ConfigFragment";
+    private static final String TAG = "SystemSettingsFragment";
     private Spinner spinner;
     private Bundle bundle;
     private String userID,sessionID,housename;
