@@ -27,10 +27,6 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/acc_setting" />
         <item
-            android:id="@+id/nav_system"
-            android:icon="@android:drawable/ic_menu_save"
-            android:title="@string/sys" />
-        <item
             android:id="@+id/nav_camera"
             android:icon="@android:drawable/ic_menu_camera"
             android:title="@string/camera" />

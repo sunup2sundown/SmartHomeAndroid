@@ -46,7 +46,6 @@ import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
-import edu.temple.m.smarthomedroid.Objects.House;
 
 import static java.lang.Thread.sleep;
 
@@ -243,16 +242,13 @@ public class HomeActivity extends AppCompatActivity
                 fragment = new AutomationFragment();
                 break;
             case R.id.nav_config:
-                fragment = new ConfigFragment();
+                fragment = new SystemSettingsFragment();
                 break;
             case R.id.nav_setting:
                 fragment = new UserSettingsFragment();
                 break;
             case R.id.nav_camera:
                 fragment = new CameraFragment();
-                break;
-            case R.id.nav_system:
-                fragment = new RelayFragment();
                 break;
             /*
             case R.id.nav_camera:
@@ -445,7 +441,7 @@ public class HomeActivity extends AppCompatActivity
                 finish();
                 startActivity(mIntent);
                 break;
-            case "ConfigFragment":
+            case "SystemSettingsFragment":
                 startConfigTab();
                 break;
             case "SensorFragment":
@@ -529,7 +525,7 @@ public class HomeActivity extends AppCompatActivity
     private void startConfigTab(){
         Log.d(TAG, "Starting Config tab");
         Bundle bundle = new Bundle();
-        fragment = new ConfigFragment();
+        fragment = new SystemSettingsFragment();
 
         bundle.putString("Username", userId);
         bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
@@ -885,7 +881,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void config_update() {
                 Bundle bundle = new Bundle();
-                Fragment fragment = new ConfigFragment();
+                Fragment fragment = new SystemSettingsFragment();
                 bundle.putString("Username", userId);
                 bundle.putString("SessionToken", sessionId);
                 bundle.putString("HouseName",housename_dashboard);

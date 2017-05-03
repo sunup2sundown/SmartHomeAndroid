@@ -119,6 +119,7 @@ public class SensorGraphFragment extends Fragment {
             });
         } else {
             Log.d("SensorGraphFragment", "dataIsValid == false");
+            Toast.makeText(getContext(), "There's no historical data to display.", Toast.LENGTH_SHORT).show();
         }
 //        mSeries2.resetData(generateData());
         return view;
@@ -206,7 +207,7 @@ public class SensorGraphFragment extends Fragment {
 
             Log.d("SensorGraphFragment", response);
 
-            if(response != null){
+            if(response != null && !response.equals("[[]]")){
                 try {
                     dataArray=new JSONArray(response);
                     dataArray=dataArray.getJSONArray(0);

@@ -12,9 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,20 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import edu.temple.m.smarthomedroid.Adapters.PeripheralConfigAdapter;
-import edu.temple.m.smarthomedroid.ConfigFragment;
-import edu.temple.m.smarthomedroid.Dashboard;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
-import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
-import edu.temple.m.smarthomedroid.Objects.Board;
-import edu.temple.m.smarthomedroid.Objects.Peripheral;
 import edu.temple.m.smarthomedroid.R;
 
-import static edu.temple.m.smarthomedroid.ConfigFragment.dat;
 import static java.lang.Thread.sleep;
 
 /**
