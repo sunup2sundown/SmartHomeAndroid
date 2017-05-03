@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:background="@color/colorPrimary"
     android:textColor="@android:color/black"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/item_relay_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight=".7"
         android:layout_gravity="left"
         android:text="Default Text"
         android:background="@color/colorPrimary"
@@ -17,8 +18,9 @@
 
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight=".3"
         android:layout_alignBottom="@+id/item_relay_name"
         android:layout_alignParentEnd="true"
         android:gravity="right"
@@ -27,4 +29,4 @@
         android:textOff="@string/textOFF"
         android:textOn="@string/textON" />
 
-</RelativeLayout>
+</LinearLayout>
