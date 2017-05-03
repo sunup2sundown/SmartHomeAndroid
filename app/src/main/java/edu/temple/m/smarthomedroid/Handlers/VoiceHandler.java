@@ -69,7 +69,7 @@ public class VoiceHandler {
         } else if(temp.contains("go") && (temp.contains("sensor") || temp.contains("sensors"))){
             command = "SensorFragment";
         } else if(temp.contains("go") && (temp.contains("configuration") || temp.contains("configurations"))){
-            command = "ConfigFragment";
+            command = "SystemSettingsFragment";
         } else if(temp.contains("logout") || (temp.contains("log") && temp.contains("out"))){
             command = "Logout";
         } else{
