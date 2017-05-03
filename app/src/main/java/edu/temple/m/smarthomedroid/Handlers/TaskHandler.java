@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutionException;
 
 import edu.temple.m.smarthomedroid.HomeActivity;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by M on 4/9/2017.
  */
@@ -33,6 +35,7 @@ public class TaskHandler {
     String housePassword;
     HashingHandler hashingHandler = new HashingHandler();
     JSONArray returnedArray;
+    boolean success;
 
     public void login(Context context, String username, String password){
         mContext = context;
@@ -64,23 +67,18 @@ public class TaskHandler {
         new Register().execute(jsonObject);
     }
 
-    public void createHouse(Context context, String name, String password, String session){
+    public boolean createHouse(Context context, String name, String password, String session){
+        success = false;
         mContext = context;
-
         JSONObject temp = new JSONObject();
-
         try {
             temp.put("houseName", name);
             temp.put("sessionToken", session);
         } catch(JSONException e){
             e.printStackTrace();
         }
-
         new CheckHouseNameAvailability().execute(temp);
-
-
         JSONObject jsonObject = new JSONObject();
-
         try {
             jsonObject.put("houseName", name);
             jsonObject.put("housePassword", hashingHandler.hash_pass(password));
@@ -88,16 +86,22 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new CreateHouse().execute(jsonObject);
-
+        try {
+            if (new CreateHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
-    public void joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+    public boolean joinHouse(Context context, String houseName, String housePassword, String sessionToken){
+        success = false;
         mContext = context;
-
         JSONObject jsonObject = new JSONObject();
-
         try {
             jsonObject.put("houseName", houseName);
             jsonObject.put("housePassword", hashingHandler.hash_pass(housePassword));
@@ -105,11 +109,20 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new JoinHouse().execute(jsonObject);
+        try {
+            if (new JoinHouse().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
-    public void leaveHouse(Context context, String sessionToken, String houseName){
+    public boolean leaveHouse(Context context, String sessionToken, String houseName){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -121,11 +134,22 @@ public class TaskHandler {
             e.printStackTrace();
         }
 
-        new LeaveHouse().execute(jsonObject);
+        try {
+            if (new LeaveHouse().execute(jsonObject).get().equals("\"You have left the house!\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ;
+        return success;
     }
 
-    public String changeHouseName(Context context, String oldHouseName, String housePassword,
+    public boolean changeHouseName(Context context, String oldHouseName, String housePassword,
                                 String newHouseName, String sessionToken){
+        success = false;
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -138,9 +162,16 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-
-        new ChangeHouseName().execute(jsonObject);
-        return response;
+        try {
+            if(new ChangeHouseName().execute(jsonObject).get().equals("\"Success\"")){
+                success = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
     public void changeHousePassword(Context context, String houseName, String oldHousePassword,
@@ -161,7 +192,7 @@ public class TaskHandler {
         new ChangeHousePassword().execute(jsonObject);
     }
 
-    public void changeUsername(Context context, String username, String sessionToken){
+    public boolean changeUsername(Context context, String username, String sessionToken){
         mContext = context;
 
         JSONObject jsonObject = new JSONObject();
@@ -172,7 +203,16 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
-            new ChangeUsername().execute(jsonObject);
+        try {
+            if (new ChangeUsername().execute(jsonObject).get().equals("\"Changed Username Successfully\"")){
+                return true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void changeUserPassword(Context context, String password, String sessionToken){
@@ -186,6 +226,7 @@ public class TaskHandler {
         } catch(JSONException e){
             e.printStackTrace();
         }
+        new ChangePassword().execute(jsonObject);
     }
 
     public void checkHouseAvailability(Context context, String houseName, String sessionToken){
@@ -498,7 +539,7 @@ public class TaskHandler {
         }
     }
 
-    private class ChangeUsername extends AsyncTask<JSONObject, Void, Void>{
+    private class ChangeUsername extends AsyncTask<JSONObject, Void, String>{
         String response;
 
         @Override
@@ -511,7 +552,7 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject...args){
+        protected String doInBackground(JSONObject...args){
             HttpHandler sh = new HttpHandler();
             String username = "";
             try {
@@ -532,11 +573,11 @@ public class TaskHandler {
             }
 
             Log.d("TaskHandler", "Change Username Response: " + response);
-            return null;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             super.onPostExecute(result);
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
@@ -545,7 +586,7 @@ public class TaskHandler {
         }
     }
 
-    private class ChangePassword extends AsyncTask<JSONObject, Void, Void>{
+    private class ChangePassword extends AsyncTask<JSONObject, Void, String>{
         @Override
         protected void onPreExecute(){
             //Show progress dialog
@@ -556,20 +597,25 @@ public class TaskHandler {
         }
 
         @Override
-        protected Void doInBackground(JSONObject...arg0){
+        protected String doInBackground(JSONObject...arg0){
 
             //Make a request to url and get response
             response = new HttpHandler().makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/changepassword", arg0[0]);
 
             Log.d("TaskHandler", "Change Password Response: " + response);
-            return null;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(String result){
             //Dismiss the progress dialog
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
+            if (response.equals("\"Changed Password Successfully\"")){
+                Toast.makeText(mContext, "Changed password", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "Failed to change password", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -693,11 +739,8 @@ public class TaskHandler {
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-
-            //response = "8 House credentials incorrect";
             switch(result) {
                 case "\"1 Unknown error\"":
-
                     Toast.makeText(mContext, "Unknown error", Toast.LENGTH_SHORT).show();
                     break;
                 case "\"2 User not found\"":
@@ -953,7 +996,7 @@ public class TaskHandler {
                 result = "house name unavailable";
             }
 
-            Log.d(TAG, "Create house response: " + response);
+            Log.d(TAG, "Create house response: " + result);
 
             return result;
         }
@@ -977,6 +1020,7 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name unavailable", Toast.LENGTH_SHORT).show();
                     break;
                 default:
+                    success = true;
             }
         }
     }

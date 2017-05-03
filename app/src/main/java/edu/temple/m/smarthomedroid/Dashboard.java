@@ -56,7 +56,7 @@ public class Dashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.dashboard_layout,container,false);
+        final View v = inflater.inflate(R.layout.fragment_dashboard,container,false);
         sessionId = getArguments().getString("SessionToken");
         listhouse = (Spinner)v.findViewById(R.id.listhouse);
         return v;
@@ -78,7 +78,7 @@ public class Dashboard extends Fragment {
                         mCallback.passData(housename);
                         new getRe().execute();
                         try {
-                            sleep(1800);
+                            sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
