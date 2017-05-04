@@ -148,7 +148,7 @@ public class Dashboard extends Fragment {
             }
             ArrayAdapter<String> dataAdapter;
             dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.item_spinner,list1);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            dataAdapter.setDropDownViewResource(R.layout.simpledropdown);
             listhouse.setAdapter(dataAdapter);
         }else{
             Log.d(TAG,"null");
