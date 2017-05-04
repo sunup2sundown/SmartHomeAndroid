@@ -41,5 +41,7 @@
     <string name="currentlist">Current\\nRules</string>
     <string name="your_sensors">Your Sensors</string>
     <string name="your_relays">Your Relays</string>
+    <string name="parameter">Parameter</string>
+    <string name="action_value">Action Value (If action is not none)</string>
 
 </resources>

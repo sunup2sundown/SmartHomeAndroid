@@ -42,12 +42,12 @@ public class AutomationFragment extends Fragment {
 
     private String userID,sessionID,str_rulename,houseName,str_condperi,
                     str_condname,str_actioncate,str_actionperi,
-                    str_actionname,str_actionparam,str_condval;
+                    str_actionname,str_actionparam,str_condval,str_para;
 
     private Spinner house, condperi, condname,actioncate,
                     actionperi, actionname, actionparam;
 
-    private EditText rulename, condval;
+    private EditText rulename, condval,paramet;
     private Button listrule,addrule;
     private JSONArray listhouse,condperi_list,cond_name,action_cate,actperi_list,
             action_namelist, action_param;
@@ -80,6 +80,7 @@ public class AutomationFragment extends Fragment {
         actioncate = (Spinner) view.findViewById(R.id.auto_actionperi_cate);
         listrule = (Button)view.findViewById(R.id.currentlist);
         addrule = (Button)view.findViewById(R.id.addrule);
+        paramet = (EditText) view.findViewById(R.id.para);
         return view;
     }
 
@@ -279,6 +280,10 @@ public class AutomationFragment extends Fragment {
         addrule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(str_actionparam!=null){
+                    str_actionparam=paramet.getText().toString();
+                }
+                Log.d("TESTTEST",str_actionparam);
                 str_rulename = rulename.getText().toString();
                 str_condval = condval.getText().toString();
                 if(str_rulename.isEmpty()||str_rulename==null){
