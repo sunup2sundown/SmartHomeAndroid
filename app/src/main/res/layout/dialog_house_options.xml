@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:theme="@style/AppTheme"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/dialog_header"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/appColorPrimary"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@mipmap/ic_logo" />
 
     <Button
         android:id="@+id/button_change_name"
