@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/appColorDarker"
     tools:context="edu.temple.m.smarthomedroid.LoginActivity"
-    android:backgroundTint="@color/appColorLigher">
+    android:backgroundTint="@color/appColorLighter">
 
     <ImageView
         android:id="@+id/imageView"
