@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     android:theme="@style/AppTheme"
-    android:background="@color/colorBackground"
-    android:backgroundTint="@color/colorBackground"
     android:orientation="vertical"
     android:weightSum="1">
 
