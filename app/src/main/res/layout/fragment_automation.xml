@@ -111,6 +111,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/action_value"
+        android:textColor="@color/appLightTextColor" />
+
+    <EditText
+        android:id="@+id/para"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/parameter"
+        android:inputType="textPersonName" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
