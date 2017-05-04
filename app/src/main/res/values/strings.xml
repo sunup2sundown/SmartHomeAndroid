@@ -14,7 +14,7 @@
     <string name="sensor_stt">Sensor Status</string>
     <string name="relay_stt">Relay Status and Control</string>
     <string name="automation">Automation</string>
-    <string name="configuration">Configuration</string>
+    <string name="configuration">System Settings</string>
     <string name="acc_setting">Account Settings</string>
     <string name="sys">System</string>
     <string name="log_out">Log Out</string>
@@ -39,5 +39,7 @@
     <string name="select_action">Select Action</string>
     <string name="select_cate">Select Peripheral Category</string>
     <string name="currentlist">Current\\nRules</string>
+    <string name="your_sensors">Your Sensors</string>
+    <string name="your_relays">Your Relays</string>
 
 </resources>

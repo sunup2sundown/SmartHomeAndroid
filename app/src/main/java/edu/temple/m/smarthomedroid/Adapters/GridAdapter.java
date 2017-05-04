@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.Objects.Relay2;
+import edu.temple.m.smarthomedroid.Objects.Sensor;
 import edu.temple.m.smarthomedroid.R;
 
 import static android.graphics.Color.BLACK;
@@ -23,37 +24,44 @@ import static android.graphics.Typeface.BOLD;
  * Created by quido on 4/16/17.
  */
 
-public class GridAdapter extends ArrayAdapter<Relay2> {
+public class GridAdapter<E> extends ArrayAdapter<E> {
         private Context context;
-        private boolean useList = true;
 
         /**
          * Constructor Method
          *
          * @param context
-         * @param relays
+         * @param elts
          */
-        public GridAdapter(Context context, ArrayList<Relay2> relays) {
-                super(context, android.R.layout.simple_list_item_1,relays);
+        public GridAdapter(Context context, ArrayList<E> elts) {
+                super(context, android.R.layout.simple_list_item_1,elts);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-                final Relay2 relay2 = (Relay2) getItem(position);
+                final E elt = getItem(position);
 
                 if (convertView == null) {
                         convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_relay_grid, parent, false);
                 }
                 TextView name = (TextView) convertView.findViewById(R.id.houseN);
-                name.setTextSize(25);
-                name.setTypeface(name.getTypeface(),BOLD);
+                name.setTextSize(20);
                 TextView stt = (TextView) convertView.findViewById(R.id.textView5);
-                stt.setTextSize(25);
-                name.setText(relay2.getName());
-                if (relay2.getStatus()) {
-                        stt.setText("ON");
-                } else {
-                        stt.setText("OFF");
+                stt.setTextSize(20);
+                try {
+                    if (elt instanceof Sensor) {
+                        name.setText(((Sensor) elt).getName());
+                        stt.setText(String.valueOf(((Sensor) elt).getValue()));
+                    } else if (elt instanceof Relay2) {
+                        name.setText(((Relay2) elt).getName());
+                        if (((Relay2) elt).getStatus()) {
+                            stt.setText("ON");
+                        } else {
+                            stt.setText("OFF");
+                        }
+                    }
+                } catch (ClassCastException e){
+                    e.printStackTrace();
                 }
 
                 return convertView;

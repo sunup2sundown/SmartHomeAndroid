@@ -16,9 +16,7 @@ import org.json.JSONObject;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
-import edu.temple.m.smarthomedroid.R;
 
-import static edu.temple.m.smarthomedroid.ConfigFragment.dat;
 import static java.lang.Thread.sleep;
 
 /**

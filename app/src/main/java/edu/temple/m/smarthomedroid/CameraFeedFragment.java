@@ -149,6 +149,18 @@ public class CameraFeedFragment extends Fragment {
     }
 
     private void takePicture(String url){
+        JSONObject jsonObject = new JSONObject();
+
+        try{
+            jsonObject.put("sessionToken", sessionID);
+            jsonObject.put("peripheralName", cameraName);
+            jsonObject.put("houseName", houseName);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        new TakePicture().execute(jsonObject);
+
         new DownloadImageTask(feedView).execute(url);
     }
 
@@ -238,7 +250,8 @@ public class CameraFeedFragment extends Fragment {
         }
 
         protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
+            //String urldisplay = urls[0];
+            String urldisplay = "https://s3.amazonaws.com/smart-home-gateway/test5.jpeg";
             Bitmap mIcon11 = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
