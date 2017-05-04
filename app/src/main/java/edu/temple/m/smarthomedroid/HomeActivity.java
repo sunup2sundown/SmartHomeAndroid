@@ -261,12 +261,6 @@ public class HomeActivity extends AppCompatActivity
                 finish();
                 startActivity(mIntent);
                 break;
-            case R.id.nav_share:
-                fragment = new RelayFragment();
-                break;
-            case R.id.nav_send:
-                fragment = new RelayFragment();
-                break;
             default:
 
         }
