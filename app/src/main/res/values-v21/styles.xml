@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <style name="SmartHomeTheme" parent="android:Theme.Material.NoActionBar" />
 
-    <style name="SmartHomeGatewayTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SmartHomeGatewayTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/appColorPrimary</item>
         <item name="colorPrimaryDark">@color/appColorDarker</item>
         <item name="colorAccent">@color/appColorDarkest</item>
-        <item name="android:colorBackground">@color/appColorLigher</item>
+        <item name="android:colorBackground">@color/appColorLighter</item>
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:textColorPrimaryInverse">@android:color/white</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
-        <item name="android:colorForeground">@color/colorForeground</item>
         <item name="android:navigationBarColor">@color/appColorDarkest</item>
     </style>
 </resources>

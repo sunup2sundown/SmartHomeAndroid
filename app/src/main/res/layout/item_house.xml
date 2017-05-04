@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/colorPrimary"
-    android:textColor="@android:color/black"
+    android:theme="@style/AppTheme.Item"
     android:layout_height="match_parent">
 
     <TextView
@@ -12,6 +11,5 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Default Text"
         android:background="@color/colorPrimary"
-        android:textColor="@android:color/black"
         android:layout_gravity="left"/>
 </LinearLayout>

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:backgroundTint="@color/appColorDarker"
     tools:openDrawer="start">
 
     <include
@@ -17,7 +16,7 @@
         <FrameLayout
             android:id="@+id/flContent"
             android:layout_width="match_parent"
-            android:backgroundTint="@color/appColorLigher"
+            android:backgroundTint="@color/appColorLighter"
             android:layout_height="match_parent">
         </FrameLayout>
 
@@ -30,6 +29,7 @@
         app:headerLayout="@layout/nav_header_smart_home"
         app:itemIconTint="@color/appColorDarkest"
         app:itemTextColor="@color/appColorDarkest"
+        android:backgroundTint="@color/colorPrimary"
         app:menu="@menu/activity_smart_home_drawer">
 
     </android.support.design.widget.NavigationView>

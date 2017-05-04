@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/appColorDarker"
     android:textColor="@android:color/black"
     android:layout_height="match_parent">
 
@@ -12,8 +12,6 @@
         android:layout_weight=".7"
         android:layout_gravity="left"
         android:text="Default Text"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/black"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Switch
@@ -24,8 +22,6 @@
         android:layout_alignBottom="@+id/item_relay_name"
         android:layout_alignParentEnd="true"
         android:gravity="right"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/black"
         android:textOff="@string/textOFF"
         android:textOn="@string/textON" />
 
