@@ -9,7 +9,7 @@
         android:id="@+id/dialog_header"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/appColorPrimary"
         android:contentDescription="@string/app_name"
         app:srcCompat="@mipmap/ic_logo" />
 

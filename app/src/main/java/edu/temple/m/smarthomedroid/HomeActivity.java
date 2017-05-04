@@ -420,7 +420,7 @@ public class HomeActivity extends AppCompatActivity
         if(requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK){
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            VoiceHandler vh = new VoiceHandler(getApplicationContext(), sessionId, matches);
+            VoiceHandler vh = new VoiceHandler(getApplicationContext(), housename_dashboard , sessionId, matches);
             fragmentToStart = vh.getResult();
         }
     }
@@ -449,6 +449,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case "DashboardFragment":
                 startDashboardTab();
+                break;
+            case "CameraFragment":
+                startCameraTab();
                 break;
             default:
         }
@@ -565,6 +568,29 @@ public class HomeActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
     }
+
+    private void startCameraTab(){
+        Log.d(TAG, "Starting Camera tab");
+        Bundle bundle = new Bundle();
+        fragment = new CameraFragment();
+
+        bundle.putString("Username", userId);
+        bundle.putString("SessionToken", sessionId);//This line i use token for test, for final release we pass tokenID
+        bundle.putString("HouseName",housename_dashboard);
+
+        if(fragment != null) {
+            //Set Fragment Arguments
+            fragment.setArguments(bundle);
+            //Insert the fragment by replacing any existing fragments
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, fragment);
+            fragmentTransaction.addToBackStack(null);
+
+            fragmentTransaction.commit();
+        }
+    }
+
 
             /**
      * HTTP Calls --Async Task

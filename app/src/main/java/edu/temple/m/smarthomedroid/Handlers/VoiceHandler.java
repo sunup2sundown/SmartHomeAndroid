@@ -23,17 +23,20 @@ import java.util.List;
 public class VoiceHandler {
     final String TAG = "VoiceHandler";
     JSONArray houses;
-    JSONArray relays;
+    JSONArray peripherals;
     //List<String> list1 = new ArrayList<String>();
     ArrayList<String> matches;
     Context mContext;
     String sessionToken;
     String result;
+    String currentHouse;
     ArrayList<String> houseList;
-    ArrayList<String> relayList;
+    ArrayList<String> peripheralList;
     ArrayList<String> commandList;
+    ArrayList<String> cameraList;
+    ArrayList<String> sensorList;
 
-    public VoiceHandler(Context context, String sessionToken, ArrayList<String> matches){
+    public VoiceHandler(Context context, String currentHouse, String sessionToken, ArrayList<String> matches){
         mContext = context;
         this.matches = matches;
         this.sessionToken = sessionToken;
@@ -42,7 +45,8 @@ public class VoiceHandler {
         commandList = new ArrayList<String>();
         commandList.add("off");
         commandList.add("on");
-        relayList = new ArrayList<String>();
+        peripheralList = new ArrayList<String>();
+        this.currentHouse = currentHouse;
     }
 
     private ArrayList<String> parseCommand(ArrayList<String> commandString){
@@ -53,25 +57,67 @@ public class VoiceHandler {
     }
 
 
-    public String getResult(){
-        ArrayList<String> relayName = new ArrayList<String>();
+    public String getResult() {
+        ArrayList<String> peripheralName = new ArrayList<String>();
         String command = "";
         ArrayList<String> temp = parseCommand(matches);
         int pos;
-        StringBuilder relay = new StringBuilder();
+        StringBuilder peripheral = new StringBuilder();
 
-        if(temp.contains("go") && (temp.contains("relays") || temp.contains("relay"))){
-            command = "RelayFragment";
-        } else if(temp.contains("go") && (temp.contains("settings") || temp.contains("setting"))){
-            command = "SettingsFragment";
-        } else if(temp.contains("go") && (temp.contains("dashboard") || temp.contains("dashboards"))){
-            command = "DashboardFragment";
-        } else if(temp.contains("go") && (temp.contains("sensor") || temp.contains("sensors"))){
-            command = "SensorFragment";
-        } else if(temp.contains("go") && (temp.contains("configuration") || temp.contains("configurations"))){
-            command = "SystemSettingsFragment";
-        } else if(temp.contains("logout") || (temp.contains("log") && temp.contains("out"))){
-            command = "Logout";
+        if (temp.contains("go")) {
+            if((temp.contains("relays") || temp.contains("relay"))){
+                command = "RelayFragment";
+            }else if ((temp.contains("account") || temp.contains("accounts"))) {
+                command = "SettingsFragment";
+            }else if ((temp.contains("dashboard") || temp.contains("dashboards"))) {
+                command = "DashboardFragment";
+            }else if ((temp.contains("sensor") || temp.contains("sensors"))) {
+                command = "SensorFragment";
+            }else if ((temp.contains("system") || temp.contains("systems"))) {
+                command = "SystemSettingsFragment";
+            } else if ((temp.contains("camera") || temp.contains("cameras"))) {
+                command = "CameraFragment";
+            }else if (temp.contains("logout") || (temp.contains("log") && temp.contains("out"))) {
+                command = "Logout";
+            }
+        }else if (temp.contains("show")) {
+            if(temp.contains("camera") || temp.contains("cameras")){
+                getCameraList(currentHouse);
+                pos = 3;
+                if(pos != temp.size()) {
+                    for (; pos < temp.size(); pos++) {
+                        peripheral.append(temp.get(pos));
+                        Log.d(TAG, temp.get(pos));
+                        Log.d(TAG, peripheral.toString());
+                    }
+                    Log.d(TAG, peripheralList.get(0));
+                    peripheralName.add(peripheral.toString());
+                    peripheralList.retainAll(peripheralName);
+                    if(peripheralList.size() > 0){
+                        Log.d(TAG, "Camera Command Executed");
+                    }
+                } else {
+                    //Not the right command
+                }
+            } else if(temp.contains("sensor") || temp.contains("sensors")){
+                getSensorList(currentHouse);
+                pos = 3;
+                if(pos != temp.size()) {
+                    for (; pos < temp.size(); pos++) {
+                        peripheral.append(temp.get(pos));
+                        Log.d(TAG, temp.get(pos));
+                        Log.d(TAG, peripheral.toString());
+                    }
+                    Log.d(TAG, peripheralList.get(0));
+                    peripheralName.add(peripheral.toString());
+                    peripheralList.retainAll(peripheralName);
+                    if(peripheralList.size() > 0){
+                        Log.d(TAG, "Sensor Command Executed");
+                    }
+                } else {
+                    //Not the right command
+                }
+            }
         } else{
             houseList.retainAll(temp);
             commandList.retainAll(temp);
@@ -83,20 +129,20 @@ public class VoiceHandler {
                     pos = temp.indexOf(commandList.get(0)) + 1;
                     if(pos != temp.size()) {
                         for (; pos < temp.size(); pos++) {
-                            relay.append(temp.get(pos));
+                            peripheral.append(temp.get(pos));
                             Log.d(TAG, temp.get(pos));
-                            Log.d(TAG, relay.toString());
+                            Log.d(TAG, peripheral.toString());
                         }
-                        Log.d(TAG, relayList.get(0));
-                        relayName.add(relay.toString());
-                        relayList.retainAll(relayName);
-                        if(relayList.size() > 0){
+                        Log.d(TAG, peripheralList.get(0));
+                        peripheralName.add(peripheral.toString());
+                        peripheralList.retainAll(peripheralName);
+                        if(peripheralList.size() > 0){
                             if(commandList.get(0).contentEquals("off")){
-                                Log.d(TAG, "Turning off " + houseList.get(0) + "'s " + relayList.get(0));
-                                new TaskHandler().setRelayStatus(mContext, sessionToken, relayList.get(0), houseList.get(0), "0");
+                                Log.d(TAG, "Turning off " + houseList.get(0) + "'s " + peripheralList.get(0));
+                                new TaskHandler().setRelayStatus(mContext, sessionToken, peripheralList.get(0), houseList.get(0), "0");
                             } else {
-                                Log.d(TAG, "Turning on " + houseList.get(0) + "'s " + relayList.get(0));
-                                new TaskHandler().setRelayStatus(mContext, sessionToken, relayList.get(0), houseList.get(0), "1");
+                                Log.d(TAG, "Turning on " + houseList.get(0) + "'s " + peripheralList.get(0));
+                                new TaskHandler().setRelayStatus(mContext, sessionToken, peripheralList.get(0), houseList.get(0), "1");
                             }
                         }
                     } else {
@@ -130,18 +176,61 @@ public class VoiceHandler {
         }
     }
 
-    private void getRelayList(String houseName){
-        new GetRelayByHouse().execute(houseName);
+    private void getCameraList(String houseName){
+        JSONArray responseArray = new TaskHandler().getCurrentCameraByHouse(mContext, sessionToken, houseName);
 
-        while(relays == null){
+        while(responseArray == null){
+
+        }
+        try {
+            peripherals = responseArray.getJSONArray(0);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        if (peripherals!=null) {
+            int i = 0;
+            for (; i < peripherals.length(); i++) {
+                try {
+                    peripheralList.add(peripherals.getJSONObject(i).getString("PeripheralName"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void getSensorList(String houseName){
+        new GetSensorsByHouse().execute();
+
+        while(peripherals == null){
             //Nothing
         }
 
-        if (relays!=null) {
+        if (peripherals!=null) {
             int i = 0;
-            for (; i < relays.length(); i++) {
+            for (; i < peripherals.length(); i++) {
                 try {
-                    relayList.add(relays.getJSONObject(i).getString("PeripheralName"));
+                    peripheralList.add(peripherals.getJSONObject(i).getString("PeripheralName"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void getRelayList(String houseName){
+        new GetRelayByHouse().execute(houseName);
+
+        while(peripherals == null){
+            //Nothing
+        }
+
+        if (peripherals!=null) {
+            int i = 0;
+            for (; i < peripherals.length(); i++) {
+                try {
+                    peripheralList.add(peripherals.getJSONObject(i).getString("PeripheralName"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -209,7 +298,53 @@ public class VoiceHandler {
             if(resp != null){
                 try {
                     responseArray = new JSONArray(resp);
-                    relays=responseArray.getJSONArray(0);
+                    peripherals=responseArray.getJSONArray(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+        }
+    }
+
+    private class GetSensorsByHouse extends AsyncTask<Void, Void, Void> {
+        JSONObject json = new JSONObject();
+        String house = currentHouse;
+        String session = sessionToken;
+        String resp;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            if(house != null && session != null) {
+                try {
+                    json.put("houseName", house);
+                    json.put("sessionToken", session);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            JSONArray responseArray = new JSONArray();
+            HttpHandler sh = new HttpHandler();
+
+            //Make a request to url and get response
+            resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/sensor/getsensorvaluesbyhouse", json);
+
+            if(resp != null){
+                try {
+                    responseArray = new JSONArray(resp);
+                    peripherals=responseArray.getJSONArray(0);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

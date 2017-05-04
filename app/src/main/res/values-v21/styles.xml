@@ -2,4 +2,18 @@
 <resources>
 
     <style name="SmartHomeTheme" parent="android:Theme.Material.NoActionBar" />
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/appColorPrimary</item>
+        <item name="colorPrimaryDark">@color/appColorDarker</item>
+        <item name="colorAccent">@color/appColorDarkest</item>
+        <item name="android:colorBackground">@color/appColorLigher</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:textColorPrimaryInverse">@android:color/white</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <item name="android:colorForeground">@color/colorForeground</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+    </style>
 </resources>
