@@ -3,7 +3,7 @@
 
     <style name="SmartHomeTheme" parent="android:Theme.Material.NoActionBar" />
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SmartHomeGatewayTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/appColorPrimary</item>
         <item name="colorPrimaryDark">@color/appColorDarker</item>
@@ -14,6 +14,6 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
         <item name="android:colorForeground">@color/colorForeground</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:navigationBarColor">@color/appColorDarkest</item>
     </style>
 </resources>

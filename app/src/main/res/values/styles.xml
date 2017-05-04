@@ -24,7 +24,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-    <style name="SmartHomeGatewayTheme" parent="Theme.AppCompat.NoActionBar" >
+    <style name="SmartHomeGateway" parent="Theme.AppCompat.NoActionBar" >
         <item name="colorAccent">@color/accent_material_dark_1</item>
         <item name="android:textColorPrimary">@color/primary_text_material_dark</item>
     </style>

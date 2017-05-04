@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:backgroundTint="@color/appColorPrimary"
+    android:backgroundTint="@color/appColorDarker"
     tools:openDrawer="start">
 
     <include
@@ -28,8 +28,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_smart_home"
-        app:itemIconTint="@android:color/background_light"
-        app:itemTextColor="@android:color/primary_text_dark"
+        app:itemIconTint="@color/appColorDarkest"
+        app:itemTextColor="@color/appColorDarkest"
         app:menu="@menu/activity_smart_home_drawer">
 
     </android.support.design.widget.NavigationView>
