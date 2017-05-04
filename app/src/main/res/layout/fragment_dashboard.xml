@@ -63,7 +63,7 @@
         android:background="@color/appColorDarker"
         android:gravity="center_horizontal"
         android:text="@string/your_sensors"
-        android:textColor="#000000" />
+        />
 
     <TextView
         android:id="@+id/textView14"
