@@ -35,20 +35,4 @@
             android:icon="@android:drawable/btn_dialog"
             android:title="@string/log_out" />
     </group>
-
-    <item
-        android:id="@+id/commu"
-        android:title="@string/comm">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/send" />
-        </menu>
-    </item>
-
 </menu>
