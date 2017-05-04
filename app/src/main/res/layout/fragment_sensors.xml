@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+
     android:theme="@style/AppTheme"
+    android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:layout_height="match_parent">
+    android:background="@color/appColorLigher"
+    android:backgroundTint="@color/appColorLigher"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/fragment_sensors_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:divider="@android:drawable/bottom_bar"
+        android:background="@color/appColorDarker"
+        android:divider="@color/appDarkTextColor"
         android:dividerHeight="10dp" />
 
     <TextView
