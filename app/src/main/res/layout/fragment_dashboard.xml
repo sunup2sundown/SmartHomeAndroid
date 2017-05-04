@@ -7,8 +7,7 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:backgroundTint="@color/colorBackground"
+    android:background="@color/appColorLigher"
     android:foregroundGravity="center_horizontal"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -22,7 +21,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
         android:layout_marginTop="25dp"
-        android:background="@color/colorBackground"
         android:foregroundGravity="center_horizontal"
         android:gravity="center_horizontal"
         android:textAlignment="center" />
@@ -30,10 +28,10 @@
         android:id="@+id/sensors_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorBackground"
-        android:backgroundTint="@color/colorBackground"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="12dp"
+        android:background="@color/appColorLigher"
+        android:backgroundTint="@color/appColorLigher"
+        android:divider="@android:color/black"
+        android:dividerHeight="6dp"
         android:layout_below="@+id/listhouse"
         android:layout_alignParentStart="true"
         android:layout_marginTop="?attr/actionBarSize" />
@@ -43,10 +41,10 @@
         android:id="@+id/relays_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorBackground"
-        android:backgroundTint="@color/colorBackground"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="12dp"
+        android:background="@color/appColorLigher"
+        android:backgroundTint="@color/appColorLigher"
+        android:divider="@android:color/black"
+        android:dividerHeight="6dp"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_below="@+id/sensors_view"
         android:layout_alignParentStart="true" />
@@ -57,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/listhouse"
         android:layout_centerHorizontal="true"
+        android:textColor="#000000"
         android:layout_marginTop="33dp"
         android:text="@string/your_sensors" />
 
@@ -67,6 +66,7 @@
         android:layout_below="@+id/sensors_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
+        android:textColor="#000000"
         android:text="@string/your_relays" />
 
 </RelativeLayout>
