@@ -167,7 +167,7 @@ public class SystemSettingsFragment extends Fragment {
                             }
                         }
                     }
-    public void onNothingSelected(AdapterView<?> parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
         addboard.setOnClickListener(new View.OnClickListener() {

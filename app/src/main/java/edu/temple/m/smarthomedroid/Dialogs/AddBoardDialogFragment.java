@@ -57,7 +57,7 @@ public class AddBoardDialogFragment extends DialogFragment {
                                 ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).toString();
                         new add_board(sessionID,housename,boardName,boardSerialNo).execute();
                         try {
-                            sleep(1600);
+                            sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -104,6 +104,9 @@ public class AddBoardDialogFragment extends DialogFragment {
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String checkname=sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", check);
+            if(checkname!=null){
+                Log.d("AHHHHHHHHH ",checkname);
+            }
             if(checkname.equalsIgnoreCase("1")){
                 String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", jsonObject);
                 if (resp != null) {
