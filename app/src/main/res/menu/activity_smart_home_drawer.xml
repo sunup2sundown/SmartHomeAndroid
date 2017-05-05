@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/AppTheme">
+
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/menu_nav_dashboard">
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/dashboard" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/menu_nav_peripherals">
         <item
             android:id="@+id/nav_sensor"
             android:icon="@android:drawable/ic_menu_mylocation"
-            android:title="@string/sensor_stt" />
+            android:title="Sensors" />
         <item
             android:id="@+id/nav_relay"
             android:icon="@android:drawable/ic_lock_idle_alarm"
-            android:title="@string/relay_stt" />
+            android:title="Relays" />
         <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="Cameras" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/nav_menu_settings">
+        <item
+
             android:id="@+id/nav_autom"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="@string/automation" />
@@ -26,10 +43,10 @@
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/acc_setting" />
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@android:drawable/ic_menu_camera"
-            android:title="@string/camera" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/nav_menu_other">
         <item
             android:id="@+id/nav_logout"
             android:icon="@android:drawable/btn_dialog"
