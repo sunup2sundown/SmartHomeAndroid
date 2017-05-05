@@ -52,9 +52,9 @@ public class AddBoardDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String boardName =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).toString();
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).getText().toString();
                         String boardSerialNo =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).toString();
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).getText().toString();
                         new add_board(sessionID,housename,boardName,boardSerialNo).execute();
                         try {
                             sleep(1600);
@@ -99,10 +99,12 @@ public class AddBoardDialogFragment extends DialogFragment {
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
+            Log.d(TAG, sessionID + "\n" + housename + "\n" + boardname);
         }
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
+
             String checkname=sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", check);
             if(checkname.equalsIgnoreCase("1")){
                 String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", jsonObject);

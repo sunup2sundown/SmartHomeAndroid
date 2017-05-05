@@ -1,6 +1,7 @@
 package edu.temple.m.smarthomedroid.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import edu.temple.m.smarthomedroid.R;
  */
 
 public class RelayAdapter extends ArrayAdapter<Relay> {
+    private final String TAG = "RelayAdapter";
     String sessionToken;
 
     /**
@@ -54,6 +56,7 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
         stt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d(TAG, "Changed!");
                     if (isChecked) {
                         try {
                             relay.switchOn();
@@ -61,14 +64,12 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new TaskHandler().setRelayStatus(getContext(), sessionToken, relay.getName(), relay.getHouseName(), "1");
                     } else {
                         try {
                             relay.switchOff();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new TaskHandler().setRelayStatus(getContext(), sessionToken, relay.getName(), relay.getHouseName(), "0");
                     }
                 }
             });

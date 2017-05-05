@@ -47,12 +47,7 @@
         android:dividerHeight="6dp"
         android:layout_below="@+id/listhouse"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/listhouse"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/appColorLightest"
-        android:backgroundTint="@color/appColorLightest"
-        android:divider="@android:color/black"
-        android:dividerHeight="6dp" />
+        android:layout_marginTop="?attr/actionBarSize" />
 
 
     <ListView
@@ -65,11 +60,7 @@
         android:divider="@android:color/black"
         android:dividerHeight="6dp"
         android:layout_below="@+id/sensors_view"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:background="@color/appColorLightest"
-        android:backgroundTint="@color/appColorLightest"
-        android:divider="@android:color/black"
-        android:dividerHeight="6dp" />
+        android:layout_marginTop="?attr/actionBarSize" />
 
     <TextView
         android:id="@+id/textView13"

@@ -405,7 +405,6 @@ private class getboard extends AsyncTask<Void, Void, Void> {
             //Make a request to url and get response
             String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/getcurrentperipheralsbyhouse", jsonObject);
             if(resp != null){
-                Log.d(TAG, "Get peripherals: " + resp);
                 try {
                     ii = new JSONArray(resp);
                     peri=ii.getJSONArray(0);
