@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-
-    android:theme="@style/AppTheme"
-    android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLighter"
+    android:background="@color/appColorLightest"
+    android:layout_height="match_parent">
     android:backgroundTint="@color/appColorLighter"
     android:orientation="vertical">
 
@@ -14,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:background="@color/appColorDarker"
-        android:divider="@color/appDarkTextColor"
+        android:divider="@android:drawable/bottom_bar"
         android:dividerHeight="10dp" />
 
     <TextView
