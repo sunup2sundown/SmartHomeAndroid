@@ -1,6 +1,10 @@
 package edu.temple.m.smarthomedroid.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +18,10 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
+import edu.temple.m.smarthomedroid.HomeActivity;
 import edu.temple.m.smarthomedroid.Objects.Relay;
 import edu.temple.m.smarthomedroid.R;
+import edu.temple.m.smarthomedroid.SensorGraphFragment;
 
 
 /**
@@ -75,8 +81,29 @@ public class RelayAdapter extends ArrayAdapter<Relay> {
         TextView tvName = (TextView)convertView.findViewById(R.id.item_relay_name);
 
         tvName.setText(relay.getName());
+        final String name = relay.getName();
+        final String houseName = relay.getHouseName();
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Log.d("RelayAdapter", "Clicked Relay: " + name);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("SessionToken", sessionToken);
+                bundle.putString("HouseName", houseName);
+                bundle.putString("PeripheralName", name);
+
+                Fragment fragment = new SensorGraphFragment();
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = ((HomeActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContent, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         return convertView;
     }
+
 
 }

@@ -25,6 +25,11 @@ public class ChangeHousePasswordDialogFragment extends DialogFragment {
     public interface Listener{
         void onChangeHousePasswordDialogPositiveClick(String housename, DialogFragment d, String sessionToken);
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
 
     public static ChangeHousePasswordDialogFragment newInstance(String houseName, String sessionToken) {
         ChangeHousePasswordDialogFragment frag = new ChangeHousePasswordDialogFragment();
