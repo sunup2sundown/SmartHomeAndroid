@@ -26,6 +26,11 @@ public class ChangePasswordDialogFragment extends DialogFragment{
         public void onChangePasswordDialogPositiveClick(DialogFragment dialog);
         public void onChangePasswordDialogNegativeClick(DialogFragment dialog);
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
 
     //Override the Fragment.onAttach method to instantiate listener
     @Override

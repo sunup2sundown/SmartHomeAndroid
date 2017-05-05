@@ -3,7 +3,9 @@ package edu.temple.m.smarthomedroid;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import edu.temple.m.smarthomedroid.Adapters.RelayAdapter;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler2;
 import edu.temple.m.smarthomedroid.Objects.Relay;
+import edu.temple.m.smarthomedroid.Objects.Sensor;
 
 import static java.lang.Thread.sleep;
 
@@ -105,6 +108,28 @@ public class RelayFragment extends ListFragment implements AdapterView.OnItemCli
         }
         ListView lv = (ListView)getView().findViewById(R.id.fragment_relay_listview);
         lv.setAdapter(rAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object object = parent.getItemAtPosition(position);
+                Relay relay = (Relay)object;
+                String name = relay.getName();
+
+                Log.d(TAG, "Clicked Relay: " + name);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("SessionToken", sessionID);
+                bundle.putString("HouseName", houseName);
+                bundle.putString("PeripheralName", name);
+
+                Fragment fragment = new SensorGraphFragment();
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContent, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
     @Override
