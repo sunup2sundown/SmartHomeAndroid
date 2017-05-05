@@ -3,19 +3,18 @@
     <color name="colorPrimary">#c0c2c4</color>
     <color name="colorPrimaryDark">#404142</color>
     <color name="colorAccent">#808283</color>
-    <color name="colorBackground">#FF303030</color>
+    <color name="colorBackground">@color/appColorLighter</color>
     <color name="accent_material_dark_1">#40c4ff</color>
     <color name="primary_text_material_dark">#d1d1d1</color>
 
     <color name="appColorPrimary">#3ad7ff</color>
     <color name="appColorDarker">#00b8e6</color>
     <color name="appColorDarkest">#007a99</color>
-    <color name="appColorLigher">#80e5ff</color>
+    <color name="appColorLighter">#80e5ff</color>
     <color name="appColorLightest">#ccf5ff</color>
 
     <color name="appLightTextColor">#FFFFFF</color>
     <color name="appDarkTextColor">#000000</color>
-    <color name="textColorSecondary">#333333</color>
+    <color name="textColorSecondary">#555555</color>
     <color name="textColorSecondaryInverse">#DDDDDD</color>
-    <color name="colorForeground">#252525</color>
 </resources>

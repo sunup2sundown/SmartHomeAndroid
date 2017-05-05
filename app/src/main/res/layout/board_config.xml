@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="@color/primary_text_material_dark"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_toStartOf="@+id/config_quantity" />
