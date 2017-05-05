@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#C0C2C4</color>
-    <color name="colorPrimaryDark">#404142</color>
-    <color name="colorAccent">#808283</color>
-    <color name="colorBackground">@color/appColorLighter</color>
+    <color name="colorPrimary">@color/appColorPrimary</color>
+    <color name="colorPrimaryDark">@color/appColorDarker</color>
+    <color name="colorAccent">@color/appColorDarkest</color>
+    <color name="colorBackground">@color/appColorLightest</color>
     <color name="accent_material_dark_1">#40c4ff</color>
     <color name="primary_text_material_dark">#d1d1d1</color>
 

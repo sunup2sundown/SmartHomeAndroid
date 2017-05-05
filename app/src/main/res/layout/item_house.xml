@@ -10,6 +10,5 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Default Text"
-        android:background="@color/colorPrimary"
         android:layout_gravity="left"/>
 </LinearLayout>

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="60dp"
+    android:background="@color/appColorLightest"
     android:orientation="vertical">
 
     <TextView
@@ -13,8 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="Available Houses: "
-        android:textAlignment="center"
-        android:textColor="@android:color/background_light" />
+        android:textAlignment="center" />
 
     <Spinner
         android:id="@+id/auto_house_spinner"
@@ -37,8 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/select_condiperi"
-        android:textColor="@android:color/background_light" />
+        android:text="@string/select_condiperi" />
 
     <Spinner
         android:id="@+id/auto_condiperiname"
@@ -50,8 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/select_condition"
-        android:textColor="@android:color/background_light" />
+        android:text="@string/select_condition" />
 
     <Spinner
         android:id="@+id/auto_conditioname"
@@ -71,8 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/select_cate"
-        android:textColor="@android:color/background_light" />
+        android:text="@string/select_cate" />
 
     <Spinner
         android:id="@+id/auto_actionperi_cate"
@@ -84,8 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/select_actionperi"
-        android:textColor="@android:color/background_light" />
+        android:text="@string/select_actionperi" />
 
     <Spinner
         android:id="@+id/auto_actionperi"
@@ -97,8 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/select_action"
-        android:textColor="@android:color/background_light" />
+        android:text="@string/select_action" />
 
     <Spinner
         android:id="@+id/auto_actionname"

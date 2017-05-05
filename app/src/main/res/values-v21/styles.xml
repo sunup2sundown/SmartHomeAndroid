@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/appColorPrimary</item>
         <item name="colorPrimaryDark">@color/appColorDarker</item>
         <item name="colorAccent">@color/appColorDarkest</item>
+        
         <item name="android:statusBarColor">@color/appColorDarker</item>
         <item name="android:navigationBarColor">@color/appColorDarkest</item>
         <item name="android:colorBackground">@color/appColorLightest</item>

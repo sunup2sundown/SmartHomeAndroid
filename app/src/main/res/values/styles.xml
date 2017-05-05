@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/appColorPrimary</item>
         <item name="colorPrimaryDark">@color/appColorDarker</item>
         <item name="colorAccent">@color/appColorDarkest</item>
+        <item name="android:background">@color/appColorLightest</item>
         <item name="android:colorBackground">@color/appColorLightest</item>
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:textColorPrimaryInverse">@android:color/white</item>
@@ -18,7 +19,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:colorBackground">@color/appColorPrimary</item>
 
     </style>

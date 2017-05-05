@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
+    android:background="@color/appColorLightest"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -37,7 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/house_list_config_text"
-        android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp" />
