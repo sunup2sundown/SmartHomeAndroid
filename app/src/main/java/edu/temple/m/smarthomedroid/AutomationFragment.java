@@ -37,17 +37,18 @@ import static java.lang.Thread.sleep;
 
 public class AutomationFragment extends Fragment {
     Bundle bundle;
-    private int done,gooduser;
+    private int done,gooduser,goodrule;
     private final String TAG = "AutomationFragment";
 
     private String userID,sessionID,str_rulename,houseName,str_condperi,
                     str_condname,str_actioncate,str_actionperi,
-                    str_actionname,str_actionparam,str_condval;
+                    str_actionname,str_actionparam,str_condval,str_para
+                    ,str_error;
 
     private Spinner house, condperi, condname,actioncate,
                     actionperi, actionname, actionparam;
 
-    private EditText rulename, condval;
+    private EditText rulename, condval,paramet;
     private Button listrule,addrule;
     private JSONArray listhouse,condperi_list,cond_name,action_cate,actperi_list,
             action_namelist, action_param;
@@ -63,6 +64,7 @@ public class AutomationFragment extends Fragment {
         gooduser=1;
         bundle = new Bundle();
         done=0;
+        goodrule=0;
         str_rulename="";
         str_condval="";
         //Receive argument bundle from Home Activity
@@ -80,6 +82,7 @@ public class AutomationFragment extends Fragment {
         actioncate = (Spinner) view.findViewById(R.id.auto_actionperi_cate);
         listrule = (Button)view.findViewById(R.id.currentlist);
         addrule = (Button)view.findViewById(R.id.addrule);
+        paramet = (EditText) view.findViewById(R.id.para);
         return view;
     }
 
@@ -279,6 +282,9 @@ public class AutomationFragment extends Fragment {
         addrule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(str_actionparam!=null){
+                    str_actionparam=paramet.getText().toString();
+                }
                 str_rulename = rulename.getText().toString();
                 str_condval = condval.getText().toString();
                 if(str_rulename.isEmpty()||str_rulename==null){
@@ -298,7 +304,12 @@ public class AutomationFragment extends Fragment {
                     if(gooduser==0){
                         Toast.makeText(getActivity(),"Invalid Rule name, please try again!", Toast.LENGTH_LONG).show();
                     }else{
-                        Toast.makeText(getActivity(),"Rule added successfully!", Toast.LENGTH_LONG).show();
+                        if(goodrule==1){
+                            Toast.makeText(getActivity(),"Rule added successfully!", Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(getActivity(),"Error: "+str_error, Toast.LENGTH_LONG).show();
+                        }
+
                     }
                 }
             }
@@ -617,6 +628,12 @@ public class AutomationFragment extends Fragment {
                 String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/createautomationrule", jsonObject);
                 if (resp != null) {
                     Log.d("addrule resp: ",resp);
+                    if(resp.equals("[]")){
+                        goodrule=1;
+                    }else{
+                        goodrule=0;
+                        str_error=resp;
+                    }
                 }
             }else{
                 gooduser=0;

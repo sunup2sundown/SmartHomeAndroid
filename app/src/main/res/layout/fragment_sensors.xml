@@ -5,6 +5,8 @@
     android:layout_marginTop="?attr/actionBarSize"
     android:background="@color/appColorLightest"
     android:layout_height="match_parent">
+    android:backgroundTint="@color/appColorLighter"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/fragment_sensors_listview"
