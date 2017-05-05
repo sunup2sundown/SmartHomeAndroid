@@ -7,10 +7,11 @@
         android:id="@+id/config_board_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/config_quantity"
         android:text="TextView"
+        android:textColor="@color/textColorSecondary"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_toStartOf="@+id/config_quantity" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/config_quantity"
@@ -18,5 +19,5 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/config_board_name"
         android:layout_alignParentEnd="true"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@color/textColorSecondary" />
 </RelativeLayout>

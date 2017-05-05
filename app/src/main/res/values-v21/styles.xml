@@ -11,18 +11,12 @@
         <item name="colorPrimary">@color/appColorPrimary</item>
         <item name="colorPrimaryDark">@color/appColorDarker</item>
         <item name="colorAccent">@color/appColorDarkest</item>
-
         <item name="android:statusBarColor">@color/appColorDarker</item>
         <item name="android:navigationBarColor">@color/appColorDarkest</item>
         <item name="android:colorBackground">@color/appColorLightest</item>
-        <item name="android:windowBackground">@color/appColorLightest</item>
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:textColorPrimaryInverse">@android:color/white</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
-    </style>
-
-    <style name="AppTheme.Dialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@color/appColorLightest</item>
     </style>
 </resources>

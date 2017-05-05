@@ -14,6 +14,8 @@ import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.NotifySettingsFragmentListener;
 import edu.temple.m.smarthomedroid.R;
 
+import static edu.temple.m.smarthomedroid.UserSettingsFragment.mpass;
+
 /**
  * Created by M on 4/9/2017.
  */
@@ -79,7 +81,10 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
 
     private void changeHouseName(String oldName, String password, String newName){
         if(new TaskHandler().changeHouseName(getContext(), oldName, password, newName, sessionID)){
+            mpass.msg("House's Name Changed Successfully!");
             mListener.updateSettingsFragment();
+        }else{
+            mpass.msg("Failed, please try again!");
         }
     }
 }

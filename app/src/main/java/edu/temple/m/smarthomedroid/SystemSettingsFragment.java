@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
@@ -59,6 +60,15 @@ public class SystemSettingsFragment extends Fragment {
     HashMap<Board,List<Peripheral>> perilist;
     private PeripheralConfigAdapter rAdapter;
     private int done=0;
+    public static maketoast2 mpass2;
+    public interface maketoast2{
+        public void msg2(String m);
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mpass2 = (maketoast2) context;
+    }
     private synchronized void setdone(int n){
         this.done = n;
     }
@@ -167,7 +177,7 @@ public class SystemSettingsFragment extends Fragment {
                             }
                         }
                     }
-    public void onNothingSelected(AdapterView<?> parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
         addboard.setOnClickListener(new View.OnClickListener() {

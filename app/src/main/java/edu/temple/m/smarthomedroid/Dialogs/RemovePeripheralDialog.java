@@ -18,6 +18,7 @@ import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
 
+import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
 import static java.lang.Thread.sleep;
 
 /**
@@ -26,6 +27,7 @@ import static java.lang.Thread.sleep;
 
 public class RemovePeripheralDialog extends DialogFragment {
     private String periname,sessionID,housename;
+    private String error=" ";
     private final String TAG = "ChangeBoardDialog";
     private EditText username, password;
     private refresh update;
@@ -66,8 +68,14 @@ public class RemovePeripheralDialog extends DialogFragment {
                             }
                         }
                         setdone(0);
-                        RemovePeripheralDialog.this.getDialog().cancel();
-                        update.config_update();
+                        if(error.equals("no")){
+                            mpass2.msg2("Removed peripheral successfully!");
+                            RemovePeripheralDialog.this.getDialog().cancel();
+                            update.config_update();
+                        }else{
+                            mpass2.msg2(error);
+                            RemovePeripheralDialog.this.getDialog().cancel();
+                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener(){
@@ -106,6 +114,13 @@ public class RemovePeripheralDialog extends DialogFragment {
                 String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/removeperipheral", jsonObject);
                 if (resp != null) {
                     Log.d(TAG, "remove : " + resp);
+                    if(resp.equals("\"Successfully removed peripheral\"")){
+                        error="no";
+                    }else{
+                        error=resp;
+                    }
+                }else{
+                    error="Failed, please try again!";
                 }
             setdone(1);
             return null;

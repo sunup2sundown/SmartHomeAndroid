@@ -10,11 +10,15 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
+
+import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
 
 /**
  * Created by Matthew White on 3/17/2017.
@@ -22,6 +26,8 @@ import edu.temple.m.smarthomedroid.R;
 
 public class ChangeBoardNameDialogFragment extends DialogFragment {
     private String newboard,oldboard,sessionID,housename;
+    private String check_name=" ";
+    private String error=" ";
     private final String TAG = "ChangeBoardDialog";
     private EditText username, password;
     private refresh update;
@@ -67,7 +73,16 @@ public class ChangeBoardNameDialogFragment extends DialogFragment {
                         }
                         setdone(0);
                         ChangeBoardNameDialogFragment.this.getDialog().cancel();
-                        update.config_update();
+                        if(check_name.equals("name")){
+                            mpass2.msg2("New name is invalid, please try again!");
+                        }else{
+                            if(error.equals("yes")){
+                                mpass2.msg2("Failed, please try again!");
+                            }else if(error.equals("no")){
+                                mpass2.msg2("Renamed board!");
+                                update.config_update();
+                            }
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
@@ -86,7 +101,8 @@ public class ChangeBoardNameDialogFragment extends DialogFragment {
         String housena = housename;
         String old = oldboard;
         String newb = newboard;
-
+        String resp2;
+        String resp;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -108,21 +124,30 @@ public class ChangeBoardNameDialogFragment extends DialogFragment {
             //Make a request to url and get response
             Log.d(TAG, "object : " + jsonObject.toString());
             Log.d(TAG, "object2 : " + jsonObject2.toString());
-            String resp2 = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", jsonObject2);
+            resp2 = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", jsonObject2);
             if(resp2.equals("1")) {
-                String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/changeboardname", jsonObject);
+                resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/changeboardname", jsonObject);
                 if (resp != null) {
                     Log.d(TAG, "changeboard : " + resp);
+                    if(resp.equals("\"0 No Errors\"")){
+                        error="no";
+                    }else{
+                        error="yes";
+                    }
+                }else{
+                    error="yes";
                 }
+                setdone(1);
+                return null;
             }else {
+                check_name="name";
+                setdone(1);
+                return null;
             }
-            setdone(1);
-            return null;
         }
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
         }
     }
 }

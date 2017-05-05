@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLightest"
+    android:layout_marginTop="60dp"
+    android:background="@color/appColorLighter"
     android:orientation="vertical">
 
     <ListView
         android:id="@+id/fragment_relay_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:clickable="true"
-        android:divider="@android:drawable/bottom_bar"
+        android:background="@color/appColorLighter"
+        android:divider="@color/appDarkTextColor"
         android:dividerHeight="10dp"></ListView>
 
     <TextView

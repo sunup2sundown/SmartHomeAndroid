@@ -60,6 +60,8 @@ public class HomeActivity extends AppCompatActivity
         , NotifySettingsFragmentListener
         , DataPassListener
         , refresh
+        , UserSettingsFragment.maketoast
+        , SystemSettingsFragment.maketoast2
         {
     private Fragment fragment;
     private final String TAG = "HomeActivity";
@@ -316,9 +318,11 @@ public class HomeActivity extends AppCompatActivity
         EditText name = (EditText) dialog.getDialog().findViewById(R.id.change_username_dialog_username);
         if (new TaskHandler().changeUsername(this, name.getText().toString(), sessionId)) {
             userId = name.getText().toString();
+            Toast.makeText(dialog.getContext(),"Username is changed!", Toast.LENGTH_LONG).show();
             Log.d("changeUsername", "true");
             updateSettingsFragment();
         } else {
+            Toast.makeText(dialog.getContext(),"Failed, please try again!", Toast.LENGTH_LONG).show();
             Log.d("changeUsername", "false");
         }
     }
@@ -584,6 +588,16 @@ public class HomeActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
     }
+
+            @Override
+            public void msg(String m) {
+                Toast.makeText(getApplicationContext(),m,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void msg2(String m) {
+                Toast.makeText(getApplicationContext(),m,Toast.LENGTH_LONG).show();
+            }
 
 
             /**

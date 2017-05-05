@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appColorDarker"
+    android:background="@color/appColorLighter"
     android:orientation="horizontal"
     android:textColor="@android:color/black">
 
@@ -12,8 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_weight=".7"
+        android:background="@color/appColorLighter"
         android:text="Default Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="14sp" />
 
     <Switch
         android:id="@+id/switch1"
@@ -22,6 +24,7 @@
         android:layout_alignBottom="@+id/item_relay_name"
         android:layout_alignParentEnd="true"
         android:layout_weight=".3"
+        android:background="@color/appColorLighter"
         android:gravity="right"
         android:textOff="@string/textOFF"
         android:textOn="@string/textON" />

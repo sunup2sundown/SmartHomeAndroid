@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -54,6 +55,17 @@ public class UserSettingsFragment extends Fragment {
     private ArrayList<House> houseList;
     private String response;
     HouseAdapter rAdapter;
+    public static maketoast mpass;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mpass = (maketoast) context;
+    }
+
+    public interface maketoast{
+        public void msg(String m);
+    }
 
     public ArrayList<House> getHouseList(){
         return houseList;
@@ -345,10 +357,11 @@ public class UserSettingsFragment extends Fragment {
         private void createHouse(String name, String password) {
             Log.d("UserSettingsFragment", "createHouse");
             if (new TaskHandler().createHouse(getContext(), name, password, sessionID)) {
-                Log.d("UserSettingsFragment", "createHouse returned true");
+                mpass.msg("House Created Successfully!");
                 mListener.updateSettingsFragment();
             } else {
-                Log.d("UserSettingsFragment", "createHouse returned false");
+                mpass.msg("Failed, please try again!");
+                //Log.d("UserSettingsFragment", "createHouse returned false");
             }
         }
     }
@@ -404,7 +417,10 @@ public class UserSettingsFragment extends Fragment {
 
         private void joinHouse(String name, String password){
             if (new TaskHandler().joinHouse(getActivity(), name, password, sessionID)) {
+                mpass.msg("Joined House Successfully!");
                 mListener.updateSettingsFragment();
+            }else{
+                mpass.msg("Failed, Please Try Again!");
             }
         }
     }
