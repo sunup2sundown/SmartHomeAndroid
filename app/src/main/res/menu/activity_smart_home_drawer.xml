@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme.Item">
 
     <group
-        android:checkableBehavior="single"
-        android:id="@+id/menu_nav_dashboard">
+        android:id="@+id/menu_nav_dashboard"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/dashboard" />
     </group>
     <group
-        android:checkableBehavior="single"
-        android:id="@+id/menu_nav_peripherals">
+        android:id="@+id/menu_nav_peripherals"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_sensor"
             android:icon="@android:drawable/ic_menu_mylocation"
@@ -28,8 +28,8 @@
             android:title="Cameras" />
     </group>
     <group
-        android:checkableBehavior="single"
-        android:id="@+id/nav_menu_settings">
+        android:id="@+id/nav_menu_settings"
+        android:checkableBehavior="single">
         <item
 
             android:id="@+id/nav_autom"
@@ -45,8 +45,8 @@
             android:title="@string/acc_setting" />
     </group>
     <group
-        android:checkableBehavior="single"
-        android:id="@+id/nav_menu_other">
+        android:id="@+id/nav_menu_other"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_logout"
             android:icon="@android:drawable/btn_dialog"

@@ -27,6 +27,8 @@ import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
 
+import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
+import static edu.temple.m.smarthomedroid.UserSettingsFragment.mpass;
 import static java.lang.Thread.sleep;
 
 /**
@@ -106,14 +108,11 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                             e.printStackTrace();
                         }
                         if(fcheck==1){
-                            Toast.makeText(getActivity().getApplicationContext(),"GOT IT",Toast.LENGTH_LONG);
                             Log.d(TAG,"oh yeah");
                         }else{
-                            Toast.makeText(getActivity().getApplicationContext(),"NOOOOOOOO!!!",Toast.LENGTH_LONG);
                             Log.d(TAG,"oh NO");
                         }
                         AddPeripheralDialogFragment.this.getDialog().cancel();
-                        update.config_update();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,7 +130,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
         List<String> list1 = new ArrayList<String>();
         new gettype().execute();
         try {
-            sleep(1940);
+            sleep(2100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -312,6 +311,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
         String session = sessionID;
         String housena = housename;
         String boardna = boardname;
+        String resp;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -336,7 +336,7 @@ public class AddPeripheralDialogFragment extends DialogFragment {
                 Log.d(TAG, checkn);
                 if(checkn.equalsIgnoreCase("1")){
                     fcheck=1;
-                    String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/createperipheral", jsonObject);
+                    resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/peripheral/createperipheral", jsonObject);
                     if(resp!=null){
                         Log.d(TAG, resp);
                     }
@@ -349,7 +349,18 @@ public class AddPeripheralDialogFragment extends DialogFragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
+            if(fcheck==0){
+                mpass2.msg2("Name is invalid/taken, please try again!");
+            }else{
+                if(resp!=null){
+                    if(resp.equals("[]")){
+                        mpass2.msg2("New Peripheral added!");
+                        update.config_update();
+                    }else{
+                        mpass2.msg2("Failed, please try again!");
+                    }
+                }
+            }
         }
     }
 }

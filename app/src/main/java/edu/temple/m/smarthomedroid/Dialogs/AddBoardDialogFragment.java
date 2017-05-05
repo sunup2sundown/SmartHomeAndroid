@@ -20,6 +20,7 @@ import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 import edu.temple.m.smarthomedroid.R;
 
+import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
 import static java.lang.Thread.sleep;
 
 /**
@@ -27,6 +28,8 @@ import static java.lang.Thread.sleep;
  */
 public class AddBoardDialogFragment extends DialogFragment {
     private String sessionID,housename;
+    private String check_name=" ";
+    private String error = " ";
     private String TAG = "AddBoardDialog";
     private refresh update;
     @Override
@@ -52,17 +55,35 @@ public class AddBoardDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String boardName =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).toString();
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_name)).getText().toString();
                         String boardSerialNo =
-                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).toString();
-                        new add_board(sessionID,housename,boardName,boardSerialNo).execute();
-                        try {
-                            sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                                ((EditText) AddBoardDialogFragment.this.getDialog().findViewById(R.id.dialog_board_serial_no)).getText().toString();
+                        if(boardName.isEmpty()||boardSerialNo.isEmpty()){
+                            mpass2.msg2("Please fill in all required information!");
+                        }else {
+                            new add_board(sessionID, housename, boardName, boardSerialNo).execute();
+                            try {
+                                sleep(2200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if (check_name.equals("0")) {
+                                mpass2.msg2("Name is invalid/taken, please try again!");
+                                AddBoardDialogFragment.this.getDialog().cancel();
+                            } else if (check_name.equals("1")) {
+                                if (error.equals("no")) {
+                                    mpass2.msg2("New Board Added!");
+                                    AddBoardDialogFragment.this.getDialog().cancel();
+                                    update.config_update();
+                                } else {
+                                    mpass2.msg2(error);
+                                    AddBoardDialogFragment.this.getDialog().cancel();
+                                }
+                            } else {
+                                mpass2.msg2("Failed, please try again!");
+                                AddBoardDialogFragment.this.getDialog().cancel();
+                            }
                         }
-                        AddBoardDialogFragment.this.getDialog().cancel();
-                        update.config_update();
                         // switch to the new house...
                     }
                 })
@@ -99,18 +120,29 @@ public class AddBoardDialogFragment extends DialogFragment {
             } catch(JSONException e){
                 Log.e(TAG, "JSONException: " + e.getMessage());
             }
+            Log.d(TAG, sessionID + "\n" + housename + "\n" + boardname);
         }
         @Override
         protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
+
             String checkname=sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/checkboardnameavailability", check);
             if(checkname!=null){
-                Log.d("AHHHHHHHHH ",checkname);
-            }
-            if(checkname.equalsIgnoreCase("1")){
-                String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", jsonObject);
-                if (resp != null) {
-                    Log.d(TAG, "CreateBoard : " + resp);
+                if(checkname.equalsIgnoreCase("1")){
+                    check_name="1";
+                    String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/createboard", jsonObject);
+                    if (resp != null) {
+                        Log.d(TAG, "CreateBoard : " + resp);
+                        if(resp.equals("\"0 No Errors\"")){
+                            error="no";
+                        }else{
+                            error=resp;
+                        }
+                    }else{
+                        error="Failed, try again!";
+                    }
+                }else{
+                    check_name="0";
                 }
             }
             return null;

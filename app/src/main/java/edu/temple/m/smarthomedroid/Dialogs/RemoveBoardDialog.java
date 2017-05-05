@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
 
+import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
 import static java.lang.Thread.sleep;
 
 /**
@@ -25,6 +26,7 @@ import static java.lang.Thread.sleep;
 
 public class RemoveBoardDialog extends DialogFragment {
     private String board,sessionID,housename;
+    private String error= " ";
     private final String TAG = "ChangeBoardDialog";
     private EditText username, password;
     private refresh update;
@@ -60,8 +62,15 @@ public class RemoveBoardDialog extends DialogFragment {
                             }
                         }
                         setdone(0);
-                        RemoveBoardDialog.this.getDialog().cancel();
-                        update.config_update();
+                        if(error.equals("no")){
+                            mpass2.msg2("Removed Board Successfully");
+                            RemoveBoardDialog.this.getDialog().cancel();
+                            update.config_update();
+                        }else{
+                            RemoveBoardDialog.this.getDialog().cancel();
+                            mpass2.msg2(error);
+                        }
+
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener(){
@@ -100,6 +109,13 @@ public class RemoveBoardDialog extends DialogFragment {
                 String resp = sh.makePostCall("https://zvgalu45ka.execute-api.us-east-1.amazonaws.com/prod/board/removeboard", jsonObject);
                 if (resp != null) {
                     Log.d(TAG, "remove : " + resp);
+                    if(resp.equals("\"0 No Errors\"")){
+                        error="no";
+                    }else{
+                        error=resp;
+                    }
+                }else{
+                    error="Failed, please try again";
                 }
             setdone(1);
             return null;
