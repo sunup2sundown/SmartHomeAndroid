@@ -21,7 +21,15 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:colorBackground">@color/appColorPrimary</item>
+  </style>
 
+    <style name="AppTheme.Item">
+        <item name="android:colorBackground">@color/appColorDarker</item>
+    </style>
+
+    <style name="SmartHomeGateway" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorAccent">@color/accent_material_dark_1</item>
+        <item name="android:textColorPrimary">@color/primary_text_material_dark</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
