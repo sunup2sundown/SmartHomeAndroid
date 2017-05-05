@@ -10,6 +10,7 @@
     android:foregroundGravity="center_horizontal"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:layout_marginTop="?attr/actionBarSize"
     android:textAlignment="gravity"
     android:weightSum="1">
 
