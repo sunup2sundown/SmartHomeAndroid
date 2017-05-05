@@ -613,9 +613,9 @@ public class TaskHandler {
                 pDialog.dismiss();
             }
             if (response.equals("\"Changed Password Successfully\"")){
-                Toast.makeText(mContext, "Changed password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Password Changed", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mContext, "Failed to change password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Failed,please try again!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -664,7 +664,6 @@ public class TaskHandler {
                     Toast.makeText(mContext, "House name is already taken", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(mContext, "Renamed house", Toast.LENGTH_SHORT).show();
             }
         }
     }

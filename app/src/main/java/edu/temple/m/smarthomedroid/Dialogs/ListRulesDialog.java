@@ -45,6 +45,11 @@ public class ListRulesDialog extends DialogFragment implements RulesAdapter.dial
     private ListView lv;
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
     private synchronized void setdone(int n){
         this.done=n;
     }

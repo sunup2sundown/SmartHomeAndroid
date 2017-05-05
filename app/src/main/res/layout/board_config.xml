@@ -8,10 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
+        android:layout_toStartOf="@+id/config_quantity"
         android:text="TextView"
+        android:textColor="@color/textColorSecondary"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_toStartOf="@+id/config_quantity" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/config_quantity"

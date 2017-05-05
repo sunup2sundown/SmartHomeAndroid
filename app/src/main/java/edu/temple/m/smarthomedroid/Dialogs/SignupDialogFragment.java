@@ -29,6 +29,11 @@ public class SignupDialogFragment extends DialogFragment {
         public void onSignupDialogNegativeClick(DialogFragment dialog);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
     //Override the Fragment.onAttach method to instantiate listener
     @Override
     public void onAttach(Activity activity){

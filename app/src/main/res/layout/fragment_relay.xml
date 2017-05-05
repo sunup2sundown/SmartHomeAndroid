@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@android:color/background_light"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/background_light">
 
     <View
         android:id="@+id/relay_divider"
@@ -17,10 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:drawable/bottom_bar"
-        android:dividerHeight="4dp"></ListView>
+        android:dividerHeight="4dp"/>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="97dp" />
+
 </LinearLayout>
