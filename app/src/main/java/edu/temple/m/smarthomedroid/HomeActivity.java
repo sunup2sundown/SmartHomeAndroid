@@ -43,6 +43,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangePasswordDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.ChangeUsernameDialogFragment;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 
+import edu.temple.m.smarthomedroid.Handlers.ProgressHandler;
 import edu.temple.m.smarthomedroid.Handlers.TaskHandler;
 import edu.temple.m.smarthomedroid.Handlers.VoiceHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
@@ -250,11 +251,6 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_camera:
                 fragment = new CameraFragment();
                 break;
-            /*
-            case R.id.nav_camera:
-                fragment = new CameraFragment();
-                break;
-                */
             case R.id.nav_logout:
                 activityClosing = true;
                 Intent mIntent = new Intent(HomeActivity.this, LoginActivity.class);

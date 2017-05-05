@@ -27,9 +27,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_smart_home"
-        app:itemIconTint="@android:color/background_dark"
-        app:itemTextColor="@android:color/primary_text_light"
-        android:backgroundTint="@color/colorPrimary"
+        app:itemIconTint="@android:color/black"
+        app:itemTextColor="@android:color/black"
+        android:backgroundTint="@android:color/background_light"
         app:menu="@menu/activity_smart_home_drawer">
 
     </android.support.design.widget.NavigationView>

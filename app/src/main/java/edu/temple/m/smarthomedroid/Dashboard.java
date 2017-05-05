@@ -23,6 +23,7 @@ import java.util.List;
 
 import edu.temple.m.smarthomedroid.Adapters.GridAdapter;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.ProgressHandler;
 import edu.temple.m.smarthomedroid.Objects.Relay2;
 import edu.temple.m.smarthomedroid.Objects.Sensor;
 
@@ -57,7 +58,7 @@ public class Dashboard extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_dashboard,container,false);
+         final View v = inflater.inflate(R.layout.fragment_dashboard,container,false);
         sessionId = getArguments().getString("SessionToken");
         listhouse = (Spinner)v.findViewById(R.id.listhouse);
         return v;
@@ -127,6 +128,7 @@ public class Dashboard extends Fragment {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+        ProgressHandler.removeProgressDialog();
     }
     public void additem(){
 

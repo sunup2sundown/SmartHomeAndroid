@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLightest"
+    android:background="@android:color/background_light"
     android:theme="@style/AppTheme"
     android:orientation="vertical"
     android:weightSum="1">
@@ -19,6 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
+        android:textSize="20sp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
@@ -28,6 +29,7 @@
         android:layout_height="39dp"
         android:layout_marginTop="10dp"
         android:text="Change Username"
+        android:background="@drawable/button_login"
         android:layout_below="@+id/text_username"
         android:layout_centerHorizontal="true" />
 
@@ -35,14 +37,19 @@
         android:id="@+id/button_changepw"
         android:layout_width="wrap_content"
         android:layout_height="39dp"
-        android:layout_alignStart="@+id/button_changeusername"
+        android:background="@drawable/button_login"
         android:layout_below="@+id/button_changeusername"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
         android:text="Change Password" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Houses you've joined:"
+        android:layout_marginTop="6dp"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:id="@+id/textView7"
         android:layout_below="@+id/button_changepw"
@@ -54,6 +61,8 @@
         android:id="@+id/listview_houses"
         android:layout_marginTop="4dp"
         android:layout_below="@+id/textView7"
+        android:divider="@android:color/black"
+        android:dividerHeight="4dp"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
@@ -64,14 +73,17 @@
         android:layout_below="@+id/listview_houses"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
+        android:background="@drawable/button_login"
         android:text="Add New House" />
 
     <Button
         android:id="@+id/button_joinhouse"
         android:layout_width="wrap_content"
         android:layout_height="39dp"
+        android:layout_marginTop="4dp"
         android:layout_below="@+id/button_newhouse"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/button_login"
         android:text="Join Existing House" />
 
 </RelativeLayout>

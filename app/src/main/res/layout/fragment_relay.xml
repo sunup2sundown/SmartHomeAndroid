@@ -3,16 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLightest"
+    android:background="@android:color/background_light"
     android:orientation="vertical">
+
+    <View
+        android:id="@+id/relay_divider"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
 
     <ListView
         android:id="@+id/fragment_relay_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
         android:divider="@android:drawable/bottom_bar"
-        android:dividerHeight="10dp"></ListView>
+        android:dividerHeight="4dp"></ListView>
 
     <TextView
         android:id="@+id/textView3"

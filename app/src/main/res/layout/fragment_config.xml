@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLightest"
+    android:background="@android:color/background_light"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -18,6 +18,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="102dp"
+        android:background="@drawable/button_login"
         android:elevation="0dp"
         android:text="Add\nBoard" />
     <Spinner
@@ -31,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
+        android:background="@color/appColorLighter"
         android:layout_marginTop="153dp" />
 
     <TextView
@@ -39,7 +41,6 @@
         android:layout_height="wrap_content"
         android:text="@string/house_list_config_text"
         android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

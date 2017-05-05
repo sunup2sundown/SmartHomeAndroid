@@ -24,7 +24,7 @@
   </style>
 
     <style name="AppTheme.Item">
-        <item name="android:colorBackground">@color/appColorDarker</item>
+        <item name="android:colorBackground">@android:color/background_light</item>
     </style>
 
     <style name="SmartHomeGateway" parent="Theme.AppCompat.NoActionBar" >

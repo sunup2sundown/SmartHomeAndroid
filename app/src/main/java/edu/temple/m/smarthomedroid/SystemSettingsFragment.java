@@ -1,5 +1,6 @@
 package edu.temple.m.smarthomedroid;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,7 @@ import edu.temple.m.smarthomedroid.Dialogs.ChangePeripheralNameDialogFragment;
 import edu.temple.m.smarthomedroid.Dialogs.RemoveBoardDialog;
 import edu.temple.m.smarthomedroid.Dialogs.RemovePeripheralDialog;
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
+import edu.temple.m.smarthomedroid.Handlers.ProgressHandler;
 import edu.temple.m.smarthomedroid.Objects.Board;
 import edu.temple.m.smarthomedroid.Objects.DataHolder;
 import edu.temple.m.smarthomedroid.Objects.House;
@@ -62,9 +64,11 @@ public class SystemSettingsFragment extends Fragment {
     private synchronized void setdone(int n){
         this.done = n;
     }
+    ProgressDialog pDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ProgressHandler.showProgressDialog(getContext(), "Loading Configuration...", "Please Wait.", false);
         FragmentManager dialogManager;
         final View v = inflater.inflate(R.layout.fragment_config,container,false);
 
@@ -104,9 +108,9 @@ public class SystemSettingsFragment extends Fragment {
                                     boardlist.add(new Board(board,housename,sessionID));
                                     Log.d(TAG,"boardlist : "+boardlist);
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                e.printStackTrace();
                             }
+                        }
                             new getperi().execute();
                             try {
                                 sleep(1800);
@@ -184,6 +188,7 @@ public class SystemSettingsFragment extends Fragment {
             }
         });
 
+        ProgressHandler.removeProgressDialog();
     }
     public void onBoard(String old, final int groupPosition){
         CharSequence options[] = new CharSequence[] {"Change Board Name", "Add Peripheral", "Remove Board"};
@@ -346,6 +351,7 @@ private class getboard extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
         try{
             jsonObject.put("SessionToken", session)
                     .put("HouseName",housename);
@@ -378,7 +384,6 @@ private class getboard extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-
     }
 }
 
@@ -390,6 +395,7 @@ private class getboard extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             try{
                 jsonObject.put("sessionToken", session)
                     .put("houseName",housename);
@@ -420,7 +426,6 @@ private class getboard extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
         }
     }
 

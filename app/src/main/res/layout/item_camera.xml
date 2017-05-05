@@ -6,11 +6,10 @@
 
     <TextView
         android:id="@+id/item_camera_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:text="Default Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
+        android:textSize="16sp" />
 
 </RelativeLayout>
