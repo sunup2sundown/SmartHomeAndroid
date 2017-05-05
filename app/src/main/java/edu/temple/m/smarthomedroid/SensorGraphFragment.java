@@ -71,6 +71,9 @@ public class SensorGraphFragment extends Fragment {
         houseName = getArguments().getString("HouseName");
         peripheralName = getArguments().getString("PeripheralName");
 
+        TextView sensorName = (TextView)view.findViewById(R.id.sensor_name_title);
+        sensorName.setText(peripheralName + " Data");
+
         jsonObject = new JSONObject();
         try{
             jsonObject.put("SessionToken", sessionToken);

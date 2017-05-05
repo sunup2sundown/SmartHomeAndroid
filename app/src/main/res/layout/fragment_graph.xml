@@ -6,10 +6,19 @@
     android:background="@color/appColorLightest"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/sensor_name_title"
+        android:text="Data"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <com.jjoe64.graphview.GraphView
+        android:layout_below="@+id/sensor_name_title"
         android:id="@+id/sensor_graph"
         app:seriesType="line"
-        android:layout_marginTop="@dimen/nav_header_height"
+        android:layout_marginTop="20dp"
         android:layout_height="200dp"
         android:layout_width="match_parent"/>
 
