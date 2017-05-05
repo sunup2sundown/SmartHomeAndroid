@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import edu.temple.m.smarthomedroid.Handlers.HttpHandler;
 import edu.temple.m.smarthomedroid.Handlers.refresh;
+import edu.temple.m.smarthomedroid.R;
 
 import static edu.temple.m.smarthomedroid.SystemSettingsFragment.mpass2;
 import static java.lang.Thread.sleep;
@@ -41,7 +42,12 @@ public class RemovePeripheralDialog extends DialogFragment {
         update = (refresh) activity;
     }
 
+
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         //Builder Class for dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

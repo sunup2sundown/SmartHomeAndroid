@@ -30,6 +30,12 @@ public class ChangeHouseNameDialogFragment extends DialogFragment {
         super.onAttach(context);
         mListener = (NotifySettingsFragmentListener) context;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
     public static ChangeHouseNameDialogFragment newInstance(int index, String houseName, String sessionToken) {
         ChangeHouseNameDialogFragment frag = new ChangeHouseNameDialogFragment();
         Bundle args = new Bundle();

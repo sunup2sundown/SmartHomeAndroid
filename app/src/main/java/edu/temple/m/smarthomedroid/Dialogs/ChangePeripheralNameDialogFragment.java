@@ -36,6 +36,12 @@ public class ChangePeripheralNameDialogFragment extends DialogFragment {
         super.onAttach(activity);
         update = (refresh) activity;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_Dialog);
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

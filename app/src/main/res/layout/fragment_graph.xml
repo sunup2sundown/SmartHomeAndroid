@@ -15,7 +15,9 @@
         android:text="Data"
         android:textSize="24sp" />
 
+
     <com.jjoe64.graphview.GraphView
+        android:layout_below="@+id/sensor_name_title"
         android:id="@+id/sensor_graph"
         android:layout_width="match_parent"
         android:layout_height="200dp"
