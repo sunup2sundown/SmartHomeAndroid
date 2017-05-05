@@ -283,7 +283,7 @@ public class AutomationFragment extends Fragment {
                 if(str_actionparam!=null){
                     str_actionparam=paramet.getText().toString();
                 }
-                Log.d("TESTTEST",str_actionparam);
+                //Log.d("TESTTEST",str_actionparam);
                 str_rulename = rulename.getText().toString();
                 str_condval = condval.getText().toString();
                 if(str_rulename.isEmpty()||str_rulename==null){

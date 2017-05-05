@@ -5,8 +5,8 @@
     android:theme="@style/AppTheme"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/appColorLigher"
-    android:backgroundTint="@color/appColorLigher"
+    android:background="@color/appColorLighter"
+    android:backgroundTint="@color/appColorLighter"
     android:orientation="vertical">
 
     <ListView
